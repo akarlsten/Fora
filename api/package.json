@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "module": "src/app.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": "git@gitlab.lnu.se:1dv430/student/ak222ye/project.git",
+  "author": "Adam Karlsten <adamkarlsten@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.11.0",
+    "esm": "^3.2.25",
+    "graphql": "^14.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
