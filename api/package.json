@@ -4,15 +4,22 @@
   "main": "src/index.js",
   "module": "src/app.js",
   "scripts": {
-    "start": "node src/index.js"
+    "dev": "cross-env NODE_ENV=development DISABLE_LOGGING=true keystone dev --entry src/index.js",
+    "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
+    "start": "cross-env NODE_ENV=production keystone start --entry src/index.js"
   },
   "repository": "git@gitlab.lnu.se:1dv430/student/ak222ye/project.git",
   "author": "Adam Karlsten <adamkarlsten@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.11.0",
-    "esm": "^3.2.25",
-    "graphql": "^14.6.0"
+    "@keystonejs/adapter-mongoose": "^6.0.0",
+    "@keystonejs/app-admin-ui": "^5.9.3",
+    "@keystonejs/app-graphql": "^5.1.4",
+    "@keystonejs/auth-password": "^5.1.3",
+    "@keystonejs/fields": "^7.0.2",
+    "@keystonejs/keystone": "^7.0.0",
+    "cross-env": "^7.0.2",
+    "esm": "^3.2.25"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
