@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "module": "src/app.js",
+  "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development DISABLE_LOGGING=true keystone dev --entry src/index.js",
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
