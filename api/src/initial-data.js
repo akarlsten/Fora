@@ -16,7 +16,7 @@ export default async keystone => {
   )
 
   if (count === 0) {
-    const password = randomString()
+    const password = 'password'
     const email = 'admin@example.com'
 
     await keystone.executeQuery(

@@ -16,6 +16,10 @@ export function userIsUser ({ authentication: { item: user } }) {
   return user && { id: user.id }
 }
 
+export function userIsLoggedIn ({ authentication: { item: user } }) {
+  return !!user
+}
+
 export function userIsAdminOrOwner (auth) {
   const isAdmin = userIsAdmin(auth)
   const isOwner = userOwnsPost(auth)

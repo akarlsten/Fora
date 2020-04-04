@@ -1,18 +1,33 @@
-import { Text, Checkbox, Select, Password, Relationship } from '@keystonejs/fields'
+import { Text, Checkbox, Select, Password, Relationship, CloudinaryImage } from '@keystonejs/fields'
 import { DateTimeUtc } from '@keystonejs/fields-datetime-utc'
 import { byTracking, atTracking } from '@keystonejs/list-plugins'
+// import { CloudinaryAdapter } from '@keystonejs/file-adapters'
+
 import { userCanAccessUsers, userIsAdmin } from '../utils/access'
+
+// const cloudinaryAdapter = new CloudinaryAdapter({
+//   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+//   apiKey: process.env.CLOUDINARY_KEY,
+//   apiSecret: process.env.CLOUDINARY_SECRET,
+//   folder: 'my-keystone-app'
+// })
 
 export default {
   fields: {
     name: { type: Text, isUnique: true, isRequired: true },
     email: { type: Text, isUnique: true, isRequired: true },
     password: { type: Password, useCompiledBcrypt: true, rejectCommon: true, isRequired: true },
-    isAdmin: { type: Checkbox },
-    threads: { type: Relationship, ref: 'Thread', many: true },
-    posts: { type: Relationship, ref: 'Post', many: true },
-    isModeratorOf: { type: Relationship, ref: 'Forum.moderators', many: true },
-    isOwnerOf: { type: Relationship, ref: 'Forum.owner', many: true },
+    // avatar: {type: CloudinaryImage, adapter: cloudinaryAdapter},
+    isAdmin: {
+      type: Checkbox,
+      access: {
+        update: userIsAdmin
+      }
+    },
+    // threads: { type: Relationship, ref: 'Thread', many: true },
+    // posts: { type: Relationship, ref: 'Post', many: true },
+    // isModeratorOf: { type: Relationship, ref: 'Forum.moderators', many: true },
+    // isOwnerOf: { type: Relationship, ref: 'Forum.owner', many: true },
     resetToken: { type: Text, unique: true },
     resetTokenExpiry: { type: DateTimeUtc, unique: true },
     state: {
@@ -25,7 +40,8 @@ export default {
     create: true,
     read: userCanAccessUsers,
     update: userCanAccessUsers,
-    delete: userIsAdmin
+    delete: userIsAdmin,
+    auth: true
   },
   plugins: [atTracking(), byTracking()]
 }
