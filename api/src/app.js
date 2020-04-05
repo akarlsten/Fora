@@ -10,9 +10,6 @@ import User from './lists/User'
 import Forum from './lists/Forum'
 import Thread from './lists/Thread'
 import Post from './lists/Post'
-import { logger } from '@keystonejs/logger'
-
-logger('test')
 
 const PROJECT_NAME = 'test'
 

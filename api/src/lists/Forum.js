@@ -32,14 +32,14 @@ export default {
     threads: { type: Relationship, ref: 'Thread', many: true },
     owner: {
       type: AuthedRelationship,
-      ref: 'User.isOwnerOf',
+      ref: 'User',
       access: {
         update: userIsAdmin
       }
     },
     moderators: {
       type: Relationship,
-      ref: 'User.isModeratorOf',
+      ref: 'User',
       many: true
     }
   },
