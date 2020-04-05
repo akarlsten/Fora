@@ -24,10 +24,20 @@ export default {
         update: userIsAdmin
       }
     },
-    // threads: { type: Relationship, ref: 'Thread', many: true },
-    // posts: { type: Relationship, ref: 'Post', many: true },
-    // isModeratorOf: { type: Relationship, ref: 'Forum.moderators', many: true },
-    // isOwnerOf: { type: Relationship, ref: 'Forum.owner', many: true },
+    threads: { type: Relationship, ref: 'Thread', many: true },
+    posts: { type: Relationship, ref: 'Post', many: true },
+    isModeratorOf: {
+      type: Relationship,
+      ref: 'Forum.moderators',
+      many: true,
+      access: { read: true, create: false, update: false }
+    },
+    isOwnerOf: {
+      type: Relationship,
+      ref: 'Forum.owner',
+      many: true,
+      access: { read: true, create: false, update: false }
+    },
     resetToken: { type: Text, unique: true },
     resetTokenExpiry: { type: DateTimeUtc, unique: true },
     state: {
@@ -38,7 +48,7 @@ export default {
   },
   access: {
     create: true,
-    read: userCanAccessUsers,
+    read: true,
     update: userCanAccessUsers,
     delete: userIsAdmin,
     auth: true

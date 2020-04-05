@@ -5,7 +5,7 @@
   "module": "src/app.js",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DISABLE_LOGGING=true keystone dev --entry src/index.js",
+    "dev": "cross-env NODE_ENV=development keystone dev --entry src/index.js",
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
     "start": "cross-env NODE_ENV=production keystone start --entry src/index.js"
   },

@@ -1,6 +1,5 @@
 import { Keystone } from '@keystonejs/keystone'
 import { PasswordAuthStrategy } from '@keystonejs/auth-password'
-import { Text, Checkbox, Password } from '@keystonejs/fields'
 import { GraphQLApp } from '@keystonejs/app-graphql'
 import { AdminUIApp } from '@keystonejs/app-admin-ui'
 import initialiseData from './initial-data'
@@ -11,6 +10,9 @@ import User from './lists/User'
 import Forum from './lists/Forum'
 import Thread from './lists/Thread'
 import Post from './lists/Post'
+import { logger } from '@keystonejs/logger'
+
+logger('test')
 
 const PROJECT_NAME = 'test'
 
@@ -19,23 +21,6 @@ const keystone = new Keystone({
   adapter: new Adapter(),
   onConnect: initialiseData
 })
-
-// // Access control functions
-// const userIsAdmin = ({ authentication: { item: user } }) => Boolean(user && user.isAdmin)
-// const userOwnsItem = ({ authentication: { item: user } }) => {
-//   if (!user) {
-//     return false
-//   }
-//   return { id: user.id }
-// }
-
-// const userIsAdminOrOwner = auth => {
-//   const isAdmin = access.userIsAdmin(auth)
-//   const isOwner = access.userOwnsItem(auth)
-//   return isAdmin || isOwner
-// }
-
-// const access = { userIsAdmin, userOwnsItem, userIsAdminOrOwner }
 
 keystone.createList('User', User)
 keystone.createList('Forum', Forum)

@@ -3,11 +3,12 @@ export function userIsAdmin ({ authentication: { item: user } }) {
   return Boolean(user && user.isAdmin)
 }
 
-export function userOwnsPost ({ authentication: { item: user } }) {
+export function userOwnsItem ({ authentication: { item: user } }) {
   if (!user) {
     return false
   }
   // This returns a graphql Where object, not a boolean
+  console.log(user)
   return { user: { id: user.id } }
 }
 
@@ -22,7 +23,8 @@ export function userIsLoggedIn ({ authentication: { item: user } }) {
 
 export function userIsAdminOrOwner (auth) {
   const isAdmin = userIsAdmin(auth)
-  const isOwner = userOwnsPost(auth)
+  const isOwner = userOwnsItem(auth)
+  console.log(isAdmin || isOwner)
   return isAdmin || isOwner
 }
 
