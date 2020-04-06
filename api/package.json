@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development keystone dev --entry src/index.js",
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
-    "start": "cross-env NODE_ENV=production keystone start --entry src/index.js"
+    "start": "cross-env NODE_ENV=production keystone start --entry src/index.js",
+    "test": "jest"
   },
   "repository": "git@gitlab.lnu.se:1dv430/student/ak222ye/project.git",
   "author": "Adam Karlsten <adamkarlsten@gmail.com>",
@@ -27,17 +28,36 @@
     "esm": "^3.2.25"
   },
   "devDependencies": {
+    "@keystonejs/test-utils": "^6.0.2",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "jest": "^25.2.7",
+    "jest-esm-transformer": "^1.0.0",
     "nodemon": "^2.0.2",
     "pino": "^6.1.1",
     "pino-pretty": "^4.0.0"
   },
   "eslintConfig": {
-    "extends": "standard"
+    "extends": "standard",
+    "overrides": [
+      {
+        "files": [
+          "**/*.test.js"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
+  },
+  "jest": {
+    "transform": {
+      ".js": "jest-esm-transformer"
+    },
+    "testEnvironment": "node"
   }
 }

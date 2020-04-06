@@ -8,7 +8,7 @@ export default {
     title: {
       type: Text
     },
-    posts: { type: Relationship, ref: 'Post', many: true },
+    posts: { type: Relationship, ref: 'Post', many: true, isRequired: true },
     forum: { type: Relationship, ref: 'Forum', isRequired: true },
     isStickied: {
       type: Checkbox,

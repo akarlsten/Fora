@@ -24,7 +24,7 @@ export function userIsLoggedIn ({ authentication: { item: user } }) {
 export function userIsAdminOrOwner (auth) {
   const isAdmin = userIsAdmin(auth)
   const isOwner = userOwnsItem(auth)
-  console.log(isAdmin || isOwner)
+
   return isAdmin || isOwner
 }
 

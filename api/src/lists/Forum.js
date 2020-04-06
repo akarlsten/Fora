@@ -47,16 +47,13 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: ({ authentication: { item: user }, itemId, originalInput }) => {
-      // TODO: this should query ForumWhereInput with the id of the forum and the logged in user id is ther owner but it doesnt work
-      return {
-      // checks if
-        id: itemId,
-        owner: {
-          id: user.id
-        }
+    update: ({ authentication: { item: user }, itemId }) => ({
+      // queries if this forum (itemId) is owned by the currently logged in user
+      id: itemId,
+      owner: {
+        id: user.id
       }
-    },
-    delete: userIsAdmin
-  }
+    })
+  },
+  delete: userIsAdmin
 }
