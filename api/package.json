@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development keystone dev --entry src/index.js",
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
     "start": "cross-env NODE_ENV=production keystone start --entry src/index.js",
-    "test": "jest"
+    "test": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --maxWorkers=1"
   },
   "repository": "git@gitlab.lnu.se:1dv430/student/ak222ye/project.git",
   "author": "Adam Karlsten <adamkarlsten@gmail.com>",

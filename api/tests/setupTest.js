@@ -1,4 +1,5 @@
 import { setupServer } from '@keystonejs/test-utils'
+import { PasswordAuthStrategy } from '@keystonejs/auth-password'
 
 import User from '../src/lists/User'
 import Forum from '../src/lists/Forum'
@@ -14,6 +15,10 @@ export default () => {
       keystone.createList('Forum', Forum)
       keystone.createList('Thread', Thread)
       keystone.createList('Post', Post)
+      keystone.createAuthStrategy({
+        type: PasswordAuthStrategy,
+        list: 'User'
+      })
     }
   })
 }
