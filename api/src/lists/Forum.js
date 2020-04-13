@@ -12,10 +12,18 @@ export default {
         resolveInput: async ({ resolvedData, existingItem }) => {
           // trims any non-alphanumeric
           return (resolvedData.name && resolvedData.name.replace(/\W/g, '')) || existingItem.name
+        },
+        validateInput: async ({ resolvedData, addFieldValidationError }) => {
+          if (resolvedData.name.length > 20) {
+            addFieldValidationError('Max length of forum name is 20 characters.')
+          }
         }
       },
       isRequired: true,
-      isUnique: true
+      isUnique: true,
+      access: {
+        update: userIsAdmin
+      }
     },
     url: {
       type: Slug,
