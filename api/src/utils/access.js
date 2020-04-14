@@ -3,6 +3,18 @@ export function userIsAdmin ({ authentication: { item: user } }) {
   return Boolean(user && user.isAdmin)
 }
 
+export function userOwnsThing ({ authentication: { item: user }, itemId }) {
+  if (!user) {
+    return false
+  }
+
+  return {
+    // queries if this forum (itemId) is owned by the currently logged in user
+    id: itemId,
+    owner: { id: user.id }
+  }
+}
+
 export function userOwnsItem ({ authentication: { item: user } }) {
   if (!user) {
     return false
@@ -23,7 +35,7 @@ export function userIsLoggedIn ({ authentication: { item: user } }) {
 
 export function userIsAdminOrOwner (auth) {
   const isAdmin = userIsAdmin(auth)
-  const isOwner = userOwnsItem(auth)
+  const isOwner = userOwnsThing(auth)
 
   return isAdmin || isOwner
 }

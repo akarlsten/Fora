@@ -292,6 +292,87 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
     }))
 
+    test('should allow admins to set moderators', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            moderators {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            moderators: {
+              disconnectAll: true,
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.moderators[0].email).toBe(users[2].email)
+    }))
+
   // admins should be able to delete
   // non-admins shouldnt be able to delete
   // admins should be able to rename

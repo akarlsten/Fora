@@ -55,13 +55,13 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: ({ authentication: { item: user }, itemId }) => ({
-      // queries if this forum (itemId) is owned by the currently logged in user
-      id: itemId,
-      owner: {
-        id: user.id
-      }
-    })
+    update: userIsAdminOrOwner
   },
   delete: userIsAdmin
 }
+
+// ({ authentication: { item: user }, itemId }) => ({
+//   // queries if this forum (itemId) is owned by the currently logged in user
+//   id: itemId,
+//   owner: { id: user.id }
+// })
