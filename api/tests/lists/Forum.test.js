@@ -90,6 +90,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         }
       }
       )
+
       expect(errors).toBe(undefined)
     }))
 
@@ -128,10 +129,169 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors[0].name).toBe('ValidationFailureError')
       expect(errors[0].data.messages[0]).toBe('Max length of forum name is 20 characters.')
     }))
-  })
 
-  // should allow owner to set moderators
-  // shouldnt allow non-owner to set moderators
+    test('should allow owner to set moderators', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            moderators {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            moderators: {
+              disconnectAll: true,
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.moderators[0].email).toBe(users[2].email)
+    }))
+
+    test('should not allow non-owner to set moderators', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[2] // we log in as user 3 who doesnt own any forums
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id // owned by user 1
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            moderators {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            moderators: {
+              disconnectAll: true,
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(data).toEqual({ updateForum: null })
+      expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
   // admins should be able to delete
   // non-admins shouldnt be able to delete
   // admins should be able to rename
@@ -139,4 +299,5 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
   // admins should be able to ban forum
   // moderators or admins should be able to set forum to private
   // non-admin/moderators shouldnt be able to update forum at all
+  })
 })
