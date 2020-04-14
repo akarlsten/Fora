@@ -373,6 +373,114 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data.updateForum.moderators[0].email).toBe(users[2].email)
     }))
 
+    test('should allow admins to delete forums', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!) {
+          deleteForum(
+            id: $id
+          ) {
+            name
+          }
+      }
+    `,
+        variables: {
+          id: forumID
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.deleteForum.name).toBe('test2')
+    }))
+
+    test('should not allow non-admins to delete forums, not even owners', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!) {
+          deleteForum(
+            id: $id
+          ) {
+            name
+          }
+      }
+    `,
+        variables: {
+          id: forumID
+        }
+      })
+
+      expect(data).toEqual({ deleteForum: null })
+      expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
   // admins should be able to delete
   // non-admins shouldnt be able to delete
   // admins should be able to rename

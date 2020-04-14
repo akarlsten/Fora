@@ -55,9 +55,9 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: userIsAdminOrOwner
-  },
-  delete: userIsAdmin
+    update: userIsAdminOrOwner,
+    delete: userIsAdmin
+  }
 }
 
 // ({ authentication: { item: user }, itemId }) => ({
