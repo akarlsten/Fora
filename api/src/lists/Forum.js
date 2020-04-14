@@ -1,7 +1,7 @@
-import { Text, Slug, Relationship } from '@keystonejs/fields'
+import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
-import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner } from '../utils/access'
+import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminModeratorOrOwner } from '../utils/access'
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
 
 export default {
@@ -49,6 +49,33 @@ export default {
       type: Relationship,
       ref: 'User',
       many: true
+    },
+    isBanned: {
+      type: Checkbox,
+      access: {
+        update: userIsAdmin
+      }
+    },
+    isPrivate: {
+      type: Checkbox,
+      access: {
+        update: ({ authentication: { item: user }, existingItem, itemId }) => {
+          // TODO: Clean this up - perhaps into access
+          if (!user) {
+            return false
+          }
+          const { owner, moderators } = existingItem
+
+          console.log(owner)
+          console.log(`--------\nCurrent user: ${user.id}\nCurrent owner: ${owner}\nAre they equal? ${user.id === owner}\nType - user.id: ${typeof user.id}\n Type - owner: ${typeof owner}`)
+
+          if (user.isAdmin || user.id === `${owner}` || (moderators && moderators.includes(user.id))) {
+            return true
+          }
+
+          return false
+        }
+      }
     }
   },
   plugins: [byTracking()],
@@ -59,9 +86,3 @@ export default {
     delete: userIsAdmin
   }
 }
-
-// ({ authentication: { item: user }, itemId }) => ({
-//   // queries if this forum (itemId) is owned by the currently logged in user
-//   id: itemId,
-//   owner: { id: user.id }
-// })

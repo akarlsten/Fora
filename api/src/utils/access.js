@@ -15,14 +15,14 @@ export function userOwnsThing ({ authentication: { item: user }, itemId }) {
   }
 }
 
-export function userOwnsItem ({ authentication: { item: user } }) {
-  if (!user) {
-    return false
-  }
-  // This returns a graphql Where object, not a boolean
-  console.log(user)
-  return { user: { id: user.id } }
-}
+// export function userOwnsItem ({ authentication: { item: user } }) {
+//   if (!user) {
+//     return false
+//   }
+//   // This returns a graphql Where object, not a boolean
+//   console.log(user)
+//   return { user: { id: user.id } }
+// }
 
 // This will check if the current user is requesting information about themselves
 export function userIsUser ({ authentication: { item: user } }) {
@@ -31,6 +31,26 @@ export function userIsUser ({ authentication: { item: user } }) {
 
 export function userIsLoggedIn ({ authentication: { item: user } }) {
   return !!user
+}
+
+export function userIsModerator ({ authentication: { item: user }, itemId }) {
+  if (!user) {
+    return false
+  }
+
+  return {
+    // queries if this forum (itemId) is owned by the currently logged in user
+    id: itemId,
+    moderators: { id: user.id }
+  }
+}
+
+export function userIsAdminModeratorOrOwner (auth) {
+  const isAdmin = userIsAdmin(auth)
+  const isOwner = userOwnsThing(auth)
+  const isModerator = userIsModerator(auth)
+
+  return isAdmin || isOwner || isModerator
 }
 
 export function userIsAdminOrOwner (auth) {

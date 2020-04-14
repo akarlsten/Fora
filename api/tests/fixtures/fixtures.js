@@ -40,12 +40,17 @@ export const users = [
     name: 'User Bepp',
     email: 'test2@wow.com',
     password: 'awoo1234'
+  },
+  {
+    name: 'A fourth user',
+    email: 'test3@wow.com',
+    password: 'awoo1234'
   }
 ]
 
 export const forums = [
   { name: 'Hej Hopp', url: 'hejhopp', owner: { where: { email: 'adam@wow.com' } }, threads: [], moderators: [] },
-  { name: 'test2', url: 'test2', owner: { where: { email: 'test@wow.com' } }, threads: [], moderators: [] }
+  { name: 'test2', url: 'test2', owner: { where: { email: 'test@wow.com' } }, threads: [], moderators: [{ where: { email: 'test3@wow.com' } }] }
 ]
 
 export default {
