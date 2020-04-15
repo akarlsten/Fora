@@ -10,7 +10,7 @@ export function userOwnsThing ({ authentication: { item: user }, itemId }) {
 
   return {
     // queries if this forum (itemId) is owned by the currently logged in user
-    id: itemId,
+    // id: itemId,
     owner: { id: user.id }
   }
 }
@@ -40,8 +40,10 @@ export function userIsModerator ({ authentication: { item: user }, itemId }) {
 
   return {
     // queries if this forum (itemId) is owned by the currently logged in user
-    id: itemId,
-    moderators: { id: user.id }
+    // id: itemId,
+    moderators_some: {
+      id: user.id
+    }
   }
 }
 

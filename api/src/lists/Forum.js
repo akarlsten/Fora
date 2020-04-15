@@ -66,14 +66,43 @@ export default {
           }
           const { owner, moderators } = existingItem
 
-          console.log(owner)
-          console.log(`--------\nCurrent user: ${user.id}\nCurrent owner: ${owner}\nAre they equal? ${user.id === owner}\nType - user.id: ${typeof user.id}\n Type - owner: ${typeof owner}`)
+          // console.log(moderators)
+          // console.log(`--------\nCurrent user: ${user.id}\nCurrent owner: ${owner}\nAre they equal? ${user.id === owner}\nType - user.id: ${typeof user.id}\n Type - owner: ${typeof owner}`)
 
           if (user.isAdmin || user.id === `${owner}` || (moderators && moderators.includes(user.id))) {
             return true
           }
 
-          return false
+          return true
+        }
+      },
+      hooks: {
+        validateInput: async ({ existingItem, context, actions: { query } }) => {
+          const queryString = `
+          query ($forumID: ID!) {
+            Forum(where: { id: $forumID}) {
+              name
+              moderators {
+                id
+              }
+            }
+          }
+          `
+
+          const options = {
+            skipAccessControl: true,
+            variables: {
+              forumID: existingItem.id
+              // userID: context.authedItem.id
+            }
+          }
+
+          const { errors, data } = await query(queryString, options)
+
+          console.log(errors)
+          console.log(JSON.stringify(data))
+          // console.log('data', data.Forum.moderators.includes(context.authedItem.id))
+          // console.log('errors', errors)
         }
       }
     }
@@ -82,7 +111,7 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: userIsAdminOrOwner,
+    update: userIsAdminModeratorOrOwner,
     delete: userIsAdmin
   }
 }

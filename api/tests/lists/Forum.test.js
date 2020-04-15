@@ -805,7 +805,6 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       const forumID = forumData.data.allForums[0].id
-      console.log('owner', forumData.data.allForums[0].owner.id)
 
       const { data, errors } = await networkedGraphqlRequest({
         app,
@@ -895,6 +894,93 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toEqual({ updateForum: null })
       expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
     }))
+
+    test('should allow moderators to set forums private', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token, item } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          moderators {
+            email
+          }
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        query($id: ID!) {
+   allForums(where: { moderators_some: { id: $id}}) {
+    moderators {
+      name
+    }
+  }
+      }
+    `,
+        variables: {
+          id: item.id,
+          data: {
+            isPrivate: true
+          }
+        }
+      })
+
+      console.log(data)
+
+      //   const { data, errors } = await networkedGraphqlRequest({
+      //     app,
+      //     headers: {
+      //       Authorization: `Bearer ${token}`
+      //     },
+      //     expectedStatusCode: 200,
+      //     query: `
+      //     mutation($id: ID!, $data: ForumUpdateInput) {
+      //       updateForum(
+      //         id: $id,
+      //         data: $data
+      //       ) {
+      //         name
+      //         isPrivate
+      //       }
+      //   }
+      // `,
+      //     variables: {
+      //       id: forumID,
+      //       data: {
+      //         isPrivate: true
+      //       }
+      //     }
+      //   })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.name).toBe('test2')
+      expect(data.updateForum.isPrivate).toBe(true)
+    }))
+
+    // TODO: Add test for moderators - first add moderator then try setting to private
 
   // moderators or admins should be able to set forum to private
   // non-admin/moderators shouldnt be able to update forum at all

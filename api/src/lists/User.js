@@ -15,7 +15,7 @@ import { userCanAccessUsers, userIsAdmin } from '../utils/access'
 export default {
   fields: {
     name: { type: Text, isUnique: true, isRequired: true },
-    email: { type: Text, isUnique: true, isRequired: true },
+    email: { type: Text, isUnique: true, isRequired: true, access: userCanAccessUsers },
     password: { type: Password, useCompiledBcrypt: true, rejectCommon: true, isRequired: true },
     // avatar: {type: CloudinaryImage, adapter: cloudinaryAdapter},
     isAdmin: {
