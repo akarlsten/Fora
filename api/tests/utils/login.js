@@ -14,7 +14,7 @@ export default function login (app, email, password) {
       }
     `,
     variables: { email, password }
-  }).then(({ data }) => {
+  }).then(({ data, error }) => {
     return data.authenticateUserWithPassword || {}
   })
 }

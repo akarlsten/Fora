@@ -15,7 +15,7 @@ import { userCanAccessUsers, userIsAdmin } from '../utils/access'
 export default {
   fields: {
     name: { type: Text, isUnique: true, isRequired: true },
-    email: { type: Text, isUnique: true, isRequired: true, access: userCanAccessUsers },
+    email: { type: Text, isUnique: true, isRequired: true },
     password: { type: Password, useCompiledBcrypt: true, rejectCommon: true, isRequired: true },
     // avatar: {type: CloudinaryImage, adapter: cloudinaryAdapter},
     isAdmin: {
@@ -26,12 +26,12 @@ export default {
     },
     threads: { type: Relationship, ref: 'Thread', many: true },
     posts: { type: Relationship, ref: 'Post', many: true },
-    // isModeratorOf: {
-    //   type: Relationship,
-    //   ref: 'Forum.moderators',
-    //   many: true,
-    //   access: { read: true, create: false, update: false }
-    // },
+    isModeratorOf: {
+      type: Relationship,
+      ref: 'Forum.moderators',
+      many: true,
+      access: { update: false }
+    },
     // isOwnerOf: {
     //   type: Relationship,
     //   ref: 'Forum.owner',

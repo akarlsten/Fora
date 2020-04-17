@@ -1,8 +1,14 @@
 import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
+import { createError } from 'apollo-errors'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminModeratorOrOwner } from '../utils/access'
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
+
+const AccessDeniedError = createError('AccessDeniedError', {
+  message: 'You do not have access to this resource',
+  options: { showPath: true }
+})
 
 export default {
   fields: {
@@ -47,7 +53,7 @@ export default {
     },
     moderators: {
       type: Relationship,
-      ref: 'User',
+      ref: 'User.isModeratorOf',
       many: true
     },
     isBanned: {
@@ -59,25 +65,35 @@ export default {
     isPrivate: {
       type: Checkbox,
       access: {
-        update: ({ authentication: { item: user }, existingItem, itemId }) => {
+        update: ({ authentication: { item: user }, existingItem, operation }) => {
+          return true
+          // console.log()
+          // console.log(existingItem)
+          // if (existingItem) {
+          //   return existingItem[fieldKey] === user.id
+          // }
           // TODO: Clean this up - perhaps into access
           if (!user) {
             return false
           }
-          const { owner, moderators } = existingItem
+          const { owner } = existingItem
 
-          // console.log(moderators)
-          // console.log(`--------\nCurrent user: ${user.id}\nCurrent owner: ${owner}\nAre they equal? ${user.id === owner}\nType - user.id: ${typeof user.id}\n Type - owner: ${typeof owner}`)
+          console.log(existingItem)
 
-          if (user.isAdmin || user.id === `${owner}` || (moderators && moderators.includes(user.id))) {
+          if (user.isAdmin || user.id === `${owner}`) {
             return true
           }
 
-          return true
+          return false
         }
       },
       hooks: {
         validateInput: async ({ existingItem, context, actions: { query } }) => {
+          const user = context.authedItem
+          if (!!user.isAdmin || user.id === `${existingItem.owner}`) {
+            return
+          }
+
           const queryString = `
           query ($forumID: ID!) {
             Forum(where: { id: $forumID}) {
@@ -93,16 +109,15 @@ export default {
             skipAccessControl: true,
             variables: {
               forumID: existingItem.id
-              // userID: context.authedItem.id
             }
           }
+          console.log(existingItem)
+          console.log(context.authedItem)
+          const { data } = await query(queryString, options)
 
-          const { errors, data } = await query(queryString, options)
-
-          console.log(errors)
-          console.log(JSON.stringify(data))
-          // console.log('data', data.Forum.moderators.includes(context.authedItem.id))
-          // console.log('errors', errors)
+          if (!data.Forum.moderators.some(moderator => moderator.id === user.id)) {
+            throw new AccessDeniedError()
+          }
         }
       }
     }
@@ -111,7 +126,7 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: userIsAdminModeratorOrOwner,
+    update: true, // userIsAdminModeratorOrOwner,
     delete: userIsAdmin
   }
 }

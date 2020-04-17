@@ -10,8 +10,9 @@ import User from './lists/User'
 import Forum from './lists/Forum'
 import Thread from './lists/Thread'
 import Post from './lists/Post'
+import Moderator from './lists/Moderator'
 
-const PROJECT_NAME = 'test'
+const PROJECT_NAME = 'dev'
 
 const keystone = new Keystone({
   name: PROJECT_NAME,
@@ -21,6 +22,7 @@ const keystone = new Keystone({
 
 keystone.createList('User', User)
 keystone.createList('Forum', Forum)
+keystone.createList('Moderator', Moderator)
 keystone.createList('Thread', Thread)
 keystone.createList('Post', Post)
 
@@ -64,7 +66,8 @@ export default {
     new GraphQLApp({ authStrategy }),
     new AdminUIApp({
       enableDefaultRoute: true,
-      authStrategy
+      authStrategy,
+      isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
     })
   ]
 }
