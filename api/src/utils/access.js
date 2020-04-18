@@ -4,13 +4,10 @@ export function userIsAdmin ({ authentication: { item: user } }) {
 }
 
 export function userOwnsThing ({ authentication: { item: user }, existingItem }) {
-  if (!user) {
-    return false
-  }
-
-  return {
-    owner: { id: user.id }
-  }
+  return user && user.id === `${existingItem.owner}`
+  // {
+  //   owner: { id: user.id }
+  // }
 }
 
 // export function userOwnsItem ({ authentication: { item: user } }) {
@@ -31,19 +28,7 @@ export function userIsLoggedIn ({ authentication: { item: user } }) {
   return !!user
 }
 
-export function userIsModerator ({ authentication: { item: user }, itemId, itemIds }) {
-  /*
-  @Adam Karlsten I have the function for list and field level but I add this
-if (existingItem) {
-    return existingItem[fieldName] === user.id || existingItem.public === true;
-  }
-before I do the where return.
-This will allow you to check on the field level if the person is a moderator and make the change.
-You should be able to access fieldKey on a field access control and do this check
-(ie - if existing item and the user is moderator, approve if fieldKey is isPrivate)
-  */
-  console.log(itemId)
-  console.log(itemIds)
+export function userIsModerator ({ authentication: { item: user } }) {
   if (!user) {
     return false
   }

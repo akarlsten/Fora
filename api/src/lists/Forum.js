@@ -2,7 +2,9 @@ import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 import { createError } from 'apollo-errors'
 
-import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminModeratorOrOwner } from '../utils/access'
+import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner } from '../utils/access'
+import { userIsAdminModeratorOrOwner } from '../hooks/access'
+
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
 
 const AccessDeniedError = createError('AccessDeniedError', {
@@ -53,8 +55,11 @@ export default {
     },
     moderators: {
       type: Relationship,
-      ref: 'User.isModeratorOf',
-      many: true
+      ref: 'User',
+      many: true,
+      access: {
+        update: userIsAdminOrOwner
+      }
     },
     isBanned: {
       type: Checkbox,
@@ -64,32 +69,13 @@ export default {
     },
     isPrivate: {
       type: Checkbox,
-      access: {
-        update: ({ authentication: { item: user }, existingItem, operation }) => {
-          return true
-          // console.log()
-          // console.log(existingItem)
-          // if (existingItem) {
-          //   return existingItem[fieldKey] === user.id
-          // }
-          // TODO: Clean this up - perhaps into access
-          if (!user) {
-            return false
-          }
-          const { owner } = existingItem
-
-          console.log(existingItem)
-
-          if (user.isAdmin || user.id === `${owner}`) {
-            return true
-          }
-
-          return false
-        }
-      },
       hooks: {
         validateInput: async ({ existingItem, context, actions: { query } }) => {
           const user = context.authedItem
+          if (!user) {
+            throw new AccessDeniedError()
+          }
+
           if (!!user.isAdmin || user.id === `${existingItem.owner}`) {
             return
           }
@@ -111,8 +97,7 @@ export default {
               forumID: existingItem.id
             }
           }
-          console.log(existingItem)
-          console.log(context.authedItem)
+
           const { data } = await query(queryString, options)
 
           if (!data.Forum.moderators.some(moderator => moderator.id === user.id)) {
@@ -126,7 +111,7 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: true, // userIsAdminModeratorOrOwner,
+    update: userIsLoggedIn,
     delete: userIsAdmin
   }
 }
