@@ -1,16 +1,10 @@
 import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
-import { createError } from 'apollo-errors'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner } from '../utils/access'
-import { userIsAdminModeratorOrOwner } from '../hooks/access'
+import { userIsAdminModeratorOrOwner } from '../hooks/forumHooks'
 
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
-
-const AccessDeniedError = createError('AccessDeniedError', {
-  message: 'You do not have access to this resource',
-  options: { showPath: true }
-})
 
 export default {
   fields: {
@@ -61,6 +55,14 @@ export default {
         update: userIsAdminOrOwner
       }
     },
+    bannedUsers: {
+      type: Relationship,
+      ref: 'User',
+      many: true,
+      hooks: {
+        validateInput: userIsAdminModeratorOrOwner
+      }
+    },
     isBanned: {
       type: Checkbox,
       access: {
@@ -70,40 +72,7 @@ export default {
     isPrivate: {
       type: Checkbox,
       hooks: {
-        validateInput: async ({ existingItem, context, actions: { query } }) => {
-          const user = context.authedItem
-          if (!user) {
-            throw new AccessDeniedError()
-          }
-
-          if (!!user.isAdmin || user.id === `${existingItem.owner}`) {
-            return
-          }
-
-          const queryString = `
-          query ($forumID: ID!) {
-            Forum(where: { id: $forumID}) {
-              name
-              moderators {
-                id
-              }
-            }
-          }
-          `
-
-          const options = {
-            skipAccessControl: true,
-            variables: {
-              forumID: existingItem.id
-            }
-          }
-
-          const { data } = await query(queryString, options)
-
-          if (!data.Forum.moderators.some(moderator => moderator.id === user.id)) {
-            throw new AccessDeniedError()
-          }
-        }
+        validateInput: userIsAdminModeratorOrOwner
       }
     }
   },

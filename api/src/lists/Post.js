@@ -6,7 +6,7 @@ import { userIsLoggedIn, userIsAdmin } from '../utils/access'
 
 export default {
   fields: {
-    author: {
+    owner: {
       type: AuthedRelationship,
       ref: 'User',
       access: {
@@ -21,7 +21,7 @@ export default {
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: userIsAdmin,
+    update: userIsLoggedIn,
     delete: userIsAdmin
   },
   plugins: [atTracking(), byTracking()]

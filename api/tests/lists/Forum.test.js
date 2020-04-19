@@ -902,7 +902,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       // fetch the email and password from the fixtures
       const { email, password } = users[3]
 
-      const { token, item } = await login(app, email, password)
+      const { token } = await login(app, email, password)
 
       expect(token).toBeTruthy()
 
@@ -954,6 +954,327 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors).toBe(undefined)
       expect(data.updateForum.name).toBe('test2')
       expect(data.updateForum.isPrivate).toBe(true)
+    }))
+
+    test('should allow owner to ban users', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            bannedUsers {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            bannedUsers: {
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ email: 'test2@wow.com' }]))
+    }))
+
+    test('should allow admin to ban users', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            bannedUsers {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            bannedUsers: {
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ email: 'test2@wow.com' }]))
+    }))
+
+    test('should allow moderator to ban users', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            bannedUsers {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            bannedUsers: {
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(errors).toBe(undefined)
+      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ email: 'test2@wow.com' }]))
+    }))
+
+    test('should not allow regular users to ban users', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[2]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allForums(
+          where: {
+            url: "test2"
+          }
+        ) {
+          id
+          owner {
+            id
+          }
+        }
+      }
+      `
+      })
+
+      const userData = await graphqlRequest({
+        keystone,
+        query: `
+      query {
+        allUsers(
+          where: {
+            email: "test2@wow.com"
+          }
+        ) {
+          id
+        }
+      }
+      `
+      })
+
+      const forumID = forumData.data.allForums[0].id
+      const userID = userData.data.allUsers[0].id
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation($id: ID!, $data: ForumUpdateInput) {
+          updateForum(
+            id: $id,
+            data: $data
+          ) {
+            bannedUsers {
+              email
+            }
+          }
+      }
+    `,
+        variables: {
+          id: forumID,
+          data: {
+            bannedUsers: {
+              connect: [
+                { id: userID }
+              ]
+            }
+          }
+        }
+      })
+
+      expect(data).toEqual({ updateForum: null })
+      expect(errors).toMatchObject([{ name: 'NestedError' }])
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
     }))
   })
 })

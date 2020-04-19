@@ -1,7 +1,7 @@
 import { Text, Checkbox, Relationship } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
-import { userIsAdminOrOwner } from '../utils/access'
+import { userIsAdminOrOwner, userIsLoggedIn, userIsAdmin } from '../utils/access'
 
 export default {
   fields: {
@@ -9,7 +9,7 @@ export default {
       type: Text
     },
     posts: { type: Relationship, ref: 'Post', many: true, isRequired: true },
-    forum: { type: Relationship, ref: 'Forum', isRequired: true },
+    forum: { type: Relationship, ref: 'Forum', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,
       access: {
@@ -17,5 +17,10 @@ export default {
       }
     }
   },
-  plugins: [byTracking()]
+  plugins: [byTracking()],
+  access: {
+    create: userIsLoggedIn,
+    update: true,
+    delete: userIsAdmin
+  }
 }
