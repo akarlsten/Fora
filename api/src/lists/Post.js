@@ -2,7 +2,7 @@ import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
 import { Text, Checkbox, Relationship } from '@keystonejs/fields'
 import { atTracking, byTracking } from '@keystonejs/list-plugins'
 
-import { userIsLoggedIn, userIsAdmin } from '../utils/access'
+import { userIsLoggedIn, userIsAdmin, userIsAdminOrOwner } from '../utils/access'
 
 export default {
   fields: {
@@ -14,14 +14,13 @@ export default {
         update: userIsAdmin
       }
     },
-    thread: { type: Relationship, ref: 'Thread', isRequired: true },
-    content: { type: Text },
-    edited: { type: Checkbox, defaultValue: false }
+    thread: { type: Relationship, ref: 'Thread', isRequired: true, access: { update: false } },
+    content: { type: Text }
   },
   access: {
     create: userIsLoggedIn,
     read: true,
-    update: userIsLoggedIn,
+    update: userIsAdminOrOwner,
     delete: userIsAdmin
   },
   plugins: [atTracking(), byTracking()]
