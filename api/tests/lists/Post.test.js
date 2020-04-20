@@ -4,7 +4,7 @@ import login from '../utils/login'
 import fixtures, { users, forums } from '../fixtures/fixtures'
 
 multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
-  describe('Model: Forum', () => {
+  describe('Model: Post', () => {
 
   })
 })

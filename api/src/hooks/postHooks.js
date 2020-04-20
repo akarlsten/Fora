@@ -16,14 +16,15 @@ export async function userIsAdminModeratorOrOwner ({ existingItem, context, acti
   }
 
   const queryString = `
-          query ($forumID: ID!) {
-            Forum(where: { id: $forumID}) {
-              name
-              owner {
-                id
-              }
-              moderators {
-                id
+          query ($threadID: ID!) {
+            Thread(where: { id: $threadID}) {
+              forum {
+                owner {
+                  id
+                }
+                moderators {
+                  id
+                }
               }
             }
           }
@@ -32,13 +33,13 @@ export async function userIsAdminModeratorOrOwner ({ existingItem, context, acti
   const options = {
     skipAccessControl: true,
     variables: {
-      forumID: existingItem.forum
+      threadID: existingItem.thread
     }
   }
 
   const { data } = await query(queryString, options)
 
-  if (!data.Forum.moderators.some(moderator => moderator.id === user.id || !data.Forum.owner.id === user.id)) {
+  if (!data.Thread.forum.moderators.some(moderator => moderator.id === user.id || !data.Thread.forum.owner.id === user.id)) {
     throw new AccessDeniedError()
   }
 }
