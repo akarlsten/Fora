@@ -5,7 +5,11 @@ const AccessDeniedError = createError('AccessDeniedError', {
   options: { showPath: true }
 })
 
-export async function userIsAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
+export async function userIsBanned ({ existingItem, context, actions: { query } }) {
+
+}
+
+export async function userIsForumAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
   if (!user) {
     throw new AccessDeniedError()
@@ -41,4 +45,8 @@ export async function userIsAdminModeratorOrOwner ({ existingItem, context, acti
   if (!data.Forum.moderators.some(moderator => moderator.id === user.id || !data.Forum.owner.id === user.id)) {
     throw new AccessDeniedError()
   }
+}
+
+export async function threadIsOpen ({ existingItem }) {
+
 }

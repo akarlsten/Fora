@@ -5,7 +5,7 @@ const AccessDeniedError = createError('AccessDeniedError', {
   options: { showPath: true }
 })
 
-export async function userIsAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
+export async function userIsForumAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
   if (!user) {
     throw new AccessDeniedError()

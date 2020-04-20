@@ -3,6 +3,7 @@ import { Text, Checkbox, Relationship } from '@keystonejs/fields'
 import { atTracking, byTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin, userIsAdminOrOwner } from '../utils/access'
+import { userIsForumAdminModeratorOrOwner } from '../hooks/postHooks'
 
 export default {
   fields: {
