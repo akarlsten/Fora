@@ -62,5 +62,98 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
       expect(errors).toBe(undefined)
     }))
+
+    test('shouldnt allow banned user to create thread', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[5]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumID = await getForumID(keystone, 'test2')
+
+      expect(forumID).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createThread(data: {
+            title: "The first thread",
+            posts: { create: [{content: "hej hej hej"}]},
+            forum: { connect: { id: "${forumID}" } }
+          }) {
+            title
+            posts {
+              owner {
+                email
+              }
+              content
+            }
+            forum {
+              name
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toEqual({ createThread: null })
+      expect(errors).toMatchObject([{ name: 'NestedError' }])
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('shouldnt allow too long thread names', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[4]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumID = await getForumID(keystone, 'test2')
+
+      expect(forumID).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createThread(data: {
+            title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lobortis velit tortor, vitae posuere.",
+            posts: { create: [{content: "hej hej hej"}]},
+            forum: { connect: { id: "${forumID}" } }
+          }) {
+            title
+            posts {
+              owner {
+                email
+              }
+              content
+            }
+            forum {
+              name
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toEqual({ createThread: null })
+      expect(errors).toMatchObject([{ name: 'ValidationFailureError' }])
+    }))
   })
 })
