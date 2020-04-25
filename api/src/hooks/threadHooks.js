@@ -65,7 +65,9 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
     }
   }
 
-  const { data } = await query(queryString, options)
+  const { data, errors } = await query(queryString, options)
+
+  console.log(errors)
 
   if (!data.Forum.moderators.some(moderator => moderator.id === user.id || !data.Forum.owner.id === user.id)) {
     throw new AccessDeniedError()

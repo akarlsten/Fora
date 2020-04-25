@@ -106,8 +106,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(data).toEqual({ createThread: null })
-      expect(errors).toMatchObject([{ name: 'NestedError' }])
-      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+      expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
     }))
 
     test('shouldnt allow too long thread names', runner(setupTest, async ({ keystone, create, app }) => {

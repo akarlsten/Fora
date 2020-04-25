@@ -40,6 +40,17 @@ export function userIsModerator ({ authentication: { item: user } }) {
   }
 }
 
+export function forumIsBanned ({ existingItem }) {
+  return Boolean(existingItem && existingItem.isBanned)
+}
+
+export function userIsAdminOrForumNotBanned (auth) {
+  const isAdmin = userIsAdmin(auth)
+  const isBanned = forumIsBanned(auth)
+
+  return isAdmin || !isBanned
+}
+
 export function userIsAdminModeratorOrOwner (auth) {
   const isAdmin = userIsAdmin(auth)
   const isOwner = userOwnsThing(auth)

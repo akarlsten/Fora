@@ -1,7 +1,7 @@
 import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
-import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner } from '../utils/access'
+import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminOrForumNotBanned } from '../utils/access'
 import { userIsAdminModeratorOrOwner } from '../hooks/forumHooks'
 
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
@@ -67,7 +67,8 @@ export default {
       type: Checkbox,
       access: {
         update: userIsAdmin
-      }
+      },
+      defaultValue: false
     },
     isPrivate: {
       type: Checkbox,
@@ -79,7 +80,7 @@ export default {
   plugins: [byTracking()],
   access: {
     create: userIsLoggedIn,
-    read: true,
+    read: userIsAdminOrForumNotBanned,
     update: userIsLoggedIn,
     delete: userIsAdmin
   }

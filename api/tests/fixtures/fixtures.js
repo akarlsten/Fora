@@ -59,8 +59,8 @@ export const users = [
 ]
 
 export const forums = [
-  { name: 'Hej Hopp', url: 'hejhopp', owner: { where: { email: 'adam@wow.com' } }, threads: [], moderators: [] },
-  { name: 'test2', url: 'test2', owner: { where: { email: 'test@wow.com' } }, threads: [], bannedUsers: [{ where: { email: 'banned@wow.com' } }], moderators: [{ where: { email: 'test3@wow.com' } }, { where: { email: 'test4@wow.com' } }] }
+  { name: 'Hej Hopp', url: 'hejhopp', owner: { where: { email: 'adam@wow.com' } }, threads: [], moderators: [], isBanned: false },
+  { name: 'test2', url: 'test2', owner: { where: { email: 'test@wow.com' } }, threads: [], bannedUsers: [{ where: { email: 'banned@wow.com' } }], moderators: [{ where: { email: 'test3@wow.com' } }, { where: { email: 'test4@wow.com' } }], isBanned: false }
 ]
 
 export default {

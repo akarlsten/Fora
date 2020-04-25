@@ -8,14 +8,14 @@ export default {
   fields: {
     title: {
       type: Text,
+      isRequired: true,
       hooks: {
         validateInput: async ({ existingItem, context, actions, resolvedData, addFieldValidationError }) => {
-          if (resolvedData.title.length > 75) {
-            addFieldValidationError('Max length of thread title is 75 characters.')
+          if (resolvedData.title.length > 75 || resolvedData.title.length < 4) {
+            addFieldValidationError('Thread title needs to be between 4 and 75 characters.')
           }
 
-          await userIsBanned({ resolvedData, existingItem, context, actions })
-
+          // only allow mods/admins/forum owners to edit thread titles
           if (existingItem) {
             await userIsForumAdminModeratorOrOwner(existingItem, context, actions)
           }
@@ -33,7 +33,14 @@ export default {
     state: {
       type: Select,
       options: ['opened', 'closed'],
-      defaultValue: 'opened'
+      defaultValue: 'opened',
+      hooks: {
+        validateInput: async ({ existingItem, context, actions }) => {
+          if (existingItem) {
+            await userIsForumAdminModeratorOrOwner(existingItem, context, actions)
+          }
+        }
+      }
     }
   },
   plugins: [byTracking()],
@@ -41,5 +48,8 @@ export default {
     create: userIsLoggedIn,
     update: userIsLoggedIn,
     delete: userIsAdmin
+  },
+  hooks: {
+    validateInput: userIsBanned
   }
 }
