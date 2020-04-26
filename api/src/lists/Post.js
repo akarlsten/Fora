@@ -11,12 +11,12 @@ export default {
       type: AuthedRelationship,
       ref: 'User',
       access: {
-        create: userIsAdmin,
-        update: userIsAdmin
-      }
+        update: false
+      },
+      isRequired: true
     },
-    thread: { type: Relationship, ref: 'Thread', isRequired: true, access: { update: false } },
-    content: { type: Text }
+    thread: { type: Relationship, ref: 'Thread.posts', isRequired: true, access: { update: false } },
+    content: { type: Text, isRequired: true }
   },
   access: {
     create: userIsLoggedIn,
