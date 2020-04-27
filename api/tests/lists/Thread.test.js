@@ -2,6 +2,7 @@ import { multiAdapterRunners, graphqlRequest, networkedGraphqlRequest } from '@k
 import setupTest from '../setupTest'
 import login from '../utils/login'
 import getForumID from '../utils/getForumID'
+import createThread from '../utils/createThread'
 import fixtures, { users, forums } from '../fixtures/fixtures'
 
 multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
@@ -153,6 +154,43 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
 
       expect(data).toEqual({ createThread: null })
       expect(errors).toMatchObject([{ name: 'ValidationFailureError' }])
+    }))
+
+    test('should not allow user to change posts in thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 400,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            posts: {
+              create: [{content: "tjenis"}]
+            }
+          }) {
+            title
+            posts {
+              content
+            }
+          }
+        }
+    `
+      })
+
+      expect(data).toBeFalsy()
+      expect(errors).toMatchObject([{ name: 'ValidationError' }])
     }))
   })
 })

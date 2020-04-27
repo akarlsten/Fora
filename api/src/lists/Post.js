@@ -1,5 +1,5 @@
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
-import { Text, Checkbox, Relationship } from '@keystonejs/fields'
+import { Text, Checkbox, Virtual, Relationship } from '@keystonejs/fields'
 import { atTracking, byTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin, userIsAdminOrOwner } from '../utils/access'
@@ -16,7 +16,8 @@ export default {
       isRequired: true
     },
     thread: { type: Relationship, ref: 'Thread.posts', isRequired: true, access: { update: false } },
-    content: { type: Text, isRequired: true }
+    content: { type: Text, isRequired: true },
+    edited: { type: Virtual, graphQLReturnType: 'Boolean', resolver: post => (post.updatedAt > post.createdAt) }
   },
   access: {
     create: userIsLoggedIn,

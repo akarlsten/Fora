@@ -17,12 +17,12 @@ export default {
 
           // only allow mods/admins/forum owners to edit thread titles
           if (existingItem) {
-            await userIsForumAdminModeratorOrOwner(existingItem, context, actions)
+            await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
           }
         }
       }
     },
-    posts: { type: Relationship, ref: 'Post.thread', many: true, isRequired: true },
+    posts: { type: Relationship, ref: 'Post.thread', many: true, isRequired: true, access: { update: false } },
     forum: { type: Relationship, ref: 'Forum', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,
@@ -37,7 +37,7 @@ export default {
       hooks: {
         validateInput: async ({ existingItem, context, actions }) => {
           if (existingItem) {
-            await userIsForumAdminModeratorOrOwner(existingItem, context, actions)
+            await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
           }
         }
       }

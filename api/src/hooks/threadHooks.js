@@ -26,7 +26,7 @@ export async function userIsBanned ({ resolvedData, existingItem, context, actio
   const options = {
     skipAccessControl: true,
     variables: {
-      forumID: forum
+      forumID: `${forum}`
     }
   }
 
@@ -61,13 +61,11 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
   const options = {
     skipAccessControl: true,
     variables: {
-      forumID: existingItem.forum
+      forumID: `${existingItem.forum}`
     }
   }
 
   const { data, errors } = await query(queryString, options)
-
-  console.log(errors)
 
   if (!data.Forum.moderators.some(moderator => moderator.id === user.id || !data.Forum.owner.id === user.id)) {
     throw new AccessDeniedError()

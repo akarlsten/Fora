@@ -28,6 +28,7 @@ export default async function createThread (keystone, fixtures, users, app) {
             id
             title
             posts {
+              id
               owner {
                 email
               }
@@ -43,6 +44,7 @@ export default async function createThread (keystone, fixtures, users, app) {
 
   return {
     threadID: data.createThread.id,
-    forumID: data.createThread.forum.id
+    forumID: data.createThread.forum.id,
+    postID: data.createThread.posts[0].id
   }
 }
