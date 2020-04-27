@@ -25,7 +25,7 @@ export default {
       }
     },
     threads: { type: Relationship, ref: 'Thread', many: true },
-    posts: { type: Relationship, ref: 'Post', many: true },
+    posts: { type: Relationship, ref: 'Post.owner', many: true },
     // isModeratorOf: {
     //   type: Relationship,
     //   ref: 'Forum.moderators',

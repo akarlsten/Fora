@@ -23,7 +23,7 @@ export default {
       }
     },
     posts: { type: Relationship, ref: 'Post.thread', many: true, isRequired: true, access: { update: false } },
-    forum: { type: Relationship, ref: 'Forum', isRequired: true, access: { update: userIsAdmin } },
+    forum: { type: Relationship, ref: 'Forum.threads', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,
       hooks: {

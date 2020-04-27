@@ -9,7 +9,7 @@ export default {
   fields: {
     owner: {
       type: AuthedRelationship,
-      ref: 'User',
+      ref: 'User.posts',
       access: {
         update: false
       },

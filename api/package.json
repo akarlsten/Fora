@@ -26,8 +26,11 @@
     "@keystonejs/list-plugins": "^5.1.2",
     "@keystonejs/mongo-join-builder": "^7.0.0",
     "bcrypt": "^4.0.1",
+    "connect-mongo": "^3.2.0",
     "cross-env": "^7.0.2",
-    "esm": "^3.2.25"
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express-session": "^1.17.1"
   },
   "devDependencies": {
     "@keystonejs/test-utils": "^6.0.2",

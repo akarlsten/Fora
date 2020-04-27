@@ -39,7 +39,7 @@ export default {
         update: false
       }
     },
-    threads: { type: Relationship, ref: 'Thread', many: true },
+    threads: { type: Relationship, ref: 'Thread.forum', many: true },
     owner: {
       type: AuthedRelationship,
       ref: 'User',
