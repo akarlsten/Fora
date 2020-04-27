@@ -5,6 +5,40 @@ const AccessDeniedError = createError('AccessDeniedError', {
   options: { showPath: true }
 })
 
+export async function userIsBanned ({ resolvedData, existingItem, context, actions: { query } }) {
+  const user = context.authedItem
+  const thread = (existingItem && existingItem.thread) || resolvedData.thread
+
+  if (user.isAdmin) {
+    return
+  }
+
+  const queryString = `
+          query ($threadID: ID!) {
+            Thread(where: { id: $threadID}) {
+              forum {
+                bannedUsers {
+                  id
+                }
+              }
+            }
+          }
+          `
+
+  const options = {
+    skipAccessControl: true,
+    variables: {
+      threadID: thread
+    }
+  }
+
+  const { data } = await query(queryString, options)
+
+  if (data.Thread.forum.bannedUsers.some(banned => banned.id === user.id)) {
+    throw new AccessDeniedError()
+  }
+}
+
 export async function userIsForumAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
   if (!user) {

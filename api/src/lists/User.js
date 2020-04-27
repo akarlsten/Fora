@@ -44,6 +44,13 @@ export default {
       type: Select,
       options: ['active', 'deactivated'],
       defaultValue: 'active'
+    },
+    isGlobalBanned: {
+      type: Checkbox,
+      access: {
+        create: userIsAdmin,
+        update: userIsAdmin
+      }
     }
   },
   access: {
