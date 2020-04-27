@@ -3,7 +3,7 @@ import { Text, Checkbox, Virtual, Relationship } from '@keystonejs/fields'
 import { atTracking, byTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin, userIsAdminOrOwner } from '../utils/access'
-import { userIsForumAdminModeratorOrOwner } from '../hooks/postHooks'
+import { userIsForumAdminModeratorOrOwner, userIsBanned } from '../hooks/postHooks'
 
 export default {
   fields: {
@@ -24,6 +24,9 @@ export default {
     read: true,
     update: userIsAdminOrOwner,
     delete: userIsAdmin
+  },
+  hooks: {
+    validateInput: userIsBanned
   },
   plugins: [atTracking(), byTracking()]
 }

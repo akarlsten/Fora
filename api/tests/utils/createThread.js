@@ -12,7 +12,7 @@ export default async function createThread (keystone, fixtures, users, app) {
 
   const forumID = await getForumID(keystone, 'test2')
 
-  const { data } = await networkedGraphqlRequest({
+  const { data, errors } = await networkedGraphqlRequest({
     app,
     headers: {
       Authorization: `Bearer ${token}`
@@ -42,6 +42,7 @@ export default async function createThread (keystone, fixtures, users, app) {
     `
   })
 
+  console.log(JSON.stringify(errors))
   return {
     threadID: data.createThread.id,
     forumID: data.createThread.forum.id,

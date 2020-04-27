@@ -7,6 +7,13 @@ const AccessDeniedError = createError('AccessDeniedError', {
 
 export async function userIsBanned ({ resolvedData, existingItem, context, actions: { query } }) {
   const user = context.authedItem
+
+  // if resolvedData doesnt contain the (required!) thread field, this is being run as nested mutation on Thread,
+  // which has its own userIsBanned check, hence we can skip it here.
+  if (!resolvedData.thread) {
+    return
+  }
+
   const thread = (existingItem && existingItem.thread) || resolvedData.thread
 
   if (user.isAdmin) {
@@ -34,6 +41,7 @@ export async function userIsBanned ({ resolvedData, existingItem, context, actio
 
   const { data } = await query(queryString, options)
 
+  console.log(data.Thread)
   if (data.Thread.forum.bannedUsers.some(banned => banned.id === user.id)) {
     throw new AccessDeniedError()
   }
