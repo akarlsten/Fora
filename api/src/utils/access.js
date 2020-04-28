@@ -4,6 +4,7 @@ export function userIsAdmin ({ authentication: { item: user } }) {
 }
 
 export function userOwnsThing ({ authentication: { item: user }, existingItem }) {
+  // TODO: Look into why this doesnt work with Posts, existingItem = undefined
   return user && user.id === `${existingItem.owner}`
   // {
   //   owner: { id: user.id }

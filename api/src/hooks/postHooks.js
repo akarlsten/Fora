@@ -41,6 +41,24 @@ export async function userIsBanned ({ resolvedData, existingItem, context, actio
   }
 }
 
+export async function userOwnsPost ({ existingItem, context }) {
+  if (!existingItem) {
+    return
+  }
+
+  const user = context.authedItem
+
+  const owner = (existingItem && existingItem.owner)
+
+  if (user.isAdmin) {
+    return
+  }
+
+  if (user.id !== `${owner}`) {
+    throw new AccessDeniedError()
+  }
+}
+
 export async function threadOrForumIsClosed ({ resolvedData, existingItem, context, actions: { query } }) {
   const user = context.authedItem
 

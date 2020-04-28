@@ -200,6 +200,64 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors[0]).toMatchObject({ name: 'AccessDeniedError' })
     }))
 
+    test('should not allow user to edit others posts', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { content: "edited by me" }) {
+              content
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updatePost: null })
+      expect(errors[0]).toMatchObject({ name: 'AccessDeniedError' })
+    }))
+
+    test('should allow user to edit own posts', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app, false, 1)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { content: "edited by me" }) {
+              content
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updatePost: { content: 'edited by me' } })
+      expect(errors).toBe(undefined)
+    }))
+
     test('shouldnt allow user to post to closed thread', runner(setupTest, async ({ keystone, create, app }) => {
       const { threadID } = await createThread(keystone, fixtures, users, app, true)
       // sequential tests

@@ -42,7 +42,7 @@ export default {
     new GraphQLApp({
       authStrategy,
       apollo: {
-        validationRules: [validation.depthLimit(10)]
+        validationRules: [validation.depthLimit(30)]
       }
     }),
     new AdminUIApp({
