@@ -2,15 +2,16 @@ import login from './login'
 import getForumID from './getForumID'
 import { networkedGraphqlRequest } from '@keystonejs/test-utils'
 
-export default async function createThread (keystone, fixtures, users, app, startClosed) {
+// TODO: disgusting, refactor the parameters
+export default async function createThread (keystone, fixtures, users, app, startClosed, user = 4, forum = 'test2') {
   await keystone.createItems(fixtures)
 
   // fetch the email and password from the fixtures
-  const { email, password } = users[4]
+  const { email, password } = users[user]
 
   const { token } = await login(app, email, password)
 
-  const forumID = await getForumID(keystone, 'test2')
+  const forumID = await getForumID(keystone, forum)
 
   const state = startClosed ? 'closed' : 'opened'
 

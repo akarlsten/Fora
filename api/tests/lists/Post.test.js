@@ -249,5 +249,56 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
       expect(errors).toMatchObject([{ name: 'ThreadClosedError' }])
     }))
+
+    test('shouldnt allow user to post to thread in banned forum', runner(setupTest, async ({ keystone, create, app }) => {
+      // here, an admin created a thread in a banned forum, which our user then attempts to post to
+      const { threadID } = await createThread(keystone, fixtures, users, app, false, 0, 'bannedforum')
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      // post 1
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createPost(data: {
+            content: "hej kompisar",
+            thread: { connect: { id: "${threadID}" } }
+          }) {
+            content
+            owner {
+              email
+            }
+            thread {
+              title
+              forum {
+                name
+              }
+              posts {
+                owner {
+                  email
+                }
+                content
+              }
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({
+        createPost: null
+      })
+      expect(errors).toMatchObject([{ name: 'ForumBannedError' }])
+    }))
   })
 })
