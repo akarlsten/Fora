@@ -199,5 +199,55 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toMatchObject({ deletePost: null })
       expect(errors[0]).toMatchObject({ name: 'AccessDeniedError' })
     }))
+
+    test('shouldnt allow user to post to closed thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, true)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      // post 1
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createPost(data: {
+            content: "hej kompisar",
+            thread: { connect: { id: "${threadID}" } }
+          }) {
+            content
+            owner {
+              email
+            }
+            thread {
+              title
+              forum {
+                name
+              }
+              posts {
+                owner {
+                  email
+                }
+                content
+              }
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({
+        createPost: null
+      })
+      expect(errors).toMatchObject([{ name: 'ThreadClosedError' }])
+    }))
   })
 })

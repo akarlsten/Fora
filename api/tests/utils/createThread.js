@@ -2,7 +2,7 @@ import login from './login'
 import getForumID from './getForumID'
 import { networkedGraphqlRequest } from '@keystonejs/test-utils'
 
-export default async function createThread (keystone, fixtures, users, app) {
+export default async function createThread (keystone, fixtures, users, app, startClosed) {
   await keystone.createItems(fixtures)
 
   // fetch the email and password from the fixtures
@@ -11,6 +11,8 @@ export default async function createThread (keystone, fixtures, users, app) {
   const { token } = await login(app, email, password)
 
   const forumID = await getForumID(keystone, 'test2')
+
+  const state = startClosed ? 'closed' : 'opened'
 
   const { data, errors } = await networkedGraphqlRequest({
     app,
@@ -23,7 +25,8 @@ export default async function createThread (keystone, fixtures, users, app) {
           createThread(data: {
             title: "The first thread",
             posts: { create: [{content: "hej hej hej"}]},
-            forum: { connect: { id: "${forumID}" } }
+            forum: { connect: { id: "${forumID}" } },
+            state: ${state}
           }) {
             id
             title
