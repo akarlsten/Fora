@@ -2,7 +2,7 @@ import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
 import { userIsAdminOrOwner, userIsLoggedIn, userIsAdmin } from '../utils/access'
-import { userIsForumAdminModeratorOrOwner, userIsBanned } from '../hooks/threadHooks'
+import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned } from '../hooks/threadHooks'
 
 export default {
   fields: {
@@ -50,6 +50,8 @@ export default {
     delete: userIsAdmin
   },
   hooks: {
-    validateInput: userIsBanned
+    validateInput: async ({ existingItem, context, actions, resolvedData }) => {
+      await Promise.all([userIsBanned({ resolvedData, existingItem, context, actions }), forumIsBanned({ resolvedData, existingItem, context, actions })])
+    }
   }
 }

@@ -192,5 +192,53 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toBeFalsy()
       expect(errors).toMatchObject([{ name: 'ValidationError' }])
     }))
+
+    test('shouldnt allow user to create thread in banned forum', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[4]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumID = await getForumID(keystone, 'bannedforum')
+
+      expect(forumID).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createThread(data: {
+            title: "The first thread",
+            posts: { create: [{content: "hej hej hej"}]},
+            forum: { connect: { id: "${forumID}" } }
+          }) {
+            title
+            posts {
+              owner {
+                email
+              }
+              content
+            }
+            forum {
+              name
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({
+        createThread: null
+      })
+      expect(errors).toMatchObject([{ name: 'ForumBannedError' }])
+    }))
   })
 })

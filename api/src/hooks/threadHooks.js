@@ -56,7 +56,7 @@ export async function forumIsBanned ({ resolvedData, existingItem, context, acti
   const options = {
     skipAccessControl: true,
     variables: {
-      threadID: forum
+      forumID: forum
     }
   }
 

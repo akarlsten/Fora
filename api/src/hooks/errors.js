@@ -10,7 +10,7 @@ export const ThreadClosedError = createError('ThreadClosedError', {
   options: { showPath: true }
 })
 
-export const ForumBannedError = createError('ThreadClosedError', {
+export const ForumBannedError = createError('ForumBannedError', {
   message: 'This forum has been banned and cannot be posted to.',
   options: { showPath: true }
 })
