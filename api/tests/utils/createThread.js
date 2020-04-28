@@ -42,7 +42,6 @@ export default async function createThread (keystone, fixtures, users, app) {
     `
   })
 
-  console.log(JSON.stringify(errors))
   return {
     threadID: data.createThread.id,
     forumID: data.createThread.forum.id,

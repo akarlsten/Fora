@@ -1,9 +1,4 @@
-import { createError } from 'apollo-errors'
-
-const AccessDeniedError = createError('AccessDeniedError', {
-  message: 'You do not have access to this resource',
-  options: { showPath: true }
-})
+import { AccessDeniedError } from './errors'
 
 export async function userIsAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem

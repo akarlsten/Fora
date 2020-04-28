@@ -1,9 +1,4 @@
-import { createError } from 'apollo-errors'
-
-const AccessDeniedError = createError('AccessDeniedError', {
-  message: 'You do not have access to this resource',
-  options: { showPath: true }
-})
+import { AccessDeniedError, ThreadClosedError, ForumBannedError } from './errors'
 
 export async function userIsBanned ({ resolvedData, existingItem, context, actions: { query } }) {
   const user = context.authedItem
@@ -41,9 +36,50 @@ export async function userIsBanned ({ resolvedData, existingItem, context, actio
 
   const { data } = await query(queryString, options)
 
-  console.log(data.Thread)
   if (data.Thread.forum.bannedUsers.some(banned => banned.id === user.id)) {
     throw new AccessDeniedError()
+  }
+}
+
+export async function threadOrForumIsClosed ({ resolvedData, existingItem, context, actions: { query } }) {
+  const user = context.authedItem
+
+  if (!resolvedData.thread) {
+    return
+  }
+
+  const thread = (existingItem && existingItem.thread) || resolvedData.thread
+
+  if (user.isAdmin) {
+    return
+  }
+
+  const queryString = `
+          query ($threadID: ID!) {
+            Thread(where: { id: $threadID}) {
+              state
+              forum {
+                isBanned
+              }
+            }
+          }
+          `
+
+  const options = {
+    skipAccessControl: true,
+    variables: {
+      threadID: thread
+    }
+  }
+
+  const { data } = await query(queryString, options)
+
+  if (data.Thread.state === 'closed') {
+    throw new ThreadClosedError()
+  }
+
+  if (data.Thread.forum.isBanned) {
+    throw new ForumBannedError()
   }
 }
 
