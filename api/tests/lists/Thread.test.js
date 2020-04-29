@@ -240,5 +240,136 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
       expect(errors).toMatchObject([{ name: 'ForumBannedError' }])
     }))
+
+    test('should not allow user to change title of thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            title: "new title"
+          }) {
+            title
+            posts {
+              content
+            }
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: null })
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow moderator to change title of thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            title: "new title"
+          }) {
+            title
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: { title: 'new title' } })
+      expect(errors).toBe(undefined)
+    }))
+
+    test('should not allow user to close of thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            state: closed
+          }) {
+            state
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: null })
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow moderator to close thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            state: closed
+          }) {
+            state
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: { state: 'closed' } })
+      expect(errors).toBe(undefined)
+    }))
   })
 })
