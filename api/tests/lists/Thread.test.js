@@ -308,7 +308,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors).toBe(undefined)
     }))
 
-    test('should not allow user to close of thread', runner(setupTest, async ({ keystone, create, app }) => {
+    test('should not allow user to close thread', runner(setupTest, async ({ keystone, create, app }) => {
       const { threadID } = await createThread(keystone, fixtures, users, app)
       // sequential tests
       // fetch the email and password from the fixtures
@@ -369,6 +369,70 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(data).toMatchObject({ updateThread: { state: 'closed' } })
+      expect(errors).toBe(undefined)
+    }))
+
+    test('should not allow user to sticky thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            isStickied: true
+          }) {
+            isStickied
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: null })
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow moderator to sticky thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          updateThread(id: "${threadID}", 
+          data: {
+            isStickied: true
+          }) {
+            isStickied
+          }
+        }
+    `
+      })
+
+      expect(data).toMatchObject({ updateThread: { isStickied: true } })
       expect(errors).toBe(undefined)
     }))
   })
