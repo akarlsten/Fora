@@ -225,8 +225,6 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       `
       })
 
-      console.log(errors)
-
       expect(data).toMatchObject({ updatePost: { content: 'edited by moderator' } })
       expect(errors).toBe(undefined)
     }))
@@ -388,6 +386,55 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         createPost: null
       })
       expect(errors).toMatchObject([{ name: 'ForumBannedError' }])
+    }))
+
+    test('should not allow posts with no content', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app)
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createPost(data: {
+            content: "   ",
+            thread: { connect: { id: "${threadID}" } }
+          }) {
+            content
+            owner {
+              email
+            }
+            thread {
+              title
+              forum {
+                name
+              }
+              posts {
+                owner {
+                  email
+                }
+                content
+              }
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({
+        createPost: null
+      })
+      expect(errors).toMatchObject([{ name: 'ValidationFailureError' }])
     }))
   })
 })

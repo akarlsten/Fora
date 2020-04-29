@@ -10,6 +10,11 @@ export default {
       type: Text,
       isRequired: true,
       hooks: {
+        resolveInput: async ({ resolvedData }) => {
+          if (resolvedData.title) {
+            return resolvedData.title.trim()
+          }
+        },
         validateInput: async ({ existingItem, context, actions, resolvedData, addFieldValidationError }) => {
           if (resolvedData.title.length > 75 || resolvedData.title.length < 4) {
             addFieldValidationError('Thread title needs to be between 4 and 75 characters.')

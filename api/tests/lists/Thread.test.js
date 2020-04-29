@@ -435,5 +435,53 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toMatchObject({ updateThread: { isStickied: true } })
       expect(errors).toBe(undefined)
     }))
+
+    test('should not allow thread with empty title', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      // fetch the email and password from the fixtures
+      const { email, password } = users[4]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const forumID = await getForumID(keystone, 'test2')
+
+      expect(forumID).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createThread(data: {
+            title: "   ",
+            posts: { create: [{content: "hej hej hej"}]},
+            forum: { connect: { id: "${forumID}" } }
+          }) {
+            title
+            posts {
+              owner {
+                email
+              }
+              content
+            }
+            forum {
+              name
+            }
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({
+        createThread: null
+      })
+      expect(errors).toMatchObject([{ name: 'ValidationFailureError' }])
+    }))
   })
 })

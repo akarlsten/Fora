@@ -16,7 +16,23 @@ export default {
       isRequired: true
     },
     thread: { type: Relationship, ref: 'Thread.posts', isRequired: true, access: { update: false } },
-    content: { type: Text, isRequired: true },
+    content: {
+      type: Text,
+      isRequired: true,
+      hooks: {
+        resolveInput: async ({ resolvedData }) => {
+          if (resolvedData.content) {
+            return resolvedData.content.trim()
+          }
+        },
+        validateInput: async ({ resolvedData, addFieldValidationError }) => {
+          // MAYBE: Change hardcoded values to configurable from .json file
+          if (resolvedData.content.length > 20000 || resolvedData.content.length < 1) {
+            addFieldValidationError('Content cannot be empty or longer than 20000 characters.')
+          }
+        }
+      }
+    },
     edited: { type: Virtual, graphQLReturnType: 'Boolean', resolver: post => (post.updatedAt > post.createdAt) }
   },
   access: {
@@ -27,6 +43,9 @@ export default {
   },
   hooks: {
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
+      // maybe a bit clever, but since these functions all potentially throw errors and this determines access
+      // we can use try/catch to conditionally check if a user is the post author/not banned/thread open if -
+      // theyre not an admin/mod (who is allowed to do anything really)
       try {
         await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
       } catch (e) {
