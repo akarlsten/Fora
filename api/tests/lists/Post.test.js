@@ -200,6 +200,37 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors[0]).toMatchObject({ name: 'AccessDeniedError' })
     }))
 
+    test('should allow moderator to edit others posts', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app, { user: 2 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { content: "edited by moderator" }) {
+              content
+          }
+        }
+      `
+      })
+
+      console.log(errors)
+
+      expect(data).toMatchObject({ updatePost: { content: 'edited by moderator' } })
+      expect(errors).toBe(undefined)
+    }))
+
     test('should not allow user to edit others posts', runner(setupTest, async ({ keystone, create, app }) => {
       const { postID } = await createThread(keystone, fixtures, users, app)
       // sequential tests
@@ -230,7 +261,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
     }))
 
     test('should allow user to edit own posts', runner(setupTest, async ({ keystone, create, app }) => {
-      const { postID } = await createThread(keystone, fixtures, users, app, false, 1)
+      const { postID } = await createThread(keystone, fixtures, users, app, { user: 1 })
       // sequential tests
       // fetch the email and password from the fixtures
       const { email, password } = users[1]
@@ -259,7 +290,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
     }))
 
     test('shouldnt allow user to post to closed thread', runner(setupTest, async ({ keystone, create, app }) => {
-      const { threadID } = await createThread(keystone, fixtures, users, app, true)
+      const { threadID } = await createThread(keystone, fixtures, users, app, { startClosed: true })
       // sequential tests
       // fetch the email and password from the fixtures
       const { email, password } = users[1]
@@ -310,7 +341,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
 
     test('shouldnt allow user to post to thread in banned forum', runner(setupTest, async ({ keystone, create, app }) => {
       // here, an admin created a thread in a banned forum, which our user then attempts to post to
-      const { threadID } = await createThread(keystone, fixtures, users, app, false, 0, 'bannedforum')
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 0, forum: 'bannedforum' })
       // sequential tests
       // fetch the email and password from the fixtures
       const { email, password } = users[1]

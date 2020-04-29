@@ -103,6 +103,7 @@ export async function threadOrForumIsClosed ({ resolvedData, existingItem, conte
 
 export async function userIsForumAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
+
   if (!user) {
     throw new AccessDeniedError()
   }
@@ -129,7 +130,7 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
   const options = {
     skipAccessControl: true,
     variables: {
-      threadID: existingItem.thread
+      threadID: `${existingItem.thread}`
     }
   }
 

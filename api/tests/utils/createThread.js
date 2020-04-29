@@ -3,7 +3,15 @@ import getForumID from './getForumID'
 import { networkedGraphqlRequest } from '@keystonejs/test-utils'
 
 // TODO: disgusting, refactor the parameters
-export default async function createThread (keystone, fixtures, users, app, startClosed, user = 4, forum = 'test2') {
+/**
+ * Creates a thread with one post in the test database
+ * @param {function} keystone - The testing Keystone instance
+ * @param {object} fixtures - An object containing some fixtures to create forums, users, etc.
+ * @param {array} users - The users list from the above fixtures. Should probably be removed in favor of fixtures.users
+ * @param {function} app - The testing GraphQLApp from Keystone
+ * @param {Object} param4 - A configuration object, allowing you to choose if the thread should be set to closed, who the OP is and which forum it is posted to.
+ */
+export default async function createThread (keystone, fixtures, users, app, { startClosed = false, user = 4, forum = 'test2' } = {}) {
   await keystone.createItems(fixtures)
 
   // fetch the email and password from the fixtures

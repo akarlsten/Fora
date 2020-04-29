@@ -27,7 +27,11 @@ export default {
   },
   hooks: {
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
-      await Promise.all([userOwnsPost({ existingItem, context }), userIsBanned({ resolvedData, existingItem, context, actions }), threadOrForumIsClosed({ resolvedData, existingItem, context, actions })])
+      try {
+        await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
+      } catch (e) {
+        await Promise.all([userOwnsPost({ existingItem, context }), userIsBanned({ resolvedData, existingItem, context, actions }), threadOrForumIsClosed({ resolvedData, existingItem, context, actions })])
+      }
     }
   },
   plugins: [atTracking(), byTracking()]
