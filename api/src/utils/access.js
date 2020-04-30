@@ -25,6 +25,11 @@ export function userIsUser ({ authentication: { item: user } }) {
   return user && { id: user.id }
 }
 
+// similiar to above but this doesnt return a GraphQLWhere and can thus be used in fields (on User)
+export function userIsSelfOrAdmin ({ authentication: { item: user }, existingItem }) {
+  return Boolean(user && user.isAdmin) || (user && user.id) === existingItem.id
+}
+
 export function userIsLoggedIn ({ authentication: { item: user } }) {
   return !!user
 }

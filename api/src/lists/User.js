@@ -3,7 +3,7 @@ import { DateTimeUtc } from '@keystonejs/fields-datetime-utc'
 import { byTracking, atTracking } from '@keystonejs/list-plugins'
 // import { CloudinaryAdapter } from '@keystonejs/file-adapters'
 
-import { userCanAccessUsers, userIsAdmin } from '../utils/access'
+import { userCanAccessUsers, userIsAdmin, userIsSelfOrAdmin } from '../utils/access'
 
 // const cloudinaryAdapter = new CloudinaryAdapter({
 //   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,8 +15,14 @@ import { userCanAccessUsers, userIsAdmin } from '../utils/access'
 export default {
   fields: {
     name: { type: Text, isUnique: true, isRequired: true },
-    email: { type: Text, isUnique: true, isRequired: true },
-    password: { type: Password, useCompiledBcrypt: true, rejectCommon: true, isRequired: true },
+    email: { type: Text, isUnique: true, isRequired: true, access: { read: userIsSelfOrAdmin } },
+    password: {
+      type: Password,
+      useCompiledBcrypt: true,
+      rejectCommon: true,
+      isRequired: true,
+      access: { read: false }
+    },
     // avatar: {type: CloudinaryImage, adapter: cloudinaryAdapter},
     isAdmin: {
       type: Checkbox,
@@ -26,18 +32,6 @@ export default {
     },
     threads: { type: Relationship, ref: 'Thread', many: true },
     posts: { type: Relationship, ref: 'Post.owner', many: true },
-    // isModeratorOf: {
-    //   type: Relationship,
-    //   ref: 'Forum.moderators',
-    //   many: true,
-    //   access: { update: false }
-    // },
-    // isOwnerOf: {
-    //   type: Relationship,
-    //   ref: 'Forum.owner',
-    //   many: true,
-    //   access: { read: true, create: false, update: false }
-    // },
     resetToken: { type: Text, unique: true },
     resetTokenExpiry: { type: DateTimeUtc, unique: true },
     state: {
