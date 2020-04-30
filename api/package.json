@@ -22,6 +22,7 @@
     "@keystonejs/fields": "^9.0.1",
     "@keystonejs/fields-authed-relationship": "^1.0.0",
     "@keystonejs/fields-datetime-utc": "^5.1.4",
+    "@keystonejs/file-adapters": "^6.0.2",
     "@keystonejs/keystone": "^8.1.1",
     "@keystonejs/list-plugins": "^5.1.2",
     "@keystonejs/mongo-join-builder": "^7.0.0",
@@ -47,6 +48,9 @@
     "pino": "^6.1.1",
     "pino-pretty": "^4.0.0"
   },
+  "resolutions": {
+    "graphql-upload": "^10.0.0"
+  },
   "eslintConfig": {
     "parser": "babel-eslint",
     "extends": "standard",
@@ -60,11 +64,5 @@
         }
       }
     ]
-  },
-  "jest": {
-    "transform": {
-      ".js": "jest-esm-transformer"
-    },
-    "testEnvironment": "node"
   }
 }

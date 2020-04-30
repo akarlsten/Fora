@@ -1,16 +1,16 @@
 import { Text, Checkbox, Select, Password, Relationship, CloudinaryImage } from '@keystonejs/fields'
 import { DateTimeUtc } from '@keystonejs/fields-datetime-utc'
 import { byTracking, atTracking } from '@keystonejs/list-plugins'
-// import { CloudinaryAdapter } from '@keystonejs/file-adapters'
+import { CloudinaryAdapter } from '@keystonejs/file-adapters'
 
 import { userCanAccessUsers, userIsAdmin, userIsSelfOrAdmin } from '../utils/access'
 
-// const cloudinaryAdapter = new CloudinaryAdapter({
-//   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-//   apiKey: process.env.CLOUDINARY_KEY,
-//   apiSecret: process.env.CLOUDINARY_SECRET,
-//   folder: 'my-keystone-app'
-// })
+const cloudinaryAdapter = new CloudinaryAdapter({
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  apiKey: process.env.CLOUDINARY_KEY,
+  apiSecret: process.env.CLOUDINARY_SECRET,
+  folder: 'avatars'
+})
 
 export default {
   fields: {
@@ -21,6 +21,7 @@ export default {
       hooks: {
         resolveInput: async ({ resolvedData, existingItem }) => {
           // trims any non-alphanumeric
+          console.log(process.env.CLOUDINARY_KEY)
           return (resolvedData.name && resolvedData.name.replace(/\W/g, '').toLowerCase())
         },
         validateInput: async ({ resolvedData, addFieldValidationError }) => {
@@ -56,7 +57,7 @@ export default {
       isRequired: true,
       access: { read: false }
     },
-    // avatar: {type: CloudinaryImage, adapter: cloudinaryAdapter},
+    avatar: { type: CloudinaryImage, adapter: cloudinaryAdapter },
     isAdmin: {
       type: Checkbox,
       access: {
