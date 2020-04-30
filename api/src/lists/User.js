@@ -14,7 +14,25 @@ import { userCanAccessUsers, userIsAdmin, userIsSelfOrAdmin } from '../utils/acc
 
 export default {
   fields: {
-    name: { type: Text, isUnique: true, isRequired: true },
+    name: {
+      type: Text,
+      isUnique: true,
+      isRequired: true,
+      hooks: {
+        resolveInput: async ({ resolvedData, existingItem }) => {
+          // trims any non-alphanumeric
+          return (resolvedData.name && resolvedData.name.replace(/\W/g, '').toLowerCase())
+        },
+        validateInput: async ({ resolvedData, addFieldValidationError }) => {
+          if (resolvedData.name.length > 20 || resolvedData.name.length < 1) {
+            addFieldValidationError('Username must be between 1 and 20 characters.')
+          }
+        }
+      },
+      access: {
+        update: userIsAdmin
+      }
+    },
     email: { type: Text, isUnique: true, isRequired: true, access: { read: userIsSelfOrAdmin } },
     password: {
       type: Password,
