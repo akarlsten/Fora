@@ -77,6 +77,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
                   email
                 }
                 content
+                isEdited
               }
             }
         }
@@ -110,7 +111,8 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
               content: 'hej tjomme',
               owner: {
                 email: 'test@wow.com'
-              }
+              },
+              isEdited: false
             }]
           }
         }
@@ -278,12 +280,13 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
           mutation {
             updatePost(id: "${postID}", data: { content: "edited by me" }) {
               content
+              isEdited
           }
         }
       `
       })
 
-      expect(data).toMatchObject({ updatePost: { content: 'edited by me' } })
+      expect(data).toMatchObject({ updatePost: { content: 'edited by me', isEdited: true } })
       expect(errors).toBe(undefined)
     }))
 

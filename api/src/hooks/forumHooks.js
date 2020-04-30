@@ -1,5 +1,13 @@
 import { AccessDeniedError } from './errors'
 
+export async function userIsGlobalBanned ({ resolvedData, existingItem, context, actions: { query } }) {
+  const user = context.authedItem
+
+  if (user.userIsGlobalBanned) {
+    throw new AccessDeniedError()
+  }
+}
+
 export async function userIsAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
   if (!user) {

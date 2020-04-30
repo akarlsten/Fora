@@ -36,7 +36,7 @@ export async function userIsBanned ({ resolvedData, existingItem, context, actio
 
   const { data } = await query(queryString, options)
 
-  if (data.Thread.forum.bannedUsers.some(banned => banned.id === user.id)) {
+  if (data.Thread.forum.bannedUsers.some(banned => banned.id === user.id) || user.isGlobalBanned) {
     throw new AccessDeniedError()
   }
 }

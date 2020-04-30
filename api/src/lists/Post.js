@@ -33,7 +33,7 @@ export default {
         }
       }
     },
-    edited: { type: Virtual, graphQLReturnType: 'Boolean', resolver: post => (post.updatedAt > post.createdAt) }
+    isEdited: { type: Virtual, graphQLReturnType: 'Boolean', resolver: post => (post.updatedAt > post.createdAt) }
   },
   access: {
     create: userIsLoggedIn,

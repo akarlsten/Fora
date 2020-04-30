@@ -2,7 +2,7 @@ import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminOrForumNotBanned } from '../utils/access'
-import { userIsAdminModeratorOrOwner } from '../hooks/forumHooks'
+import { userIsAdminModeratorOrOwner, userIsGlobalBanned } from '../hooks/forumHooks'
 
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
 
@@ -13,7 +13,7 @@ export default {
       hooks: {
         resolveInput: async ({ resolvedData, existingItem }) => {
           // trims any non-alphanumeric
-          return (resolvedData.name && resolvedData.name.replace(/\W/g, '')) || existingItem.name
+          return (resolvedData.name && resolvedData.name.replace(/\W/g, '')) // || existingItem.name // perhaps not needed
         },
         validateInput: async ({ resolvedData, addFieldValidationError }) => {
           if (resolvedData.name.length > 20) {
@@ -60,6 +60,9 @@ export default {
       ref: 'User',
       many: true,
       hooks: {
+        // note to maintainer: Keystone doesnt yet allow async access control checks on the field level
+        // they do however allow them on field hooks, hence we are cheating by checking access control
+        // in a validation hook
         validateInput: userIsAdminModeratorOrOwner
       }
     },
@@ -70,6 +73,8 @@ export default {
       },
       defaultValue: false
     },
+    // this field is currently unusable, as there is no way to create async access control checks except with hooks
+    // we cant check if a user is subscriber before giving read access
     isPrivate: {
       type: Checkbox,
       hooks: {
@@ -83,5 +88,8 @@ export default {
     read: userIsAdminOrForumNotBanned,
     update: userIsLoggedIn,
     delete: userIsAdmin
+  },
+  hooks: {
+    validateInput: userIsGlobalBanned
   }
 }
