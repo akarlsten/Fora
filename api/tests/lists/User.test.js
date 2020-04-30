@@ -15,6 +15,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         mutation {
           createUser(data: {
             name: "totinos",
+            displayName: "totinos",
             email: "totinos@pizza.com",
             password: "awoo1234"
           }) {
@@ -84,6 +85,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         mutation {
           createUser(data: {
             name: "/// cool bean xxD !!    ",
+            displayName: "coolbean",
             email: "totinos@pizza.com",
             password: "awoo1234"
           }) {
@@ -94,6 +96,30 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(data).toMatchObject({ createUser: { name: 'coolbeanxxd' } })
+      expect(errors).toBe(undefined)
+    }))
+
+    test('should only trim display name (not remove alphanumeric)', runner(setupTest, async ({ keystone, create, app }) => {
+      await keystone.createItems(fixtures)
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        expectedStatusCode: 200,
+        query: `
+        mutation {
+          createUser(data: {
+            name: "coolbeanxxd",
+            displayName: "/// cool bean xxD !!    ",
+            email: "totinos@pizza.com",
+            password: "awoo1234"
+          }) {
+            displayName
+        }
+      }
+    `
+      })
+
+      expect(data).toMatchObject({ createUser: { displayName: '/// cool bean xxD !!' } })
       expect(errors).toBe(undefined)
     }))
   })

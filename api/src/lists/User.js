@@ -33,6 +33,21 @@ export default {
         update: userIsAdmin
       }
     },
+    displayName: {
+      type: Text,
+      isRequired: true,
+      hooks: {
+        resolveInput: async ({ resolvedData, existingItem }) => {
+          // here we just trim
+          return (resolvedData.displayName && resolvedData.displayName.trim())
+        },
+        validateInput: async ({ resolvedData, addFieldValidationError }) => {
+          if (resolvedData.displayName.length > 50 || resolvedData.displayName.length < 1) {
+            addFieldValidationError('Display name must be between 1 and 50 characters.')
+          }
+        }
+      }
+    },
     email: { type: Text, isUnique: true, isRequired: true, access: { read: userIsSelfOrAdmin } },
     password: {
       type: Password,
