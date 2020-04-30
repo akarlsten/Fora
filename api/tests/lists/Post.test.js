@@ -31,7 +31,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
           }) {
             content
             owner {
-              email
+              name
             }
             thread {
               title
@@ -40,7 +40,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
               }
               posts {
                 owner {
-                  email
+                  name
                 }
                 content
               }
@@ -65,7 +65,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
           }) {
             content
             owner {
-              email
+              name
             }
             thread {
               title
@@ -74,7 +74,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
               }
               posts {
                 owner {
-                  email
+                  name
                 }
                 content
                 isEdited
@@ -89,7 +89,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         createPost: {
           content: 'hej tjomme',
           owner: {
-            email: 'test@wow.com'
+            name: 'pepp'
           },
           thread: {
             title: 'The first thread',
@@ -99,18 +99,18 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             posts: [{
               content: 'hej hej hej',
               owner: {
-                email: 'test4@wow.com'
+                name: 'fifth'
               }
             }, {
               content: 'hej kompisar',
               owner: {
-                email: 'test@wow.com'
+                name: 'pepp'
               }
             },
             {
               content: 'hej tjomme',
               owner: {
-                email: 'test@wow.com'
+                name: 'pepp'
               },
               isEdited: false
             }]
@@ -135,7 +135,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
               }
               posts {
                 owner {
-                  email
+                  name
                 }
                 content
               }
@@ -153,18 +153,18 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
           posts: [{
             content: 'hej hej hej',
             owner: {
-              email: 'test4@wow.com'
+              name: 'fifth'
             }
           }, {
             content: 'hej kompisar',
             owner: {
-              email: 'test@wow.com'
+              name: 'pepp'
             }
           },
           {
             content: 'hej tjomme',
             owner: {
-              email: 'test@wow.com'
+              name: 'pepp'
             }
           }]
         }
@@ -314,18 +314,12 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             thread: { connect: { id: "${threadID}" } }
           }) {
             content
-            owner {
-              email
-            }
             thread {
               title
               forum {
                 name
               }
               posts {
-                owner {
-                  email
-                }
                 content
               }
             }
@@ -365,18 +359,12 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             thread: { connect: { id: "${threadID}" } }
           }) {
             content
-            owner {
-              email
-            }
             thread {
               title
               forum {
                 name
               }
               posts {
-                owner {
-                  email
-                }
                 content
               }
             }
@@ -414,18 +402,12 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             thread: { connect: { id: "${threadID}" } }
           }) {
             content
-            owner {
-              email
-            }
             thread {
               title
               forum {
                 name
               }
               posts {
-                owner {
-                  email
-                }
                 content
               }
             }

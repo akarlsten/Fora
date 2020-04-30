@@ -24,7 +24,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       `
       })
 
-      expect(data.allForums[0].owner.name).toBe('Adde C')
+      expect(data.allForums[0].owner.name).toBe('addec')
       expect(errors).toBe(undefined)
     }))
 
@@ -86,7 +86,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         createForum: {
           name: 'test123',
           url: 'test123',
-          owner: { name: 'Adde C' }
+          owner: { name: 'addec' }
         }
       }
       )
@@ -164,7 +164,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       query {
         allUsers(
           where: {
-            email: "test2@wow.com"
+            name: "bepp"
           }
         ) {
           id
@@ -189,7 +189,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             data: $data
           ) {
             moderators {
-              email
+              name
             }
           }
       }
@@ -208,7 +208,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(errors).toBe(undefined)
-      expect(data.updateForum.moderators[0].email).toBe(users[2].email)
+      expect(data.updateForum.moderators[0].name).toBe(users[2].name)
     }))
 
     test('should not allow non-owner to set moderators', runner(setupTest, async ({ keystone, create, app }) => {
@@ -990,7 +990,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       query {
         allUsers(
           where: {
-            email: "test2@wow.com"
+            name: "bepp"
           }
         ) {
           id
@@ -1015,7 +1015,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             data: $data
           ) {
             bannedUsers {
-              email
+              name
             }
           }
       }
@@ -1033,7 +1033,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(errors).toBe(undefined)
-      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ email: 'test2@wow.com' }]))
+      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ name: 'bepp' }]))
     }))
 
     test('should allow admin to ban users', runner(setupTest, async ({ keystone, create, app }) => {
@@ -1150,7 +1150,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       query {
         allUsers(
           where: {
-            email: "test2@wow.com"
+            name: "bepp"
           }
         ) {
           id
@@ -1175,7 +1175,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             data: $data
           ) {
             bannedUsers {
-              email
+              name
             }
           }
       }
@@ -1193,7 +1193,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
 
       expect(errors).toBe(undefined)
-      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ email: 'test2@wow.com' }]))
+      expect(data.updateForum.bannedUsers).toEqual(expect.arrayContaining([{ name: 'bepp' }]))
     }))
 
     test('should not allow regular users to ban users', runner(setupTest, async ({ keystone, create, app }) => {

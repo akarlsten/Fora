@@ -28,31 +28,31 @@
 
 export const users = [
   {
-    name: 'Adde C',
+    name: 'addec',
     email: 'adam@wow.com',
     password: 'awoo1234',
     isAdmin: true
   }, {
-    name: 'User Pepp',
+    name: 'pepp',
     email: 'test@wow.com',
     password: 'awoo1234'
   }, {
-    name: 'User Bepp',
+    name: 'bepp',
     email: 'test2@wow.com',
     password: 'awoo1234'
   },
   {
-    name: 'A fourth user',
+    name: 'fourth',
     email: 'test3@wow.com',
     password: 'awoo1234'
   },
   {
-    name: 'Fifth user',
+    name: 'fifth',
     email: 'test4@wow.com',
     password: 'awoo1234'
   },
   {
-    name: 'Banned',
+    name: 'banned',
     email: 'banned@wow.com',
     password: 'awoo1234'
   }
