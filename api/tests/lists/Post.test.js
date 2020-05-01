@@ -6,7 +6,6 @@ import fixtures, { users, forums } from '../fixtures/fixtures'
 
 multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
   describe('Model: Post', () => {
-    console.log(process.env.CLOUDINARY_CLOUD_NAME)
     test('should allow authenticated user to post to existing thread', runner(setupTest, async ({ keystone, create, app }) => {
       const { threadID } = await createThread(keystone, fixtures, users, app)
       // sequential tests

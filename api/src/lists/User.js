@@ -21,7 +21,6 @@ export default {
       hooks: {
         resolveInput: async ({ resolvedData, existingItem }) => {
           // trims any non-alphanumeric
-          console.log(process.env.CLOUDINARY_KEY)
           return (resolvedData.name && resolvedData.name.replace(/\W/g, '').toLowerCase())
         },
         validateInput: async ({ resolvedData, addFieldValidationError }) => {

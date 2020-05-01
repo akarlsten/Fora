@@ -1,4 +1,14 @@
-import { AccessDeniedError, ForumBannedError } from './errors'
+import { AccessDeniedError, ForumBannedError, NoPostsError } from './errors'
+
+export async function threadHasNoPosts ({ operation, resolvedData, existingItem, actions: { query } }) {
+  // with new threads, check that post arent empty
+  if (!existingItem) {
+    // check for both absence of the field and if the array is length 0
+    if (!resolvedData.posts || resolvedData?.posts.length < 1) {
+      throw new NoPostsError()
+    }
+  }
+}
 
 export async function userIsBanned ({ resolvedData, existingItem, context, actions: { query } }) {
   const user = context.authedItem

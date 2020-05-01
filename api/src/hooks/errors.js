@@ -14,3 +14,8 @@ export const ForumBannedError = createError('ForumBannedError', {
   message: 'This forum has been banned and cannot be posted to.',
   options: { showPath: true }
 })
+
+export const NoPostsError = createError('NoPostsError', {
+  message: 'You cannot create a thread without at least 1 post.',
+  options: { showPath: true }
+})
