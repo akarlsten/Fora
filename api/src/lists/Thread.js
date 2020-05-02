@@ -69,5 +69,7 @@ export default {
         threadHasNoPosts({ resolvedData, existingItem, context, actions })
       ])
     }
+    // TODO: After the thread itself is deleted, call a mutation to delete all Posts where thread: this
+    // afterDelete: deletePosts
   }
 }

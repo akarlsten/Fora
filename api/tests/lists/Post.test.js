@@ -173,35 +173,6 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(response.errors).toBe(undefined)
     }))
 
-    test('should not allow user to remove others posts', runner(setupTest, async ({ keystone, create, app }) => {
-      const { postID } = await createThread(keystone, fixtures, users, app)
-      // sequential tests
-      // fetch the email and password from the fixtures
-      const { email, password } = users[1]
-
-      const { token } = await login(app, email, password)
-
-      expect(token).toBeTruthy()
-
-      const { data, errors } = await networkedGraphqlRequest({
-        app,
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        expectedStatusCode: 200,
-        query: `
-        mutation {
-          deletePost(id: "${postID}") {
-            content
-        }
-      }
-    `
-      })
-
-      expect(data).toMatchObject({ deletePost: null })
-      expect(errors[0]).toMatchObject({ name: 'AccessDeniedError' })
-    }))
-
     test('should allow moderator to edit others posts', runner(setupTest, async ({ keystone, create, app }) => {
       const { postID } = await createThread(keystone, fixtures, users, app, { user: 2 })
       // sequential tests
@@ -420,6 +391,96 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         createPost: null
       })
       expect(errors).toMatchObject([{ name: 'ValidationFailureError' }])
+    }))
+
+    test('should not allow user to delete own posts', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { isDeleted: true }) {
+              content
+              isEdited
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updatePost: null })
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow moderator to delete posts but not see content', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { isDeleted: true }) {
+              content
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updatePost: { content: null, isDeleted: true } })
+      expect(errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow admins to delete posts and see content', runner(setupTest, async ({ keystone, create, app }) => {
+      const { postID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updatePost(id: "${postID}", data: { isDeleted: true }) {
+              content
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updatePost: { content: 'hej hej hej', isDeleted: true } })
+      expect(errors).toBe(undefined)
     }))
   })
 })
