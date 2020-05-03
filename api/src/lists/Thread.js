@@ -1,7 +1,7 @@
 import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
-import { userIsAdminOrThreadNotDeleted, userIsLoggedIn, userIsAdmin } from '../utils/access'
+import { userIsLoggedIn, userIsAdmin } from '../utils/access'
 import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts, setPostsDeleted } from '../hooks/threadHooks'
 
 export default {

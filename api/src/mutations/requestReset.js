@@ -3,7 +3,7 @@
 
 import { promisify } from 'util'
 import { randomBytes } from 'crypto'
-import { mailTemplate, sgMail } from '../src/mail'
+import { mailTemplate, sgMail } from '../mail/mail'
 
 export async function requestReset (parent, args, ctx, info, { query }) {
   // 1. Check if this is a real user
