@@ -12,6 +12,7 @@ import User from './lists/User'
 import Forum from './lists/Forum'
 import Thread from './lists/Thread'
 import Post from './lists/Post'
+import * as mutations from './mutations'
 
 const MongoStore = MongoStoreMaker(expressSession)
 
@@ -36,6 +37,21 @@ const authStrategy = keystone.createAuthStrategy({
   list: 'User'
 })
 
+keystone.extendGraphQLSchema({
+  types: [{ type: 'type Message { message: String }' }],
+  mutations: [
+    {
+      schema: 'requestReset(email: String!): Message',
+      resolver: mutations.requestReset
+    },
+    {
+      schema:
+        'resetPassword(resetToken: String!, password: String!, confirmPassword: String!): Message',
+      resolver: mutations.resetPassword
+    }
+  ]
+})
+
 export default {
   keystone,
   apps: [
@@ -50,5 +66,8 @@ export default {
       authStrategy,
       isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
     })
-  ]
+  ]/* , // uncomment this in production when behind nginx
+  configureExpress: app => {
+    app.set('trust proxy', true)
+  } */
 }
