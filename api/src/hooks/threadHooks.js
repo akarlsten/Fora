@@ -4,7 +4,7 @@ export async function threadHasNoPosts ({ operation, resolvedData, existingItem,
   // with new threads, check that post arent empty
   if (!existingItem) {
     // check for both absence of the field and if the array is length 0
-    if (!resolvedData.posts || resolvedData?.posts.length < 1) {
+    if (!resolvedData.posts || resolvedData.posts.length < 1) {
       throw new NoPostsError()
     }
   }

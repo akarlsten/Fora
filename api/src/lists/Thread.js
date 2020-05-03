@@ -1,7 +1,7 @@
 import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
-import { userIsAdminOrOwner, userIsLoggedIn, userIsAdmin } from '../utils/access'
+import { userIsAdminOrThreadNotDeleted, userIsLoggedIn, userIsAdmin } from '../utils/access'
 import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts } from '../hooks/threadHooks'
 
 export default {
@@ -25,6 +25,10 @@ export default {
             await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
           }
         }
+      },
+      access: {
+        read: ({ authentication, existingItem }) => !existingItem.isDeleted || userIsAdmin({ authentication }),
+        update: ({ existingItem }) => !existingItem.isDeleted // an admin would have to undelete first
       }
     },
     posts: {
@@ -32,10 +36,19 @@ export default {
       ref: 'Post.thread',
       many: true,
       isRequired: true,
-      access: { update: false }
+      access: {
+        read: ({ authentication, existingItem }) => !existingItem.isDeleted || userIsAdmin({ authentication }),
+        update: false
+      }
     },
     forum: { type: Relationship, ref: 'Forum.threads', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
+      type: Checkbox,
+      hooks: {
+        validateInput: userIsForumAdminModeratorOrOwner
+      }
+    },
+    isDeleted: {
       type: Checkbox,
       hooks: {
         validateInput: userIsForumAdminModeratorOrOwner

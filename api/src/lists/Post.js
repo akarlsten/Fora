@@ -39,12 +39,13 @@ export default {
       },
       access: {
         read: ({ authentication, existingItem }) => !existingItem.isDeleted || userIsAdmin({ authentication }),
-        update: ({ existingItem }) => !existingItem.isDeleted
+        update: ({ existingItem }) => !existingItem.isDeleted // an admin would have to undelete first
       }
     },
     isEdited: { type: Virtual, graphQLReturnType: 'Boolean', resolver: post => (post.updatedAt > post.createdAt) },
     isDeleted: {
       type: Checkbox,
+      // defaultValue: () => false,
       hooks: {
         validateInput: userIsForumAdminModeratorOrOwner
       }

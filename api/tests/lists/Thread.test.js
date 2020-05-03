@@ -531,5 +531,104 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       })
       expect(errors).toMatchObject([{ name: 'NoPostsError' }])
     }))
+
+    test('should not allow user to delete own thread', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[1]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: true }) {
+              title
+              posts {
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updateThread: null })
+      expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow moderator to delete threads but not see content', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: true }) {
+              title
+              posts {
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updateThread: { title: null, posts: null, isDeleted: true } })
+      expect(errors).toMatchObject([{ name: 'AccessDeniedError' }, { name: 'AccessDeniedError' }])
+    }))
+
+    test('should allow admins to delete threads and see content', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: true }) {
+              title
+              posts {
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updateThread: { title: 'The first thread', posts: [{ content: 'hej hej hej' }], isDeleted: true } })
+      expect(errors).toBe(undefined)
+    }))
   })
 })
