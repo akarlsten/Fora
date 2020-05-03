@@ -2,7 +2,7 @@ import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
 import { userIsAdminOrThreadNotDeleted, userIsLoggedIn, userIsAdmin } from '../utils/access'
-import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts } from '../hooks/threadHooks'
+import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts, setPostsDeleted } from '../hooks/threadHooks'
 
 export default {
   fields: {
@@ -51,7 +51,8 @@ export default {
     isDeleted: {
       type: Checkbox,
       hooks: {
-        validateInput: userIsForumAdminModeratorOrOwner
+        validateInput: userIsForumAdminModeratorOrOwner,
+        beforeChange: setPostsDeleted
       }
     },
     state: {
@@ -71,7 +72,7 @@ export default {
   access: {
     create: userIsLoggedIn,
     update: userIsLoggedIn,
-    delete: userIsAdmin
+    delete: false
   },
   hooks: {
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
@@ -82,7 +83,5 @@ export default {
         threadHasNoPosts({ resolvedData, existingItem, context, actions })
       ])
     }
-    // TODO: After the thread itself is deleted, call a mutation to delete all Posts where thread: this
-    // afterDelete: deletePosts
   }
 }

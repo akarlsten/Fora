@@ -111,3 +111,48 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
     throw new AccessDeniedError()
   }
 }
+
+export async function setPostsDeleted ({ existingItem, resolvedData, context, actions: { query } }) {
+  const thread = (existingItem && existingItem.id) || resolvedData.id
+
+  // only do this if the flag has actually changed
+  if (existingItem.isDeleted !== resolvedData.isDeleted) {
+    const queryString = `
+          query ($threadID: ID!) {
+            allPosts(where: { thread: { id: $threadID} }) {
+              id
+            }
+          }
+          `
+
+    const options1 = {
+      skipAccessControl: true,
+      variables: {
+        threadID: `${thread}`
+      }
+    }
+
+    const { data: { allPosts: posts } } = await query(queryString, options1)
+
+    const postsData = []
+    posts.forEach(post => postsData.push({ id: post.id, data: { isDeleted: !!resolvedData.isDeleted } }))
+
+    const mutationString = `
+          mutation ($postsData: [PostsUpdateInput]) {
+            updatePosts(data: $postsData) {
+              id
+              isDeleted
+            }
+          }
+          `
+
+    const options2 = {
+      skipAccessControl: true,
+      variables: {
+        postsData: postsData
+      }
+    }
+
+    await query(mutationString, options2)
+  }
+}

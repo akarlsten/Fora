@@ -619,6 +619,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
             updateThread(id: "${threadID}", data: { isDeleted: true }) {
               title
               posts {
+                isDeleted
                 content
               }
               isDeleted
@@ -627,7 +628,115 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       `
       })
 
-      expect(data).toMatchObject({ updateThread: { title: 'The first thread', posts: [{ content: 'hej hej hej' }], isDeleted: true } })
+      expect(data).toMatchObject({ updateThread: { title: 'The first thread', posts: [{ content: 'hej hej hej', isDeleted: true }], isDeleted: true } })
+      expect(errors).toBe(undefined)
+    }))
+
+    test('should allow admins to undelete threads', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[0]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: true }) {
+              title
+              posts {
+                isDeleted
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: false }) {
+              title
+              posts {
+                isDeleted
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updateThread: { title: 'The first thread', posts: [{ content: 'hej hej hej', isDeleted: false }], isDeleted: false } })
+      expect(errors).toBe(undefined)
+    }))
+
+    test('should allow moderators to undelete threads', runner(setupTest, async ({ keystone, create, app }) => {
+      const { threadID } = await createThread(keystone, fixtures, users, app, { user: 1 })
+      // sequential tests
+      // fetch the email and password from the fixtures
+      const { email, password } = users[3]
+
+      const { token } = await login(app, email, password)
+
+      expect(token).toBeTruthy()
+
+      await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: true }) {
+              title
+              posts {
+                isDeleted
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      const { data, errors } = await networkedGraphqlRequest({
+        app,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        expectedStatusCode: 200,
+        query: `
+          mutation {
+            updateThread(id: "${threadID}", data: { isDeleted: false }) {
+              title
+              posts {
+                isDeleted
+                content
+              }
+              isDeleted
+          }
+        }
+      `
+      })
+
+      expect(data).toMatchObject({ updateThread: { title: 'The first thread', posts: [{ content: 'hej hej hej', isDeleted: false }], isDeleted: false } })
       expect(errors).toBe(undefined)
     }))
   })
