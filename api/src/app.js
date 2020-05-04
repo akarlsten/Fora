@@ -57,12 +57,17 @@ export default {
   apps: [
     new GraphQLApp({
       authStrategy,
+      apiPath: '/api',
+      graphiqlPath: '/gql',
       apollo: {
         validationRules: [validation.depthLimit(30)]
       }
     }),
     new AdminUIApp({
       enableDefaultRoute: true,
+      apiPath: '/api',
+      // graphiqlPath: '/gql',
+      adminPath: '/admin',
       authStrategy,
       isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
     })
