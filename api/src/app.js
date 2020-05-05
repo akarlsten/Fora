@@ -5,6 +5,7 @@ import { AdminUIApp } from '@keystonejs/app-admin-ui'
 import initialiseData from './initial-data'
 import expressSession from 'express-session'
 import MongoStoreMaker from 'connect-mongo'
+import path from 'path'
 
 import { MongooseAdapter as Adapter } from '@keystonejs/adapter-mongoose'
 
@@ -52,6 +53,15 @@ keystone.extendGraphQLSchema({
   ]
 })
 
+// ---- Schema dumping ----
+if (typeof process.env.DUMP_SCHEMA === 'string') {
+  const schemaName = 'public' // this is the default keystonejs schema name
+  keystone.dumpSchema(process.env.DUMP_SCHEMA, schemaName)
+  console.log(`Schema dumped to: ${path.resolve(process.env.DUMP_SCHEMA)}`)
+  process.exit(0)
+}
+// ---- End Schema dumping ----
+
 export default {
   keystone,
   apps: [
@@ -60,7 +70,10 @@ export default {
       apiPath: '/api',
       graphiqlPath: '/gql',
       apollo: {
-        validationRules: [validation.depthLimit(30)]
+        validationRules: [validation.depthLimit(30)],
+        engine: {
+          privateVariables: ['password']
+        }
       }
     }),
     new AdminUIApp({

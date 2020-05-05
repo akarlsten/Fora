@@ -2,6 +2,7 @@ import App from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import withApollo from '../lib/withApollo'
 import '../styles/tailwind.css'
+import Page from '../components/Page'
 
 class MyApp extends App {
   static async getInitialProps ({ Component, ctx }) {
@@ -19,7 +20,9 @@ class MyApp extends App {
 
     return (
       <ApolloProvider client={apollo}>
-        <Component {...pageProps} />
+        <Page>
+          <Component {...pageProps} />
+        </Page>
       </ApolloProvider>
     )
   }

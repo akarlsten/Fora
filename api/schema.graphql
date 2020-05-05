@@ -1,0 +1,862 @@
+
+      scalar Upload
+      type CloudinaryImage_File {
+  id: ID
+  path: String
+  filename: String
+  originalFilename: String
+  mimetype: String
+  encoding: String
+  publicUrl: String
+}
+
+"""
+Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
+All options are strings as they ultimately end up in a URL.
+"""
+input CloudinaryImageFormat {
+  prettyName: String
+  width: String
+  height: String
+  crop: String
+  aspect_ratio: String
+  gravity: String
+  zoom: String
+  x: String
+  y: String
+  format: String
+  fetch_format: String
+  quality: String
+  radius: String
+  angle: String
+  effect: String
+  opacity: String
+  border: String
+  background: String
+  overlay: String
+  underlay: String
+  default_image: String
+  delay: String
+  color: String
+  color_space: String
+  dpr: String
+  page: String
+  density: String
+  flags: String
+  transformation: String
+}
+
+extend type CloudinaryImage_File {
+  publicUrlTransformed(transformation: CloudinaryImageFormat): String
+}
+
+input ThreadRelateToManyInput {
+  create: [ThreadCreateInput]
+  connect: [ThreadWhereUniqueInput]
+  disconnect: [ThreadWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
+input PostRelateToManyInput {
+  create: [PostCreateInput]
+  connect: [PostWhereUniqueInput]
+  disconnect: [PostWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
+scalar String
+
+enum UserStateType {
+  active
+  deactivated
+}
+
+scalar DateTime
+
+input UserRelateToOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: UserWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+""" A keystone list """
+type User {
+  """
+  This virtual field will be resolved in one of the following ways (in this order):
+   1. Execution of 'labelResolver' set on the User List config, or
+   2. As an alias to the field set on 'labelField' in the User List config, or
+   3. As an alias to a 'name' field on the User List (if one exists), or
+   4. As an alias to the 'id' field on the User List.
+  """
+  _label_: String
+  id: ID
+  name: String
+  displayName: String
+  email: String
+  avatar: CloudinaryImage_File
+  isAdmin: Boolean
+  threads(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Thread]
+  _threadsMeta(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  posts(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Post]
+  _postsMeta(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  resetToken: String
+  resetTokenExpiry: String
+  state: UserStateType
+  isGlobalBanned: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+  updatedBy: User
+  createdBy: User
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput]
+  OR: [UserWhereInput]
+  id: ID
+  id_not: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  displayName: String
+  displayName_not: String
+  displayName_contains: String
+  displayName_not_contains: String
+  displayName_starts_with: String
+  displayName_not_starts_with: String
+  displayName_ends_with: String
+  displayName_not_ends_with: String
+  displayName_i: String
+  displayName_not_i: String
+  displayName_contains_i: String
+  displayName_not_contains_i: String
+  displayName_starts_with_i: String
+  displayName_not_starts_with_i: String
+  displayName_ends_with_i: String
+  displayName_not_ends_with_i: String
+  displayName_in: [String]
+  displayName_not_in: [String]
+  email: String
+  email_not: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  email_i: String
+  email_not_i: String
+  email_contains_i: String
+  email_not_contains_i: String
+  email_starts_with_i: String
+  email_not_starts_with_i: String
+  email_ends_with_i: String
+  email_not_ends_with_i: String
+  email_in: [String]
+  email_not_in: [String]
+  avatar: String
+  avatar_not: String
+  avatar_contains: String
+  avatar_not_contains: String
+  avatar_starts_with: String
+  avatar_not_starts_with: String
+  avatar_ends_with: String
+  avatar_not_ends_with: String
+  avatar_in: [String]
+  avatar_not_in: [String]
+  isAdmin: Boolean
+  isAdmin_not: Boolean
+  """ condition must be true for all nodes """
+  threads_every: ThreadWhereInput
+  """ condition must be true for at least 1 node """
+  threads_some: ThreadWhereInput
+  """ condition must be false for all nodes """
+  threads_none: ThreadWhereInput
+  """ is the relation field null """
+  threads_is_null: Boolean
+  """ condition must be true for all nodes """
+  posts_every: PostWhereInput
+  """ condition must be true for at least 1 node """
+  posts_some: PostWhereInput
+  """ condition must be false for all nodes """
+  posts_none: PostWhereInput
+  """ is the relation field null """
+  posts_is_null: Boolean
+  resetToken: String
+  resetToken_not: String
+  resetToken_contains: String
+  resetToken_not_contains: String
+  resetToken_starts_with: String
+  resetToken_not_starts_with: String
+  resetToken_ends_with: String
+  resetToken_not_ends_with: String
+  resetToken_i: String
+  resetToken_not_i: String
+  resetToken_contains_i: String
+  resetToken_not_contains_i: String
+  resetToken_starts_with_i: String
+  resetToken_not_starts_with_i: String
+  resetToken_ends_with_i: String
+  resetToken_not_ends_with_i: String
+  resetToken_in: [String]
+  resetToken_not_in: [String]
+  resetTokenExpiry: String
+  resetTokenExpiry_not: String
+  resetTokenExpiry_lt: String
+  resetTokenExpiry_lte: String
+  resetTokenExpiry_gt: String
+  resetTokenExpiry_gte: String
+  resetTokenExpiry_in: [String]
+  resetTokenExpiry_not_in: [String]
+  state: UserStateType
+  state_not: UserStateType
+  state_in: [UserStateType]
+  state_not_in: [UserStateType]
+  isGlobalBanned: Boolean
+  isGlobalBanned_not: Boolean
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_in: [DateTime]
+  updatedAt_not_in: [DateTime]
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_in: [DateTime]
+  createdAt_not_in: [DateTime]
+  updatedBy: UserWhereInput
+  updatedBy_is_null: Boolean
+  createdBy: UserWhereInput
+  createdBy_is_null: Boolean
+}
+
+input UserWhereUniqueInput {
+  id: ID!
+}
+
+input UserUpdateInput {
+  name: String
+  displayName: String
+  email: String
+  password: String
+  avatar: Upload
+  isAdmin: Boolean
+  threads: ThreadRelateToManyInput
+  posts: PostRelateToManyInput
+  resetToken: String
+  resetTokenExpiry: String
+  state: UserStateType
+  isGlobalBanned: Boolean
+}
+
+input UsersUpdateInput {
+  id: ID!
+  data: UserUpdateInput
+}
+
+input UserCreateInput {
+  name: String
+  displayName: String
+  email: String
+  password: String
+  avatar: Upload
+  isAdmin: Boolean
+  threads: ThreadRelateToManyInput
+  posts: PostRelateToManyInput
+  resetToken: String
+  resetTokenExpiry: String
+  state: UserStateType
+  isGlobalBanned: Boolean
+}
+
+input UsersCreateInput {
+  data: UserCreateInput
+}
+
+input UserRelateToManyInput {
+  create: [UserCreateInput]
+  connect: [UserWhereUniqueInput]
+  disconnect: [UserWhereUniqueInput]
+  disconnectAll: Boolean
+}
+
+""" A keystone list """
+type Forum {
+  """
+  This virtual field will be resolved in one of the following ways (in this order):
+   1. Execution of 'labelResolver' set on the Forum List config, or
+   2. As an alias to the field set on 'labelField' in the Forum List config, or
+   3. As an alias to a 'name' field on the Forum List (if one exists), or
+   4. As an alias to the 'id' field on the Forum List.
+  """
+  _label_: String
+  id: ID
+  name: String
+  url: String
+  threads(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Thread]
+  _threadsMeta(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  owner: User
+  moderators(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): [User]
+  _moderatorsMeta(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  bannedUsers(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): [User]
+  _bannedUsersMeta(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  isBanned: Boolean
+  isPrivate: Boolean
+  updatedBy: User
+  createdBy: User
+}
+
+input ForumWhereInput {
+  AND: [ForumWhereInput]
+  OR: [ForumWhereInput]
+  id: ID
+  id_not: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  url: String
+  url_not: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  url_i: String
+  url_not_i: String
+  url_contains_i: String
+  url_not_contains_i: String
+  url_starts_with_i: String
+  url_not_starts_with_i: String
+  url_ends_with_i: String
+  url_not_ends_with_i: String
+  url_in: [String]
+  url_not_in: [String]
+  """ condition must be true for all nodes """
+  threads_every: ThreadWhereInput
+  """ condition must be true for at least 1 node """
+  threads_some: ThreadWhereInput
+  """ condition must be false for all nodes """
+  threads_none: ThreadWhereInput
+  """ is the relation field null """
+  threads_is_null: Boolean
+  owner: UserWhereInput
+  owner_is_null: Boolean
+  """ condition must be true for all nodes """
+  moderators_every: UserWhereInput
+  """ condition must be true for at least 1 node """
+  moderators_some: UserWhereInput
+  """ condition must be false for all nodes """
+  moderators_none: UserWhereInput
+  """ is the relation field null """
+  moderators_is_null: Boolean
+  """ condition must be true for all nodes """
+  bannedUsers_every: UserWhereInput
+  """ condition must be true for at least 1 node """
+  bannedUsers_some: UserWhereInput
+  """ condition must be false for all nodes """
+  bannedUsers_none: UserWhereInput
+  """ is the relation field null """
+  bannedUsers_is_null: Boolean
+  isBanned: Boolean
+  isBanned_not: Boolean
+  isPrivate: Boolean
+  isPrivate_not: Boolean
+  updatedBy: UserWhereInput
+  updatedBy_is_null: Boolean
+  createdBy: UserWhereInput
+  createdBy_is_null: Boolean
+}
+
+input ForumWhereUniqueInput {
+  id: ID!
+}
+
+input ForumUpdateInput {
+  name: String
+  threads: ThreadRelateToManyInput
+  owner: UserRelateToOneInput
+  moderators: UserRelateToManyInput
+  bannedUsers: UserRelateToManyInput
+  isBanned: Boolean
+  isPrivate: Boolean
+}
+
+input ForumsUpdateInput {
+  id: ID!
+  data: ForumUpdateInput
+}
+
+input ForumCreateInput {
+  name: String
+  threads: ThreadRelateToManyInput
+  moderators: UserRelateToManyInput
+  bannedUsers: UserRelateToManyInput
+  isBanned: Boolean
+  isPrivate: Boolean
+}
+
+input ForumsCreateInput {
+  data: ForumCreateInput
+}
+
+input ForumRelateToOneInput {
+  create: ForumCreateInput
+  connect: ForumWhereUniqueInput
+  disconnect: ForumWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+enum ThreadStateType {
+  opened
+  closed
+}
+
+""" A keystone list """
+type Thread {
+  """
+  This virtual field will be resolved in one of the following ways (in this order):
+   1. Execution of 'labelResolver' set on the Thread List config, or
+   2. As an alias to the field set on 'labelField' in the Thread List config, or
+   3. As an alias to a 'name' field on the Thread List (if one exists), or
+   4. As an alias to the 'id' field on the Thread List.
+  """
+  _label_: String
+  id: ID
+  title: String
+  posts(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Post]
+  _postsMeta(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  forum: Forum
+  isStickied: Boolean
+  isDeleted: Boolean
+  state: ThreadStateType
+  updatedBy: User
+  createdBy: User
+}
+
+input ThreadWhereInput {
+  AND: [ThreadWhereInput]
+  OR: [ThreadWhereInput]
+  id: ID
+  id_not: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  title: String
+  title_not: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  title_i: String
+  title_not_i: String
+  title_contains_i: String
+  title_not_contains_i: String
+  title_starts_with_i: String
+  title_not_starts_with_i: String
+  title_ends_with_i: String
+  title_not_ends_with_i: String
+  title_in: [String]
+  title_not_in: [String]
+  """ condition must be true for all nodes """
+  posts_every: PostWhereInput
+  """ condition must be true for at least 1 node """
+  posts_some: PostWhereInput
+  """ condition must be false for all nodes """
+  posts_none: PostWhereInput
+  """ is the relation field null """
+  posts_is_null: Boolean
+  forum: ForumWhereInput
+  forum_is_null: Boolean
+  isStickied: Boolean
+  isStickied_not: Boolean
+  isDeleted: Boolean
+  isDeleted_not: Boolean
+  state: ThreadStateType
+  state_not: ThreadStateType
+  state_in: [ThreadStateType]
+  state_not_in: [ThreadStateType]
+  updatedBy: UserWhereInput
+  updatedBy_is_null: Boolean
+  createdBy: UserWhereInput
+  createdBy_is_null: Boolean
+}
+
+input ThreadWhereUniqueInput {
+  id: ID!
+}
+
+input ThreadUpdateInput {
+  title: String
+  forum: ForumRelateToOneInput
+  isStickied: Boolean
+  isDeleted: Boolean
+  state: ThreadStateType
+}
+
+input ThreadsUpdateInput {
+  id: ID!
+  data: ThreadUpdateInput
+}
+
+input ThreadCreateInput {
+  title: String
+  posts: PostRelateToManyInput
+  forum: ForumRelateToOneInput
+  isStickied: Boolean
+  isDeleted: Boolean
+  state: ThreadStateType
+}
+
+input ThreadsCreateInput {
+  data: ThreadCreateInput
+}
+
+input ThreadRelateToOneInput {
+  create: ThreadCreateInput
+  connect: ThreadWhereUniqueInput
+  disconnect: ThreadWhereUniqueInput
+  disconnectAll: Boolean
+}
+
+""" A keystone list """
+type Post {
+  """
+  This virtual field will be resolved in one of the following ways (in this order):
+   1. Execution of 'labelResolver' set on the Post List config, or
+   2. As an alias to the field set on 'labelField' in the Post List config, or
+   3. As an alias to a 'name' field on the Post List (if one exists), or
+   4. As an alias to the 'id' field on the Post List.
+  """
+  _label_: String
+  id: ID
+  owner: User
+  thread: Thread
+  content: String
+  isEdited: Boolean
+  isDeleted: Boolean
+  updatedAt: DateTime
+  createdAt: DateTime
+  updatedBy: User
+  createdBy: User
+}
+
+input PostWhereInput {
+  AND: [PostWhereInput]
+  OR: [PostWhereInput]
+  id: ID
+  id_not: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  owner: UserWhereInput
+  owner_is_null: Boolean
+  thread: ThreadWhereInput
+  thread_is_null: Boolean
+  content: String
+  content_not: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  content_i: String
+  content_not_i: String
+  content_contains_i: String
+  content_not_contains_i: String
+  content_starts_with_i: String
+  content_not_starts_with_i: String
+  content_ends_with_i: String
+  content_not_ends_with_i: String
+  content_in: [String]
+  content_not_in: [String]
+  isDeleted: Boolean
+  isDeleted_not: Boolean
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_in: [DateTime]
+  updatedAt_not_in: [DateTime]
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_in: [DateTime]
+  createdAt_not_in: [DateTime]
+  updatedBy: UserWhereInput
+  updatedBy_is_null: Boolean
+  createdBy: UserWhereInput
+  createdBy_is_null: Boolean
+}
+
+input PostWhereUniqueInput {
+  id: ID!
+}
+
+input PostUpdateInput {
+  content: String
+  isDeleted: Boolean
+}
+
+input PostsUpdateInput {
+  id: ID!
+  data: PostUpdateInput
+}
+
+input PostCreateInput {
+  thread: ThreadRelateToOneInput
+  content: String
+  isDeleted: Boolean
+}
+
+input PostsCreateInput {
+  data: PostCreateInput
+}
+
+"""
+NOTE: Can be JSON, or a Boolean/Int/String
+Why not a union? GraphQL doesn't support a union including a scalar
+(https://github.com/facebook/graphql/issues/215)
+"""
+scalar JSON
+
+type _ListAccess {
+  """
+  Access Control settings for the currently logged in (or anonymous)
+  user when performing 'create' operations.
+  NOTE: 'create' can only return a Boolean.
+  It is not possible to specify a declarative Where clause for this
+  operation
+  """
+  create: Boolean
+  """
+  Access Control settings for the currently logged in (or anonymous)
+  user when performing 'read' operations.
+  """
+  read: JSON
+  """
+  Access Control settings for the currently logged in (or anonymous)
+  user when performing 'update' operations.
+  """
+  update: JSON
+  """
+  Access Control settings for the currently logged in (or anonymous)
+  user when performing 'delete' operations.
+  """
+  delete: JSON
+  """
+  Access Control settings for the currently logged in (or anonymous)
+  user when performing 'auth' operations.
+  """
+  auth: JSON
+}
+
+type _ListSchemaFields {
+  """The name of the field in its list."""
+  name: String
+  """The field type (ie, Checkbox, Text, etc)"""
+  type: String
+}
+
+type _ListSchemaRelatedFields {
+  """The typename as used in GraphQL queries"""
+  type: String
+  """A list of GraphQL field names"""
+  fields: [String]
+}
+
+type _ListSchema {
+  """The typename as used in GraphQL queries"""
+  type: String
+  """
+  Top level GraphQL query names which either return this type, or
+  provide aggregate information about this type
+  """
+  queries: [String]
+  """Information about fields defined on this list. """
+  fields(where: _ListSchemaFieldsInput): [_ListSchemaFields]
+  """
+  Information about fields on other types which return this type, or
+  provide aggregate information about this type
+  """
+  relatedFields: [_ListSchemaRelatedFields]
+}
+
+type _ListMeta {
+  """The Keystone List name"""
+  name: String
+  """
+  Access control configuration for the currently authenticated
+  request
+  """
+  access: _ListAccess
+  """Information on the generated GraphQL schema"""
+  schema: _ListSchema
+}
+
+type _QueryMeta {
+  count: Int
+}
+
+input _ksListsMetaInput {
+  key: String
+}
+
+input _ListSchemaFieldsInput {
+  type: String
+}
+
+type Message {
+  message: String
+}
+
+type unauthenticateUserOutput {
+  """
+  `true` when unauthentication succeeds.
+  NOTE: unauthentication always succeeds when the request has an invalid or missing authentication token.
+  """
+  success: Boolean
+}
+
+type authenticateUserOutput {
+  """ Used to make subsequent authenticated requests by setting this token in a header: 'Authorization: Bearer <token>'. """
+  token: String
+  """ Retrieve information on the newly authenticated User here. """
+  item: User
+}
+
+type Query {
+  """ Search for all User items which match the where clause. """
+  allUsers(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): [User]
+  """ Search for the User item with the matching ID. """
+  User(where: UserWhereUniqueInput!): User
+  """ Perform a meta-query on all User items which match the where clause. """
+  _allUsersMeta(where: UserWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  """ Retrieve the meta-data for the User list. """
+  _UsersMeta: _ListMeta
+  """ Search for all Forum items which match the where clause. """
+  allForums(where: ForumWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Forum]
+  """ Search for the Forum item with the matching ID. """
+  Forum(where: ForumWhereUniqueInput!): Forum
+  """ Perform a meta-query on all Forum items which match the where clause. """
+  _allForumsMeta(where: ForumWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  """ Retrieve the meta-data for the Forum list. """
+  _ForumsMeta: _ListMeta
+  """ Search for all Thread items which match the where clause. """
+  allThreads(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Thread]
+  """ Search for the Thread item with the matching ID. """
+  Thread(where: ThreadWhereUniqueInput!): Thread
+  """ Perform a meta-query on all Thread items which match the where clause. """
+  _allThreadsMeta(where: ThreadWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  """ Retrieve the meta-data for the Thread list. """
+  _ThreadsMeta: _ListMeta
+  """ Search for all Post items which match the where clause. """
+  allPosts(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): [Post]
+  """ Search for the Post item with the matching ID. """
+  Post(where: PostWhereUniqueInput!): Post
+  """ Perform a meta-query on all Post items which match the where clause. """
+  _allPostsMeta(where: PostWhereInput, search: String, orderBy: String, first: Int, skip: Int): _QueryMeta
+  """ Retrieve the meta-data for the Post list. """
+  _PostsMeta: _ListMeta
+  """ Retrieve the meta-data for all lists. """
+  _ksListsMeta(where: _ksListsMetaInput): [_ListMeta]
+  """The version of the Keystone application serving this API."""
+  appVersion: String
+  authenticatedUser: User
+}
+
+type Mutation {
+  """ Create a single User item. """
+  createUser(data: UserCreateInput): User
+  """ Create multiple User items. """
+  createUsers(data: [UsersCreateInput]): [User]
+  """ Update a single User item by ID. """
+  updateUser(id: ID!, data: UserUpdateInput): User
+  """ Update multiple User items by ID. """
+  updateUsers(data: [UsersUpdateInput]): [User]
+  """ Delete a single User item by ID. """
+  deleteUser(id: ID!): User
+  """ Delete multiple User items by ID. """
+  deleteUsers(ids: [ID!]): [User]
+  """ Create a single Forum item. """
+  createForum(data: ForumCreateInput): Forum
+  """ Create multiple Forum items. """
+  createForums(data: [ForumsCreateInput]): [Forum]
+  """ Update a single Forum item by ID. """
+  updateForum(id: ID!, data: ForumUpdateInput): Forum
+  """ Update multiple Forum items by ID. """
+  updateForums(data: [ForumsUpdateInput]): [Forum]
+  """ Delete a single Forum item by ID. """
+  deleteForum(id: ID!): Forum
+  """ Delete multiple Forum items by ID. """
+  deleteForums(ids: [ID!]): [Forum]
+  """ Create a single Thread item. """
+  createThread(data: ThreadCreateInput): Thread
+  """ Create multiple Thread items. """
+  createThreads(data: [ThreadsCreateInput]): [Thread]
+  """ Update a single Thread item by ID. """
+  updateThread(id: ID!, data: ThreadUpdateInput): Thread
+  """ Update multiple Thread items by ID. """
+  updateThreads(data: [ThreadsUpdateInput]): [Thread]
+  """ Create a single Post item. """
+  createPost(data: PostCreateInput): Post
+  """ Create multiple Post items. """
+  createPosts(data: [PostsCreateInput]): [Post]
+  """ Update a single Post item by ID. """
+  updatePost(id: ID!, data: PostUpdateInput): Post
+  """ Update multiple Post items by ID. """
+  updatePosts(data: [PostsUpdateInput]): [Post]
+  requestReset(email: String!): Message
+  resetPassword(resetToken: String!, password: String!, confirmPassword: String!): Message
+  """ Authenticate and generate a token for a User with the Password Authentication Strategy. """
+  authenticateUserWithPassword(email: String, password: String): authenticateUserOutput
+  unauthenticateUser: unauthenticateUserOutput
+}
+
+    
