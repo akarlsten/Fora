@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
+import { useUser } from '../components/User'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY {
@@ -11,11 +12,15 @@ query FORUM_QUERY {
 `
 
 const Index = ({ query }) => {
+  const loggedIn = useUser()
   const { data, loading } = useQuery(FORUM_QUERY)
 
   return (
     <div>
       <h1 className="font-sans text-gray-700 font-light text-5xl">Here are forums!</h1>
+      {loggedIn && (
+        <p>You are logged in!</p>
+      )}
       {loading ? (
         <p>Loading forums..</p>
       )
