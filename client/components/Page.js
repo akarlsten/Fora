@@ -7,7 +7,7 @@ const Page = ({ children }) => {
     <React.Fragment>
       <Meta />
       <Header />
-      <div>{children}</div>
+      <div className="container mx-auto px-6 p-20">{children}</div>
     </React.Fragment>
   )
 }
