@@ -16,7 +16,7 @@ const Index = ({ query }) => {
   const { data, loading } = useQuery(FORUM_QUERY)
 
   return (
-    <div>
+    <div className="container mx-auto">
       <h1 className="font-sans text-gray-700 font-light text-5xl">Here are forums!</h1>
       {loggedIn && (
         <p>You are logged in!</p>

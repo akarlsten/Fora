@@ -1,17 +1,16 @@
 import React, { Component, useState, useEffect } from 'react'
 import { useMutation, Mutation } from '@apollo/client'
-
+import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
-import useForm from '../lib/useForm'
 
-import { CURRENT_USER_QUERY } from './User'
+import { useUser, CURRENT_USER_QUERY } from './User'
+import useForm from '../lib/useForm'
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       item {
         id
-        email
         name
       }
     }
@@ -19,6 +18,15 @@ const SIGNIN_MUTATION = gql`
 `
 
 function Signin () {
+  const router = useRouter()
+  const loggedIn = useUser()
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push('/')
+    }
+  }, [loggedIn])
+
   const { inputs, handleChange, resetForm } = useForm({
     email: '',
     password: ''
@@ -69,7 +77,7 @@ function Signin () {
               />
             </label>
           </div>
-          <button className="bg-pink-400 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded" type="submit">Sign In!</button>
+          <input className="bg-pink-400 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded" type="submit" value="Sign in!" />
         </fieldset>
       </form>
       <div className="text-center pt-12 pb-12">
