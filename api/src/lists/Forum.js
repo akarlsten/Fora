@@ -16,8 +16,8 @@ export default {
           return (resolvedData.name && resolvedData.name.replace(/\W/g, '')) // || existingItem.name // perhaps not needed
         },
         validateInput: async ({ resolvedData, addFieldValidationError }) => {
-          if (resolvedData.name.length > 20) {
-            addFieldValidationError('Max length of forum name is 20 characters.')
+          if (resolvedData.name.length > 20 || resolvedData.name.length < 1) {
+            addFieldValidationError('Forum name must be between 1 and 20 characters.')
           }
         }
       },
@@ -37,6 +37,24 @@ export default {
         create: false,
         read: true,
         update: false
+      }
+    },
+    description: {
+      type: Text,
+      hooks: {
+        resolveInput: async ({ resolvedData }) => {
+          if (resolvedData.description) {
+            return resolvedData.description.trim()
+          }
+        },
+        validateInput: async ({ resolvedData, addFieldValidationError, existingItem, context, actions }) => {
+          // MAYBE: Change hardcoded values to configurable from .json file
+          if (resolvedData.description.length > 140 || resolvedData.description.length < 1) {
+            addFieldValidationError('Description cannot be empty or longer than 140 characters.')
+          }
+
+          userIsAdminModeratorOrOwner({ existingItem, context, actions })
+        }
       }
     },
     threads: { type: Relationship, ref: 'Thread.forum', many: true },
