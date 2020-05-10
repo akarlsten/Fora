@@ -1276,5 +1276,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(errors).toMatchObject([{ name: 'NestedError' }])
       expect(errors[0].data.errors).toMatchObject([{ name: 'AccessDeniedError' }])
     }))
+
+    /// TODO: Add tests for description, colorScheme, subscriptions
   })
 })

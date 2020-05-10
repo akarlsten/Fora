@@ -25,7 +25,7 @@ const Index = ({ query }) => {
 
   return (
     <div className="container mx-auto">
-      <h1 className="font-sans text-gray-700 font-bold text-2xl">Forums</h1>
+      <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Forums</h1>
       <ForumList>
         {loading ? (
           <p>Loading forums..</p>

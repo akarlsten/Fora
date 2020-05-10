@@ -122,5 +122,6 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toMatchObject({ createUser: { displayName: '/// cool bean xxD !!' } })
       expect(errors).toBe(undefined)
     }))
+    // TODO: Add tests for subscriptions
   })
 })

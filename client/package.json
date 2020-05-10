@@ -14,6 +14,7 @@
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "apollo-upload-client": "^13.0.0",
     "autoprefixer": "^9.7.6",
+    "d3-format": "^1.4.4",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "next": "9.3.6",

@@ -65,6 +65,7 @@ export default {
     },
     threads: { type: Relationship, ref: 'Thread', many: true },
     posts: { type: Relationship, ref: 'Post.owner', many: true },
+    subscriptions: { type: Relationship, ref: 'Forum.subscribers', many: true },
     resetToken: { type: Text, unique: true },
     resetTokenExpiry: { type: DateTimeUtc, unique: true },
     state: {
