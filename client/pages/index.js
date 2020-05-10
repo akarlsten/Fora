@@ -9,7 +9,11 @@ query FORUM_QUERY {
   allForums {
     id
     name
+    description
     _threadsMeta {
+      count
+    }
+    _subscribersMeta {
       count
     }
   }
@@ -31,7 +35,7 @@ const Index = ({ query }) => {
           <p>Loading forums..</p>
         )
           : data.allForums.map(forum => (
-            <ForumItem key={forum.id} threadCount={forum._threadsMeta.count} {...forum} />
+            <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
           ))}
       </ForumList>
 
