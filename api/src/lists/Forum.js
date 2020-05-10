@@ -1,10 +1,18 @@
-import { Text, Slug, Relationship, Checkbox, Select } from '@keystonejs/fields'
+import { Text, Slug, Relationship, Checkbox, Select, CloudinaryImage } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
+import { CloudinaryAdapter } from '@keystonejs/file-adapters'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminOrForumNotBanned } from '../utils/access'
 import { userIsAdminModeratorOrOwner, userIsGlobalBanned } from '../hooks/forumHooks'
 
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
+
+const cloudinaryAdapter = new CloudinaryAdapter({
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  apiKey: process.env.CLOUDINARY_KEY,
+  apiSecret: process.env.CLOUDINARY_SECRET,
+  folder: 'icons'
+})
 
 export default {
   fields: {
@@ -88,6 +96,14 @@ export default {
         // note to maintainer: Keystone doesnt yet allow async access control checks on the field level
         // they do however allow them on field hooks, hence we are cheating by checking access control
         // in a validation hook
+        validateInput: userIsAdminModeratorOrOwner
+      }
+    },
+    subscribers: { type: Relationship, ref: 'User.subscriptions', many: true, update: false },
+    icon: {
+      type: CloudinaryImage,
+      adapter: cloudinaryAdapter,
+      hooks: {
         validateInput: userIsAdminModeratorOrOwner
       }
     },

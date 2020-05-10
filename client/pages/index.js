@@ -31,7 +31,7 @@ const Index = ({ query }) => {
           <p>Loading forums..</p>
         )
           : data.allForums.map(forum => (
-            <ForumItem key={forum.id} {...forum} />
+            <ForumItem key={forum.id} threadCount={forum._threadsMeta.count} {...forum} />
           ))}
       </ForumList>
 
