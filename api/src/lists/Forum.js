@@ -1,4 +1,4 @@
-import { Text, Slug, Relationship, Checkbox } from '@keystonejs/fields'
+import { Text, Slug, Relationship, Checkbox, Select } from '@keystonejs/fields'
 import { byTracking } from '@keystonejs/list-plugins'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminOrForumNotBanned } from '../utils/access'
@@ -63,6 +63,13 @@ export default {
       ref: 'User',
       access: {
         update: userIsAdmin
+      }
+    },
+    colorScheme: {
+      type: Select,
+      options: 'gray, red, orange, yellow, green, teal, blue, indigo, purple, pink',
+      hooks: {
+        validateInput: userIsAdminModeratorOrOwner
       }
     },
     moderators: {
