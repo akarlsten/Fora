@@ -54,7 +54,7 @@ export default {
       useCompiledBcrypt: true,
       rejectCommon: true,
       isRequired: true,
-      access: { read: false }
+      access: { read: userIsAdmin }
     },
     avatar: { type: CloudinaryImage, adapter: cloudinaryAdapter },
     isAdmin: {

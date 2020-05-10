@@ -1,11 +1,19 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
-import { useUser } from '../components/User'
+import { useUser } from '../hooks/useUser'
+import ForumItem from '../components/ForumItem'
+import ForumList from '../components/ForumList'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY {
   allForums {
     id
+    name
+    _threadsMeta {
+      count
+    }
+  }
+  allUsers {
     name
   }
 }
@@ -17,15 +25,22 @@ const Index = ({ query }) => {
 
   return (
     <div className="container mx-auto">
-      <h1 className="font-sans text-gray-700 font-light text-5xl">Here are forums!</h1>
-      {loggedIn && (
-        <p>You are logged in!</p>
-      )}
+      <h1 className="font-sans text-gray-700 font-bold text-2xl">Forums</h1>
+      <ForumList>
+        {loading ? (
+          <p>Loading forums..</p>
+        )
+          : data.allForums.map(forum => (
+            <ForumItem key={forum.id} {...forum} />
+          ))}
+      </ForumList>
+
+      <h1 className="font-sans mt-4 text-gray-700 font-light text-2xl">Users</h1>
       {loading ? (
-        <p>Loading forums..</p>
+        <p>Loading users..</p>
       )
-        : data.allForums.map(forum => (
-          <p key={forum.id}>{forum.name}</p>
+        : data.allUsers.map(user => (
+          <p key={user.id}>{user.name}</p>
         ))}
     </div>
   )

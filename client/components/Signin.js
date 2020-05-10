@@ -3,7 +3,7 @@ import { useMutation, Mutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
 
-import { useUser, CURRENT_USER_QUERY } from './User'
+import { useUser, CURRENT_USER_QUERY } from '../hooks/useUser'
 import useForm from '../lib/useForm'
 
 const SIGNIN_MUTATION = gql`
@@ -73,11 +73,11 @@ function Signin () {
                 placeholder="password"
                 value={inputs.password}
                 onChange={handleChange}
-                autoComplete="new-password"
+                autoComplete="password"
               />
             </label>
           </div>
-          <input className="bg-pink-400 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded" type="submit" value="Sign in!" />
+          <input className="bg-pink-400 mx-auto text-white font-bold text-lg hover:bg-pink-700 p-2 mt-8 rounded" type="submit" value="Sign in!" />
         </fieldset>
       </form>
       <div className="text-center pt-12 pb-12">
