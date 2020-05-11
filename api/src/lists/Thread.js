@@ -1,5 +1,5 @@
 import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
-import { byTracking } from '@keystonejs/list-plugins'
+import { byTracking, atTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin } from '../utils/access'
 import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts, setPostsDeleted } from '../hooks/threadHooks'
@@ -68,7 +68,7 @@ export default {
       }
     }
   },
-  plugins: [byTracking()],
+  plugins: [byTracking(), atTracking()],
   access: {
     create: userIsLoggedIn,
     update: userIsLoggedIn,
