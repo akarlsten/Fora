@@ -1,7 +1,10 @@
 import ThreadList from './ThreadList'
+import ForumSidebar from './ForumSidebar'
 import SubscribeButton from './SubscribeButton'
 
-const ForumContainer = ({ id, icon, name, threads, colorScheme, description, subscribers }) => {
+const ForumContainer = (props) => {
+  const { id, url, icon, name, threads, colorScheme, subscribers } = props
+
   return (
     <div className="flex flex-col max-w-full">
       <div className="flex items-center mb-8">
@@ -19,7 +22,10 @@ const ForumContainer = ({ id, icon, name, threads, colorScheme, description, sub
           <SubscribeButton forumID={id} color={colorScheme} subscribed={subscribers} />
         </div>
       </div>
-      <ThreadList color={colorScheme} threads={threads} />
+      <div className="flex flex-row items-start">
+        <ThreadList url={url} color={colorScheme} threads={threads} />
+        <ForumSidebar color={colorScheme} {...props} />
+      </div>
     </div>
   )
 }

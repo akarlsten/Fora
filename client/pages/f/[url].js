@@ -16,6 +16,7 @@ query FORUM_QUERY($url: String, $userID: ID) {
     url
     description
     colorScheme
+    createdAt
     icon {
       publicUrlTransformed(transformation: {
         width:"200",
@@ -37,6 +38,12 @@ query FORUM_QUERY($url: String, $userID: ID) {
     }
     _subscribersMeta {
       count
+    }
+    owner {
+      name
+    }
+    moderators {
+      name
     }
     subscribers(where: {
       id: $userID

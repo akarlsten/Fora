@@ -30,7 +30,7 @@ mutation UNSUBSCRIBE($userID: ID!, $forumID: ID!) {
 
 const SubscribeButton = ({ forumID, color, subscribed }) => {
   // bypassing the Apollo cache here, perhaps not the best idea..
-  const [subbed, setSubbed] = useState(subscribed.length >= 1)
+  const [subbed, setSubbed] = useState(subscribed && subscribed.length >= 1)
 
   const user = useUser()
 

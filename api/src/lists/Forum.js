@@ -1,5 +1,5 @@
 import { Text, Slug, Relationship, Checkbox, Select, CloudinaryImage } from '@keystonejs/fields'
-import { byTracking } from '@keystonejs/list-plugins'
+import { byTracking, atTracking } from '@keystonejs/list-plugins'
 import { CloudinaryAdapter } from '@keystonejs/file-adapters'
 
 import { userIsAdmin, userIsLoggedIn, userIsAdminOrOwner, userIsAdminOrForumNotBanned } from '../utils/access'
@@ -123,7 +123,7 @@ export default {
       }
     }
   },
-  plugins: [byTracking()],
+  plugins: [byTracking(), atTracking()],
   access: {
     create: userIsLoggedIn,
     read: userIsAdminOrForumNotBanned,

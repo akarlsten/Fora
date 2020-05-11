@@ -1,4 +1,4 @@
-import { Text, Checkbox, Relationship, Select } from '@keystonejs/fields'
+import { Text, Checkbox, Relationship, Select, Slug } from '@keystonejs/fields'
 import { byTracking, atTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin } from '../utils/access'
@@ -29,6 +29,15 @@ export default {
       access: {
         read: ({ authentication, existingItem }) => !existingItem.isDeleted || userIsAdmin({ authentication }),
         update: ({ existingItem }) => !existingItem.isDeleted // an admin would have to undelete first
+      }
+    },
+    url: {
+      type: Slug,
+      isUnique: true,
+      access: {
+        create: false,
+        read: true,
+        update: false
       }
     },
     posts: {
