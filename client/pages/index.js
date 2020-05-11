@@ -9,7 +9,17 @@ query FORUM_QUERY {
   allForums {
     id
     name
+    url
     description
+    colorScheme
+    icon {
+      publicUrlTransformed(transformation: {
+        width:"100",
+        height:"100",
+        crop:"fill",
+        gravity:"center"
+      })
+    }
     _threadsMeta {
       count
     }

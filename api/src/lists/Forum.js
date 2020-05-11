@@ -75,7 +75,7 @@ export default {
     },
     colorScheme: {
       type: Select,
-      options: 'gray, red, orange, yellow, green, teal, blue, indigo, purple, pink',
+      options: 'gray, red, orange, yellow, green, teal, blue, indigo, purple, pink, black',
       hooks: {
         validateInput: userIsAdminModeratorOrOwner
       }

@@ -26,7 +26,7 @@ const Header = () => {
         <div className="w-1/5 mr-6 flex-shrink-0">
           <Link href="/">
             <a>
-              <img className="h-10 w-full" src="/fora.svg" alt="" />
+              <img className="h-10 w-full" src="/fora.svg" alt="Fora | Go Home" />
             </a>
           </Link>
         </div>
