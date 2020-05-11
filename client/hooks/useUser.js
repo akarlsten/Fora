@@ -7,6 +7,17 @@ const CURRENT_USER_QUERY = gql`
       id
       name
       displayName
+      avatar {
+        publicUrlTransformed(transformation: {
+        width:"100",
+        height:"100",
+        crop:"fill",
+        gravity:"center"
+      })
+      }
+      subscriptions {
+        id
+      }
     }
   }
 `

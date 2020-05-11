@@ -1,20 +1,25 @@
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
+import { useUser } from '../../hooks/useUser'
 import gql from 'graphql-tag'
 
+import ForumContainer from '../../components/ForumContainer'
+
 const FORUM_QUERY = gql`
-query FORUM_QUERY($url: String) {
+query FORUM_QUERY($url: String, $userID: ID) {
   allForums(where: {
     url: $url
   }) {
+    id
     name
     url
     description
     colorScheme
     icon {
       publicUrlTransformed(transformation: {
-        width:"100",
-        height:"100",
+        width:"200",
+        height:"200",
         crop:"fill",
         gravity:"center"
       })
@@ -33,14 +38,21 @@ query FORUM_QUERY($url: String) {
     _subscribersMeta {
       count
     }
+    subscribers(where: {
+      id: $userID
+    }) {
+      id
+    }
   }
 }
 `
 const Forum = () => {
   const router = useRouter()
+  const user = useUser()
+
   const { url } = router.query
   const { data, loading } = useQuery(FORUM_QUERY, {
-    variables: { url }
+    variables: { url, userID: user && user.id }
   })
 
   return (
@@ -49,18 +61,8 @@ const Forum = () => {
         <p>Loading forum..</p>
       )
         : (
-          <React.Fragment>
-            <h1>{data.allForums[0].title}</h1>
-            <p>{data.allForums[0]._threadsMeta.count}</p>
-            {data.allForums[0].threads.map(thread => (
-              <div key={thread.id}>
-                <p>{thread.title}</p>
-                <p>{thread._postsMeta.count}</p>
-              </div>
-            ))}
-          </React.Fragment>
+          <ForumContainer {...data.allForums[0]} />
         )}
-
     </div>
   )
 }

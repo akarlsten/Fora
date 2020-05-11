@@ -27,9 +27,6 @@ query FORUM_QUERY {
       count
     }
   }
-  allUsers {
-    name
-  }
 }
 `
 
@@ -48,14 +45,6 @@ const Index = ({ query }) => {
             <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
           ))}
       </ForumList>
-
-      <h1 className="font-sans mt-4 text-gray-700 font-light text-2xl">Users</h1>
-      {loading ? (
-        <p>Loading users..</p>
-      )
-        : data.allUsers.map(user => (
-          <p key={user.id}>{user.name}</p>
-        ))}
     </div>
   )
 }

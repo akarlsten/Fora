@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { useUser } from '../hooks/useUser'
 import SigninButton from './SigninButton'
 import SignoutButton from './SignoutButton'
+import UserBadge from './UserBadge'
 import NavSearch from './NavSearch'
 
 Router.onRouteChangeStart = () => {
@@ -46,7 +47,7 @@ const Header = () => {
             <div className={'hidden w-3/5 sm:w-2/5 lg:flex lg:items-center lg:justify-end px-6'}>
               {loggedIn && (
                 <React.Fragment>
-                  <p className={'text-pink-400 mr-4'}>Hello {loggedIn.name}!</p>
+                  <UserBadge name={loggedIn.name} avatar={loggedIn.avatar} />
                   <SignoutButton />
                 </React.Fragment>
               )}
