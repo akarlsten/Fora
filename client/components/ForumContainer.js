@@ -1,9 +1,18 @@
+import { useContext, useEffect } from 'react'
+
 import ThreadList from './ThreadList'
 import ForumSidebar from './ForumSidebar'
 import SubscribeButton from './SubscribeButton'
+import { useTheme } from '../context/ColorContext'
 
 const ForumContainer = (props) => {
   const { id, url, icon, name, threads, colorScheme, subscribers } = props
+
+  const { setTheme } = useTheme()
+
+  useEffect(() => {
+    setTheme(colorScheme)
+  }, [])
 
   return (
     <div className="flex flex-col max-w-full">

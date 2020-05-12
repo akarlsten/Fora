@@ -1,7 +1,7 @@
 
 const UserBadge = ({ name, avatar }) => {
   return (
-    <div className="flex items-center px-2 text-gray-800">
+    <div className="flex items-center mx-2 text-gray-800 border-r border-black">
       {avatar ? (
         <img className="w-8 h-8 rounded-full mr-2" src={avatar.publicUrlTransformed} alt="" />
       ) : (
@@ -11,10 +11,11 @@ const UserBadge = ({ name, avatar }) => {
           <circle cx="96" cy="59" r="43" fill="white" />
         </svg>
       )}
-      <p className="font-bold">{name} |</p>
-      <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+      <p className="font-bold pr-2">{name}</p>
     </div>
   )
 }
+
+//         <svg className="h-5 w-5 fill-current pl-2" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
 
 export default UserBadge

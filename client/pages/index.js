@@ -1,6 +1,8 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
+import { useEffect } from 'react'
 import { useUser } from '../hooks/useUser'
+import { useTheme } from '../context/ColorContext'
 import ForumItem from '../components/ForumItem'
 import ForumList from '../components/ForumList'
 
@@ -33,6 +35,11 @@ query FORUM_QUERY {
 const Index = ({ query }) => {
   const loggedIn = useUser()
   const { data, loading } = useQuery(FORUM_QUERY)
+  const { setTheme } = useTheme()
+
+  useEffect(() => {
+    setTheme('pink')
+  }, [])
 
   return (
     <div className="container mx-auto">

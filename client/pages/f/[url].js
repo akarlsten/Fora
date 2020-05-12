@@ -5,6 +5,7 @@ import { useUser } from '../../hooks/useUser'
 import gql from 'graphql-tag'
 
 import ForumContainer from '../../components/ForumContainer'
+import NotFound from '../../components/404'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY($url: String, $userID: ID) {
@@ -28,6 +29,7 @@ query FORUM_QUERY($url: String, $userID: ID) {
     threads {
       id
       title
+      url
       _postsMeta {
         count
       }
@@ -40,9 +42,11 @@ query FORUM_QUERY($url: String, $userID: ID) {
       count
     }
     owner {
+      id
       name
     }
     moderators {
+      id
       name
     }
     subscribers(where: {
@@ -62,16 +66,15 @@ const Forum = () => {
     variables: { url, userID: user && user.id }
   })
 
-  return (
-    <div>
-      {loading ? (
-        <p>Loading forum..</p>
-      )
-        : (
-          <ForumContainer {...data.allForums[0]} />
-        )}
-    </div>
-  )
+  // TODO: ADD 404 PAGE, check if data.allforums is empty!!!!!!!!!
+
+  if (loading) {
+    return <p>Loading forum..</p>
+  } else if (data && data.allForums.length > 0) {
+    return <ForumContainer {...data.allForums[0]} />
+  } else {
+    return <NotFound />
+  }
 }
 
 export default Forum

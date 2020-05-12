@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ForumSidebar = ({ name, color, description, owner, createdAt }) => {
+const ForumSidebar = ({ name, color, description, owner, createdAt, moderators }) => {
   return (
     <div className={`w-full lg:w-1/4 flex flex-col items-center bg-white rounded p-4 ml-4 divide-x-0 border border-${color || 'pink'}-200`}>
       <h2 className="font-bold text-xl">{name}</h2>
@@ -14,7 +14,15 @@ const ForumSidebar = ({ name, color, description, owner, createdAt }) => {
           </React.Fragment>
         )}
       </div>
-      <p>Created by {owner.name} {createdAt && `on ${createdAt}`}</p>
+      <p>Created by <span className="font-bold">{owner.name}</span> {createdAt && `on ${createdAt}`}</p>
+      {moderators && moderators.length > 0 && (
+        <div className="flex flex-col self-start mt-4">
+          <p className="font-bold">Moderators</p>
+          {moderators.map(mod => (
+            <p key={mod.id} className="font-medium">{mod.name}</p>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

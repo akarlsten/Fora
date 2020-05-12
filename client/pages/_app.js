@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/client'
 import withApollo from '../lib/withApollo'
 import '../styles/tailwind.css'
 import Page from '../components/Page'
+import { ColorThemeProvider } from '../context/ColorContext'
 
 class MyApp extends App {
   static async getInitialProps ({ Component, ctx }) {
@@ -17,12 +18,13 @@ class MyApp extends App {
 
   render () {
     const { Component, apollo, pageProps } = this.props
-
     return (
       <ApolloProvider client={apollo}>
-        <Page>
-          <Component {...pageProps} />
-        </Page>
+        <ColorThemeProvider>
+          <Page>
+            <Component {...pageProps} />
+          </Page>
+        </ColorThemeProvider>
       </ApolloProvider>
     )
   }

@@ -13,7 +13,7 @@ const ThreadList = ({ url, threads, color }) => {
   return (
     <div className={`w-full lg:w-3/4 rounded bg-white border border-${color || 'pink'}-200 divide-y divide-${color || 'pink'}-200`}>
       {threads.map(thread => (
-        <ThreadItem key={thread.id} url={url} id={thread.id} title={thread.title} count={thread._postsMeta.count} color={color} />
+        <ThreadItem key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
       ))}
     </div>
   )

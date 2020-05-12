@@ -5,7 +5,7 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head />
-        <body className="bg-pink-100 antialiased">
+        <body className={'bg-pink-100 antialiased'}>
           <Main />
           <NextScript />
         </body>
