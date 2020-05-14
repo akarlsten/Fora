@@ -1,7 +1,25 @@
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { useUser } from '../hooks/useUser'
 import { useState } from 'react'
 import gql from 'graphql-tag'
+
+const SUBSCRIBED_QUERY = gql`
+query SUBSCRIBED_QUERY($userID: ID!, $forumID: ID!) {
+  User(where: { id: $userID }) {
+    subscriptions(where: { id: $forumID }) {
+      id
+    }
+  }
+}
+`
+
+const SUBSCRIBED_FRAGMENT = gql`
+fragment myForum on Forum {
+    _subscribersMeta {
+      count
+    }
+  }
+`
 
 const SUBSCRIBE = gql`
 mutation SUBSCRIBE($userID: ID!, $forumID: ID!) {
@@ -28,20 +46,26 @@ mutation UNSUBSCRIBE($userID: ID!, $forumID: ID!) {
 }
 `
 
-const SubscribeButton = ({ forumID, color, subscribed }) => {
-  // bypassing the Apollo cache here, perhaps not the best idea..
-  const [subbed, setSubbed] = useState(subscribed && subscribed.length >= 1)
-
+const SubscribeButton = ({ forumID, color }) => {
   const user = useUser()
 
-  if (!user) {
-    return ''
-  }
+  const { data, loading } = useQuery(SUBSCRIBED_QUERY, {
+    variables: { userID: user.id, forumID }
+  })
 
   const [setSubscribed] = useMutation(SUBSCRIBE, {
     variables: {
       userID: user.id,
       forumID
+    },
+    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user.id, forumID } }],
+    update (cache) {
+      const { _subscribersMeta: { count } } = cache.readFragment({ id: `Forum:${forumID}`, fragment: SUBSCRIBED_FRAGMENT })
+      cache.writeFragment({
+        id: `Forum:${forumID}`,
+        fragment: SUBSCRIBED_FRAGMENT,
+        data: { _typeName: 'Forum', _subscribersMeta: { count: count + 1 } }
+      })
     }
   })
 
@@ -49,14 +73,28 @@ const SubscribeButton = ({ forumID, color, subscribed }) => {
     variables: {
       userID: user.id,
       forumID
+    },
+    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user.id, forumID } }],
+    update (cache) {
+      const { _subscribersMeta: { count } } = cache.readFragment({ id: `Forum:${forumID}`, fragment: SUBSCRIBED_FRAGMENT })
+      cache.writeFragment({
+        id: `Forum:${forumID}`,
+        fragment: SUBSCRIBED_FRAGMENT,
+        data: { _subscribersMeta: { count: count - 1 } }
+      })
     }
   })
 
-  return subbed ? (
+  if (loading) {
+    return ''
+  }
+
+  const { subscriptions } = data && data.User
+
+  return subscriptions.length > 0 ? (
     <button onClick={async e => {
       e.preventDefault()
       await setUnsubscribed()
-      setSubbed(false)
     }} className={`p-2 rounded border border-${color || 'pink'}-200 ml-4 flex text-${color || 'pink'}-300 items-center`}>
       <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
     Subscribed!
@@ -65,8 +103,7 @@ const SubscribeButton = ({ forumID, color, subscribed }) => {
     <button onClick={async e => {
       e.preventDefault()
       await setSubscribed()
-      setSubbed(true)
-    }} className={`p-2 rounded bg-${color || 'pink'}-400 ml-4 flex items-center`}>
+    }} className={`p-2 rounded border border-${color || 'pink'}-400 bg-${color || 'pink'}-400 ml-4 flex items-center`}>
       <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" fillRule="evenodd"></path></svg>
     Subscribe</button>
   )

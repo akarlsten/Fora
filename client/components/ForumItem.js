@@ -7,7 +7,7 @@ const ForumItem = ({ icon, name, description, threadCount, userCount, colorSchem
   return (
     <Link href="/f/[url]" as={`/f/${url}`}>
       <a className="max-w-sm w-full md:max-w-lg lg:max-w-full">
-        <div className="overflow-hidden divide-x shadow-md cursor-pointer hover:shadow-xl transition duration-100 ease-in-out transform hover:-translate-y-1 bg-white rounded p-4 flex flex-row justify-between">
+        <div className="overflow-hidden h-full divide-x shadow-md cursor-pointer hover:shadow-xl transition duration-100 ease-in-out transform hover:-translate-y-1 bg-white rounded p-4 flex flex-row justify-between">
           <div className="flex flex-col justify-between leading-normal pr-2 overflow-hidden">
             <div className="flex items-center pb-1">
               {icon ? (

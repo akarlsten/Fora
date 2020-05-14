@@ -5,6 +5,8 @@ import { useUser } from '../../../hooks/useUser'
 import gql from 'graphql-tag'
 
 import NotFound from '../../../components/404'
+import Error from '../../../components/Error'
+import LoadingSpinner from '../../../components/LoadingSpinner'
 import ThreadContainer from '../../../components/ThreadContainer'
 
 const THREAD_QUERY = gql`
@@ -31,6 +33,14 @@ query THREAD_QUERY($slug: String) {
       id
       owner {
         name
+        avatar {
+        publicUrlTransformed(transformation: {
+          width:"150",
+          height:"150",
+          crop:"fill",
+          gravity:"center"
+        })
+        }
       }
       content
       createdAt
@@ -48,14 +58,16 @@ const Thread = () => {
 
   console.log(url, tid)
 
-  const { data, loading } = useQuery(THREAD_QUERY, {
+  const { data, loading, error } = useQuery(THREAD_QUERY, {
     variables: { slug: tid }
   })
 
   console.log(data)
 
   if (loading) {
-    return <p>Loading thread..</p>
+    return <LoadingSpinner />
+  } else if (error) {
+    return <Error />
   } else if (data && data.allThreads.length > 0) {
     return <ThreadContainer {...data.allThreads[0]} />
   } else {

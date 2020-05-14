@@ -1,14 +1,15 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
-import { useUser } from '../../hooks/useUser'
 import gql from 'graphql-tag'
 
 import ForumContainer from '../../components/ForumContainer'
 import NotFound from '../../components/404'
+import Error from '../../components/Error'
+import LoadingSpinner from '../../components/LoadingSpinner'
 
 const FORUM_QUERY = gql`
-query FORUM_QUERY($url: String, $userID: ID) {
+query FORUM_QUERY($url: String) {
   allForums(where: {
     url: $url
   }) {
@@ -49,28 +50,24 @@ query FORUM_QUERY($url: String, $userID: ID) {
       id
       name
     }
-    subscribers(where: {
-      id: $userID
-    }) {
-      id
-    }
   }
 }
 `
 const Forum = () => {
   const router = useRouter()
-  const user = useUser()
 
   const { url } = router.query
-  const { data, loading } = useQuery(FORUM_QUERY, {
-    variables: { url, userID: user && user.id }
+  const { data, loading, error } = useQuery(FORUM_QUERY, {
+    variables: { url }
   })
 
   // TODO: ADD 404 PAGE, check if data.allforums is empty!!!!!!!!!
 
   if (loading) {
-    return <p>Loading forum..</p>
-  } else if (data && data.allForums.length > 0) {
+    return <LoadingSpinner />
+  } else if (error) {
+    return <Error />
+  } else if (data && data.allForums && data.allForums.length > 0) {
     return <ForumContainer {...data.allForums[0]} />
   } else {
     return <NotFound />
