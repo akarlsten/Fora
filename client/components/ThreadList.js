@@ -1,7 +1,7 @@
 import ThreadItem from './ThreadItem'
 
 const ThreadList = ({ url, threads, color }) => {
-  if (!threads || threads.length < 1) {
+  if (threads?.length < 1) {
     return (
       <div className="w-full flex flex-col justify-center items-center mt-10">
         <img className="w-64 self-center mb-10" src="/happy_thing.svg" style={{ filter: 'grayscale(100%) opacity(40%)' }} alt=""/>

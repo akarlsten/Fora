@@ -19,6 +19,10 @@ query FORUM_QUERY($url: String) {
     description
     colorScheme
     createdAt
+    isBanned
+    bannedUsers {
+      id
+    }
     icon {
       publicUrlTransformed(transformation: {
         width:"200",
@@ -61,13 +65,11 @@ const Forum = () => {
     variables: { url }
   })
 
-  // TODO: ADD 404 PAGE, check if data.allforums is empty!!!!!!!!!
-
   if (loading) {
     return <LoadingSpinner />
   } else if (error) {
     return <Error />
-  } else if (data && data.allForums && data.allForums.length > 0) {
+  } else if (data?.allForums?.length > 0) {
     return <ForumContainer {...data.allForums[0]} />
   } else {
     return <NotFound />

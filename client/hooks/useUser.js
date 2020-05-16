@@ -8,6 +8,7 @@ const CURRENT_USER_QUERY = gql`
       name
       displayName
       isAdmin
+      isGlobalBanned
       avatar {
         publicUrlTransformed(transformation: {
         width:"100",

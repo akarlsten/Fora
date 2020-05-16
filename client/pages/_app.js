@@ -1,7 +1,7 @@
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import withApollo from '../lib/withApollo'
-import '../styles/tailwind.css'
+import '../styles/styles.css'
 import Page from '../components/Page'
 import { ColorThemeProvider } from '../context/ColorContext'
 

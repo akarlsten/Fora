@@ -6,6 +6,8 @@ import { useTheme } from '../context/ColorContext'
 import ForumItem from '../components/ForumItem'
 import ForumList from '../components/ForumList'
 
+import { createClient } from '../lib/withApollo'
+
 const FORUM_QUERY = gql`
 query FORUM_QUERY {
   allForums {
@@ -32,7 +34,7 @@ query FORUM_QUERY {
 }
 `
 
-const Index = ({ query }) => {
+const Index = (/* data */) => {
   const loggedIn = useUser()
   const { data, loading } = useQuery(FORUM_QUERY)
   const { setTheme } = useTheme()
@@ -55,5 +57,16 @@ const Index = ({ query }) => {
     </div>
   )
 }
+
+// SSR pattern
+// export const getServerSideProps = async (context) => {
+//   const apolloClient = createClient()
+
+//   const { data } = await apolloClient.query({
+//     query: FORUM_QUERY
+//   })
+
+//   return { props: data }
+// }
 
 export default Index

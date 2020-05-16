@@ -62,6 +62,11 @@ if (typeof process.env.DUMP_SCHEMA === 'string') {
 }
 // ---- End Schema dumping ----
 
+console.log('!!!!!!')
+console.log('Hello future me, Keystone added the ability to use async access control functions in v 10.0.')
+console.log('This should allow us to rewrite the hacky validateInput-hook based access control and allow us to use it on read operations, enabling private forums.')
+console.log('Investigate this later!!')
+
 export default {
   keystone,
   apps: [

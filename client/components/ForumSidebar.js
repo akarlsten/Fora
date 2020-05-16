@@ -8,14 +8,14 @@ const ForumSidebar = ({ name, color, description, owner, createdAt, moderators }
         {description ? (
           <p>{description}</p>
         ) : (
-          <React.Fragment>
+          <>
             <p>A forum without a description.</p>
             <img className="mt-4" src="/mystery.gif" alt=""/>
-          </React.Fragment>
+          </>
         )}
       </div>
       <p>Created by <span className="font-bold">{owner.name}</span> {createdAt && `on ${createdAt}`}</p>
-      {moderators && moderators.length > 0 && (
+      {moderators?.length > 0 && (
         <div className="flex flex-col self-start mt-4">
           <p className="font-bold">Moderators</p>
           {moderators.map(mod => (
