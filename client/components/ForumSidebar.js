@@ -1,4 +1,5 @@
 import React from 'react'
+import { formatDistanceToNow, parseISO } from 'date-fns'
 
 const ForumSidebar = ({ name, color, description, owner, createdAt, moderators }) => {
   return (
@@ -14,7 +15,7 @@ const ForumSidebar = ({ name, color, description, owner, createdAt, moderators }
           </>
         )}
       </div>
-      <p>Created by <span className="font-bold">{owner.name}</span> {createdAt && `on ${createdAt}`}</p>
+      <p>Created by <span className="font-bold">{owner.name}</span> {createdAt && `${formatDistanceToNow(parseISO(createdAt))} ago.`}</p>
       {moderators?.length > 0 && (
         <div className="flex flex-col self-start mt-4">
           <p className="font-bold">Moderators</p>
