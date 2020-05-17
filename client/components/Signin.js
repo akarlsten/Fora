@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
 
 import { useUser, CURRENT_USER_QUERY } from '../hooks/useUser'
-import useForm from '../hooks/useForm'
+import useSimpleForm from '../hooks/useSimpleForm'
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -27,7 +27,7 @@ function Signin () {
     }
   }, [loggedIn])
 
-  const { inputs, handleChange, resetForm } = useForm({
+  const { inputs, handleChange, resetForm } = useSimpleForm({
     email: '',
     password: ''
   })

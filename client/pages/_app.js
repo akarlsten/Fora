@@ -1,5 +1,6 @@
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/client'
+import { ToastProvider } from 'react-toast-notifications'
 import withApollo from '../lib/withApollo'
 import '../styles/styles.css'
 import Page from '../components/Page'
@@ -21,9 +22,11 @@ class MyApp extends App {
     return (
       <ApolloProvider client={apollo}>
         <ColorThemeProvider>
-          <Page>
-            <Component {...pageProps} />
-          </Page>
+          <ToastProvider autoDismiss placement="bottom-right">
+            <Page>
+              <Component {...pageProps} />
+            </Page>
+          </ToastProvider>
         </ColorThemeProvider>
       </ApolloProvider>
     )

@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client'
 
 import PleaseSignIn from '../../../../components/PleaseSignIn'
 import NotFound from '../../../../components/404'
+import EditForum from '../../../../components/EditForum'
 
 const Action = () => {
   const router = useRouter()
@@ -11,7 +12,7 @@ const Action = () => {
   if (action === 'post') {
 
   } else if (action === 'edit') {
-
+    return <EditForum />
   } else {
     return <NotFound />
   }

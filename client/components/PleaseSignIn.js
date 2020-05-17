@@ -1,4 +1,4 @@
-import { useUser } from './User'
+import { useUser } from '../hooks/useUser'
 import Signin from './Signin'
 
 function PleaseSignIn ({ children }) {
