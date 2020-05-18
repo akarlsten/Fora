@@ -22,6 +22,7 @@ mutation CREATE_THREAD($forumID: ID!, $title: String!, $post: String!) {
     }) {
       id
       title
+      url
     }
 }
 `
@@ -46,12 +47,11 @@ const ThreadForm = () => {
   }, [forum])
 
   const [createThread] = useMutation(CREATE_THREAD, {
-    data,
-    refetchQueries: [{ query: FORUM_QUERY, variables: { url } }],
-    onCompleted: () => {
+    onCompleted: ({ createThread: { url: threadUrl } }) => {
       addToast('Thread created!', { appearance: 'success' })
-      router.push('/f/[url]', `/f/${url}`)
+      router.push('/f/[url]/[tid]', `/f/${url}/${threadUrl}`)
     },
+    refetchQueries: [{ query: FORUM_QUERY, variables: { url } }],
     onError: () => addToast('Couldn\'t create thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
@@ -90,15 +90,17 @@ const ThreadForm = () => {
           <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Title</label>
-              <input ref={register({ minLength: 4, maxLength: 75 })} className="form-input block w-full" name="title" type="text" />
+              <input ref={register({ minLength: 4, maxLength: 75, required: true })} className="form-input block w-full" name="title" type="text" />
               {formErrors.title && (<span className="text-sm text-red-600">Title must be between 4 and 75 characters.</span>)}
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Post</label>
-              <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000 })} className="resize-none form-textarea block w-full" name="post" type="text" />
-              {formErrors.content && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+              <div>
+                <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="post" type="text" />
+                {formErrors.post && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+              </div>
               {forum?.colorScheme === 'black' ? (
                 <input className={'bg-gray-600 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded'} type="submit" value="Post" />
               ) : (
-                <input className={`bg-${forum.colorScheme}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme}-700 p-2 mt-8 rounded`} type="submit" value="Post" />
+                <input className={`bg-${forum.colorScheme || 'pink'}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 mt-8 rounded`} type="submit" value="Post" />
               )}
             </div>
           </form>

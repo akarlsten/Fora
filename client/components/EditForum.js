@@ -136,7 +136,7 @@ const EditForum = () => {
                 <input className={'bg-gray-600 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded'} type="submit" value="Save Changes" />
 
               ) : (
-                <input className = {`bg-${forum.colorScheme}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme}-700 p-2 mt-8 rounded`} type="submit" value="Save Changes" />
+                <input className = {`bg-${forum.colorScheme || 'pink'}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 mt-8 rounded`} type="submit" value="Save Changes" />
               )}
             </div>
           </form>

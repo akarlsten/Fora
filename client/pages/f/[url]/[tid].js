@@ -9,7 +9,7 @@ import Error from 'components/Error'
 import LoadingSpinner from 'components/LoadingSpinner'
 import ThreadContainer from 'components/ThreadContainer'
 
-const THREAD_QUERY = gql`
+export const THREAD_QUERY = gql`
 query THREAD_QUERY($slug: String) {
   allThreads(where: {url: $slug }) {
     id
@@ -20,6 +20,10 @@ query THREAD_QUERY($slug: String) {
       name
       url
       colorScheme
+      bannedUsers {
+        id
+      }
+      isBanned
       icon {
         publicUrlTransformed(transformation: {
           width:"100",
@@ -35,8 +39,8 @@ query THREAD_QUERY($slug: String) {
         name
         avatar {
         publicUrlTransformed(transformation: {
-          width:"150",
-          height:"150",
+          width:"300",
+          height:"300",
           crop:"fill",
           gravity:"center"
         })
