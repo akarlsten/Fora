@@ -71,18 +71,19 @@ const EditForum = () => {
     variables: { url }
   })
 
-  const [updateDescrColor, { error: updateDescrColorError }] = useMutation(UPDATE_COLOR_DESC, { data })
+  const [updateDescrColor] = useMutation(UPDATE_COLOR_DESC, {
+    data,
+    onCompleted: () => { addToast('Successfully updated forum!', { appearance: 'success' }) },
+    onError: () => addToast('Couldn\'t update forum, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+  })
 
   const { register, handleSubmit, errors: formErrors } = useForm()
   const onSubmit = ({ description, colorScheme }) => {
     if (!formErrors.description && !formErrors.colorScheme) {
-      updateDescrColor({ variables: { forumID: data.allForums[0].id, description, colorScheme } })
-
-      addToast('Successfully updated forum!', { appearance: 'success' })
+      updateDescrColor({
+        variables: { forumID: data.allForums[0].id, description, colorScheme }
+      })
       setTheme(colorScheme)
-      if (updateDescrColorError) {
-        addToast('aiee', { appearance: 'error', autoDismiss: true })
-      }
     }
   }
 
@@ -115,7 +116,7 @@ const EditForum = () => {
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Description</label>
               <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
-              {formErrors.description && (<span>Description must be between 1 and 140 characters.</span>)}
+              {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
               <div className="grid grid-cols-3 gap-2">
                 <ColorRadio color="red" oldColor={forum.colorScheme} register={register} />

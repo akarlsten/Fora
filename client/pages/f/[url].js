@@ -8,7 +8,7 @@ import NotFound from 'components/404'
 import Error from 'components/Error'
 import LoadingSpinner from 'components/LoadingSpinner'
 
-const FORUM_QUERY = gql`
+export const FORUM_QUERY = gql`
 query FORUM_QUERY($url: String) {
   allForums(where: {
     url: $url
@@ -31,7 +31,7 @@ query FORUM_QUERY($url: String) {
         gravity:"center"
       })
     }
-    threads {
+    threads(orderBy: "updatedAt_DESC") {
       id
       title
       url

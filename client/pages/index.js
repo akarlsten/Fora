@@ -11,7 +11,7 @@ import { createClient } from 'lib/withApollo'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY {
-  allForums {
+  allForums(orderBy: "subscribers_DESC") {
     id
     name
     url
@@ -44,6 +44,10 @@ const Index = (/* data */) => {
     setTheme('pink')
   }, [])
 
+  // TODO: Try to do this in the request to server, we need orderBy on the nested field _subscribersMeta, which doesnt work?
+  const sorted = data?.allForums && [...data.allForums].sort((a, b) => b._subscribersMeta.count - a._subscribersMeta.count)
+
+  console.log(sorted)
   return (
     <div className="container mx-auto">
       <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Forums</h1>
@@ -51,7 +55,7 @@ const Index = (/* data */) => {
         {loading ? (
           <p>Loading forums..</p>
         )
-          : data.allForums.map(forum => (
+          : sorted.map(forum => (
             <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
           ))}
       </ForumList>

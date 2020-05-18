@@ -21,11 +21,11 @@ const ForumItem = ({ icon, name, description, threadCount, userCount, colorSchem
               )}
               <div className={`text-gray-900 font-bold text-lg xl:text-xl ${name.length > 18 ? 'md:text-base' : ''}`}>{name}</div>
             </div>
-            <p className="text-gray-700 text-sm pt-1">
-              {description || (
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis tellus non metus dapibus convallis. Pellentesque hendrerit odio.'
-              )}
-            </p>
+            {description && (
+              <p className="text-gray-700 text-sm pt-1">
+                {description}
+              </p>
+            )}
           </div>
           <div className="flex flex-col justify-around leading-normal pl-2">
             <div className="flex flex-col align-middle justify-center text-center mb-1">
