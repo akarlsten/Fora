@@ -1,12 +1,13 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import { useEffect } from 'react'
-import { useUser } from '../hooks/useUser'
-import { useTheme } from '../context/ColorContext'
-import ForumItem from '../components/ForumItem'
-import ForumList from '../components/ForumList'
 
-import { createClient } from '../lib/withApollo'
+import { useUser } from 'hooks/useUser'
+import { useTheme } from 'context/ColorContext'
+import ForumItem from 'components/ForumItem'
+import ForumList from 'components/ForumList'
+
+import { createClient } from 'lib/withApollo'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY {

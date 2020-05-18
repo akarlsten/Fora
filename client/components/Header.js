@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import NProgress from 'nprogress'
 import Link from 'next/link'
 import Router from 'next/router'
-import { useUser } from '../hooks/useUser'
-import SigninButton from './SigninButton'
-import SignoutButton from './SignoutButton'
-import UserBadge from './UserBadge'
-import NavSearch from './NavSearch'
+import { useUser } from 'hooks/useUser'
+import SigninButton from 'components/SigninButton'
+import SignoutButton from 'components/SignoutButton'
+import UserBadge from 'components/UserBadge'
+import NavSearch from 'components/NavSearch'
 
 Router.onRouteChangeStart = () => {
   NProgress.start()

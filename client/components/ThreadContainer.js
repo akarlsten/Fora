@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import PostList from './PostList'
+import PostList from 'components/PostList'
 
 const ThreadContainer = (props) => {
   const { title, forum, posts } = props

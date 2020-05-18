@@ -1,6 +1,7 @@
-import Signin from '../components/Signin'
 import { useEffect } from 'react'
-import { useTheme } from '../context/ColorContext'
+
+import Signin from 'components/Signin'
+import { useTheme } from 'context/ColorContext'
 
 const SignupPage = props => {
   const { setTheme } = useTheme()

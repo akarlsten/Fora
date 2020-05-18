@@ -3,8 +3,8 @@ import { useMutation, Mutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
 
-import { useUser, CURRENT_USER_QUERY } from '../hooks/useUser'
-import useSimpleForm from '../hooks/useSimpleForm'
+import { useUser, CURRENT_USER_QUERY } from 'hooks/useUser'
+import useSimpleForm from 'hooks/useSimpleForm'
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {

@@ -1,4 +1,4 @@
-import PostItem from './PostItem'
+import PostItem from 'components/PostItem'
 
 const PostList = ({ posts, color }) => {
   return (

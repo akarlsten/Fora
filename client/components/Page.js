@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
-import Meta from './Meta'
-import Header from './Header'
-import { useTheme } from '../context/ColorContext'
+
+import Meta from 'components/Meta'
+import Header from 'components/Header'
+import { useTheme } from 'context/ColorContext'
 
 const Page = ({ children }) => {
   const { theme } = useTheme()

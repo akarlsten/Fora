@@ -3,10 +3,10 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 
-import ForumContainer from '../../components/ForumContainer'
-import NotFound from '../../components/404'
-import Error from '../../components/Error'
-import LoadingSpinner from '../../components/LoadingSpinner'
+import ForumContainer from 'components/ForumContainer'
+import NotFound from 'components/404'
+import Error from 'components/Error'
+import LoadingSpinner from 'components/LoadingSpinner'
 
 const FORUM_QUERY = gql`
 query FORUM_QUERY($url: String) {

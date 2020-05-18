@@ -4,10 +4,10 @@ import { useQuery } from '@apollo/client'
 import { useUser } from '../../../hooks/useUser'
 import gql from 'graphql-tag'
 
-import NotFound from '../../../components/404'
-import Error from '../../../components/Error'
-import LoadingSpinner from '../../../components/LoadingSpinner'
-import ThreadContainer from '../../../components/ThreadContainer'
+import NotFound from 'components/404'
+import Error from 'components/Error'
+import LoadingSpinner from 'components/LoadingSpinner'
+import ThreadContainer from 'components/ThreadContainer'
 
 const THREAD_QUERY = gql`
 query THREAD_QUERY($slug: String) {

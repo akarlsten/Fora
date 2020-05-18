@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { useUser } from '../hooks/useUser'
 import { useState } from 'react'
 import gql from 'graphql-tag'
+
+import { useUser } from 'hooks/useUser'
 
 const SUBSCRIBED_QUERY = gql`
 query SUBSCRIBED_QUERY($userID: ID!, $forumID: ID!) {

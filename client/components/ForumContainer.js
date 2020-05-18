@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react'
 import Link from 'next/link'
 
-import ThreadList from './ThreadList'
-import ForumSidebar from './ForumSidebar'
-import SubscribeButton from './SubscribeButton'
-import { useTheme } from '../context/ColorContext'
-import { useUser } from '../hooks/useUser'
+import ThreadList from 'components/ThreadList'
+import ForumSidebar from 'components/ForumSidebar'
+import SubscribeButton from 'components/SubscribeButton'
+import { useTheme } from 'context/ColorContext'
+import { useUser } from 'hooks/useUser'
 
 const ForumContainer = (props) => {
   const { id, url, icon, name, threads, colorScheme, moderators, owner, bannedUsers, isBanned } = props

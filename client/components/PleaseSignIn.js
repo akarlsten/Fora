@@ -1,5 +1,5 @@
-import { useUser } from '../hooks/useUser'
-import Signin from './Signin'
+import { useUser } from 'hooks/useUser'
+import Signin from 'components/Signin'
 
 function PleaseSignIn ({ children }) {
   const me = useUser()

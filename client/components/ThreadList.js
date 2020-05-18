@@ -1,4 +1,4 @@
-import ThreadItem from './ThreadItem'
+import ThreadItem from 'components/ThreadItem'
 
 const ThreadList = ({ url, threads, color }) => {
   if (threads?.length < 1) {

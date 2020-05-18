@@ -3,7 +3,7 @@ import { onError } from '@apollo/link-error'
 import { getDataFromTree } from '@apollo/react-ssr'
 import { createUploadLink } from 'apollo-upload-client'
 import withApollo from 'next-with-apollo'
-import { endpoint, prodEndpoint } from '../config'
+import { endpoint, prodEndpoint } from 'config'
 
 export function createClient ({ headers, initialState } = {}) {
   return new ApolloClient({

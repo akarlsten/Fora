@@ -5,10 +5,10 @@ import { useToasts } from 'react-toast-notifications'
 import gql from 'graphql-tag'
 import Link from 'next/link'
 
-import { useTheme } from '../context/ColorContext'
-import PleaseSignIn from './PleaseSignIn'
-import LoadingSpinner from './LoadingSpinner'
-import Error from './Error'
+import { useTheme } from 'context/ColorContext'
+import PleaseSignIn from 'components/PleaseSignIn'
+import LoadingSpinner from 'components/LoadingSpinner'
+import Error from 'components/Error'
 
 const ThreadForm = () => {
   return (

@@ -1,10 +1,11 @@
 import App from 'next/app'
 import { ApolloProvider } from '@apollo/client'
 import { ToastProvider } from 'react-toast-notifications'
-import withApollo from '../lib/withApollo'
-import '../styles/styles.css'
-import Page from '../components/Page'
-import { ColorThemeProvider } from '../context/ColorContext'
+
+import withApollo from 'lib/withApollo'
+import 'styles/styles.css'
+import Page from 'components/Page'
+import { ColorThemeProvider } from 'context/ColorContext'
 
 class MyApp extends App {
   static async getInitialProps ({ Component, ctx }) {
