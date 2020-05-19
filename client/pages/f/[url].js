@@ -31,15 +31,13 @@ query FORUM_QUERY($url: String) {
         gravity:"center"
       })
     }
-    threads(orderBy: "updatedAt_DESC") {
+    threads(orderBy: "lastPost_DESC") {
       id
       title
       url
+      lastPost
       _postsMeta {
         count
-      }
-      posts(orderBy: "createdAt_DESC", first: 1) {
-        createdAt
       }
       updatedAt
     }
