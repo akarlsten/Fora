@@ -50,6 +50,12 @@ export default {
         update: false
       }
     },
+    lastPost: {
+      type: Text,
+      access: {
+        update: userIsAdmin
+      }
+    },
     forum: { type: Relationship, ref: 'Forum.threads', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,

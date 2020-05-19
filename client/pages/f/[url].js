@@ -38,6 +38,9 @@ query FORUM_QUERY($url: String) {
       _postsMeta {
         count
       }
+      posts(orderBy: "createdAt_DESC", first: 1) {
+        createdAt
+      }
       updatedAt
     }
     _threadsMeta {

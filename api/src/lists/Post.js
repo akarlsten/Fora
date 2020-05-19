@@ -7,7 +7,8 @@ import {
   userIsForumAdminModeratorOrOwner,
   userIsBanned,
   threadOrForumIsClosed,
-  userOwnsPost
+  userOwnsPost,
+  updateLastPostOnThread
 } from '../hooks/postHooks'
 
 export default {
@@ -71,7 +72,8 @@ export default {
           threadOrForumIsClosed({ resolvedData, existingItem, context, actions })
         ])
       }
-    }
+    },
+    afterChange: updateLastPostOnThread
   },
   plugins: [atTracking(), byTracking()]
 }

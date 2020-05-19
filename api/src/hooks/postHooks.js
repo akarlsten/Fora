@@ -140,3 +140,24 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
     throw new AccessDeniedError()
   }
 }
+
+// Because the afterChange and afterDelete hooks have a similar
+// signature, we can reuse the same function
+export async function updateLastPostOnThread ({
+  operation,
+  existingItem, // The child post
+  updatedItem,
+  actions: { query }
+}) {
+  // Ignore operations other than create and delete
+  if (operation !== 'create' && operation !== 'delete') return
+
+  // Save the new cout to the parent comment item
+  const { errors: updateErrors } = await query(`
+    mutation($threadID: ID!, $newDate: String!) {
+      updateThread(id: $threadID, data: { lastPost: $newDate }) { id }
+    }`,
+  { skipAccessControl: true, variables: { newDate: `${updatedItem.createdAt}`, threadID: `${updatedItem.thread}` } }
+  )
+  console.log(updateErrors)
+}
