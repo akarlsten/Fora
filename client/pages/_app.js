@@ -4,6 +4,7 @@ import { ToastProvider } from 'react-toast-notifications'
 
 import withApollo from 'lib/withApollo'
 import 'styles/styles.css'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Page from 'components/Page'
 import { ColorThemeProvider } from 'context/ColorContext'
 
