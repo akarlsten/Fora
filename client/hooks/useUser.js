@@ -7,6 +7,7 @@ const CURRENT_USER_QUERY = gql`
       id
       name
       displayName
+      email
       isAdmin
       isGlobalBanned
       avatar {
