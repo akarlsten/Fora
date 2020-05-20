@@ -5,6 +5,7 @@ import { useQuery, useMutation } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
 import gql from 'graphql-tag'
 import Link from 'next/link'
+import Loader from 'react-loader-spinner'
 
 import { useTheme } from 'context/ColorContext'
 import PleaseSignIn from 'components/PleaseSignIn'
@@ -56,9 +57,9 @@ mutation UPDATE_COLOR_DESC($forumID: ID!, $data: ForumUpdateInput!) {
 `
 
 const ColorRadio = ({ color, register, oldColor }) => (
-  <label className={`inline-flex items-center p-2 bg-${color}-200 border-${color}-400 border-4 rounded`}>
-    <input type="radio" ref={register} className={`form-radio text-${color}-400 h-6 w-6`} name="colorScheme" value={color} defaultChecked={oldColor === color} />
-    <span className={`ml-2 text-${color}-800 font-bold`}>{color.charAt(0).toUpperCase() + color.slice(1)}</span>
+  <label className={`inline-flex items-center p-1 sm:p-2 bg-${color}-200 border-${color}-400 border-2 sm:border-4 rounded`}>
+    <input type="radio" ref={register} className={`form-radio text-${color}-400 h-4 w-4 sm:h-6 sm:w-6`} name="colorScheme" value={color} defaultChecked={oldColor === color} />
+    <span className={`ml-1 sm:ml-2 text-sm sm:text-base text-${color}-800 font-bold`}>{color.charAt(0).toUpperCase() + color.slice(1)}</span>
   </label>
 )
 
@@ -99,18 +100,24 @@ const EditForum = () => {
     }
   }, [files, files && files[0], formErrors?.icon?.message])
 
-  const [updateDescrColor] = useMutation(UPDATE_FORUM, {
+  const [updateDescrColor, { loading: mutationLoading }] = useMutation(UPDATE_FORUM, {
     refetchQueries: [{ query: EDIT_FORUM_QUERY, variables: { url } }],
     onCompleted: () => { addToast('Successfully updated forum!', { appearance: 'success' }) },
     onError: () => addToast('Couldn\'t update forum, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
   const onSubmit = ({ description, colorScheme }) => {
-    if (!formErrors.description && !formErrors.colorScheme) {
-      updateDescrColor({
-        variables: { forumID: data.allForums[0].id, data: { description, colorScheme, icon: files[0] } }
-      })
+    if (!formErrors.description && !formErrors.colorScheme && !formErrors.icon) {
       setTheme(colorScheme)
+      if (files && files[0]) {
+        updateDescrColor({
+          variables: { forumID: data.allForums[0].id, data: { description, colorScheme, icon: files[0] } }
+        })
+      } else {
+        updateDescrColor({
+          variables: { forumID: data.allForums[0].id, data: { description, colorScheme } }
+        })
+      }
     }
   }
 
@@ -145,7 +152,7 @@ const EditForum = () => {
               <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
               {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2">
                 <ColorRadio color="red" oldColor={forum.colorScheme} register={register} />
                 <ColorRadio color="orange" oldColor={forum.colorScheme} register={register} />
                 <ColorRadio color="green" oldColor={forum.colorScheme} register={register} />
@@ -154,18 +161,18 @@ const EditForum = () => {
                 <ColorRadio color="indigo" oldColor={forum.colorScheme} register={register} />
                 <ColorRadio color="purple" oldColor={forum.colorScheme} register={register}/>
                 <ColorRadio color="pink" oldColor={forum.colorScheme} register={register} />
-                <label className="inline-flex bg-gray-200 items-center p-2 border-black border-4 rounded">
-                  <input type="radio" ref={register} defaultChecked={forum.colorScheme === 'black'} className="form-radio h-6 w-6 text-black" name="colorScheme" value="black" />
-                  <span className="ml-2 text-gray-800 font-bold">Gray/Black</span>
+                <label className="inline-flex bg-gray-200 items-center p-1 sm:p-2 border-black border-2 sm:border-4 rounded">
+                  <input type="radio" ref={register} defaultChecked={forum.colorScheme === 'black'} className="form-radio h-4 sm:h-6 w-4 sm:w-6 text-black" name="colorScheme" value="black" />
+                  <span className="ml-1 sm:ml-2 text-sm sm:text-base text-gray-800 font-bold">Gray/Black</span>
                 </label>
               </div>
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
-              <div className="flex p-4 items-center">
-                <div className="flex mr-4">
+              <div className="flex p-4 flex-col sm:flex-row sm:items-center">
+                <div className="flex justify-center mb-4 sm:mb-0 mr-0 sm:mr-4">
                   {iconPreview ? (
-                    <img className={'max-w-none my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 rounded-full'} src={iconPreview} alt="" />
+                    <img className={'max-w-none my-2 w-24 md:w-32 lg:w-48 h-24 md:h-32 lg:h-48 rounded-full'} src={iconPreview} alt="" />
                   ) : (
-                    <svg className={'my-2 w-12 md:w-32 lg:w-40 rounded-full fill-current'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg className={'my-2 w-24 md:w-32 lg:w-40 rounded-full fill-current'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle className={`text-${forum.colorScheme}-400`} cx="79.5" cy="79.5" r="79.5" />
                       <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
                       <circle cx="96" cy="59" r="43" fill="white" />
@@ -173,20 +180,26 @@ const EditForum = () => {
                   )}
                 </div>
                 <input onChange={() => getValues('icon')} accept={validImageTypes} type="file" ref={register({
+                  required: false,
                   validate: {
-                    fileHasToExist: value => (value[0] ? value[0] : false) || '⚠ Invalid file.',
-                    largerThan5MB: value => value[0].size < 5 * 1024 * 1024 || '⚠ Avatar cannot exceed 5MB.',
-                    wrongFileType: value => (value[0].type && validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
+                    largerThan5MB: value => (!value[0] || value[0].size < 5 * 1024 * 1024) || '⚠ Avatar cannot exceed 5MB.',
+                    wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
                   }
                 })} name="icon" />
               </div>
               {formErrors.icon && (<span className="text-sm text-red-600">{formErrors.icon.message}</span>)}
-              {forum?.colorScheme === 'black' ? (
-                <input className={'bg-gray-600 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded'} type="submit" value="Save Changes" />
-
-              ) : (
-                <input className = {`bg-${forum.colorScheme || 'pink'}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 mt-8 rounded`} type="submit" value="Save Changes" />
-              )}
+              <div className="flex align-start items-center mt-8">
+                {forum?.colorScheme === 'black' && !mutationLoading ? (
+                  <input className={'bg-gray-600 mr-4 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
+                ) : !mutationLoading ? (
+                  <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
+                ) : (
+                  <>
+                    <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
+                    <Loader type="ThreeDots" color={forum.colorScheme} width={40} height={40} />
+                  </>
+                )}
+              </div>
             </div>
           </form>
         </div>

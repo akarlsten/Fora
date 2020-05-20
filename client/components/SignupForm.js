@@ -69,9 +69,15 @@ const SignupForm = () => {
 
   const onSubmit = ({ name, email, password }) => {
     if (Object.keys(formErrors).length === 0) {
-      createUser({
-        variables: { data: { name, displayName: name, email, password, avatar: files[0] } }
-      })
+      if (files && files[0]) {
+        createUser({
+          variables: { data: { name, displayName: name, email, password, avatar: files[0] } }
+        })
+      } else {
+        createUser({
+          variables: { data: { name, displayName: name, email, password } }
+        })
+      }
     }
   }
   return (
@@ -146,10 +152,10 @@ const SignupForm = () => {
               )}
             </div>
             <input onChange={() => getValues('avatar')} accept={validImageTypes} type="file" ref={register({
+              required: false,
               validate: {
-                fileHasToExist: value => (value[0] ? value[0] : false) || '⚠ Invalid file.',
-                largerThan5MB: value => value[0].size < 5 * 1024 * 1024 || '⚠ Avatar cannot exceed 5MB.',
-                wrongFileType: value => (value[0].type && validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
+                largerThan5MB: value => (!value[0] || value[0].size < 5 * 1024 * 1024) || '⚠ Avatar cannot exceed 5MB.',
+                wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
               }
             })} name="avatar" />
           </div>
