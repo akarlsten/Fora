@@ -55,6 +55,7 @@ const SignupForm = () => {
       }
     }
   }, [files, files[0], formErrors?.avatar?.message])
+
   const [nameCheck, { data: nameData }] = useLazyQuery(USERNAME_QUERY)
   const [emailCheck, { data: emailData }] = useLazyQuery(EMAIL_QUERY)
 

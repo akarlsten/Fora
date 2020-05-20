@@ -17,7 +17,7 @@ const Page = ({ children }) => {
   return (
     <React.Fragment>
       <Meta />
-      <div className={`w-screen h-screen overflow-x-hidden bg-${color === 'black' ? 'gray' : color}-100`}>
+      <div className={`h-screen bg-${color === 'black' ? 'gray' : color}-100`}>
         <Header />
         <div className="container mx-auto px-6 p-20">{children}</div>
       </div>
