@@ -2,11 +2,13 @@ import React, { Component, useState, useEffect } from 'react'
 import { useMutation, Mutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
+import Link from 'next/link'
+import { useToasts } from 'react-toast-notifications'
 
 import { useUser, CURRENT_USER_QUERY } from 'hooks/useUser'
 import useSimpleForm from 'hooks/useSimpleForm'
 
-const SIGNIN_MUTATION = gql`
+export const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       item {
@@ -20,6 +22,7 @@ const SIGNIN_MUTATION = gql`
 function Signin () {
   const router = useRouter()
   const loggedIn = useUser()
+  const { addToast } = useToasts()
 
   useEffect(() => {
     if (loggedIn) {
@@ -33,7 +36,8 @@ function Signin () {
   })
   const [signin, { error, loading }] = useMutation(SIGNIN_MUTATION, {
     variables: inputs,
-    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    onError: () => addToast('Couldn\'t sign you in, make sure you\'ve entered your details correctly!', { appearance: 'error', autoDismiss: true })
   })
   return (
     <div className="flex flex-col items-center justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
@@ -43,7 +47,7 @@ function Signin () {
         onSubmit={async e => {
           e.preventDefault()
           const res = await signin()
-          console.log(res)
+
           resetForm()
         }}
       >
@@ -86,7 +90,7 @@ function Signin () {
         </fieldset>
       </form>
       <div className="text-center pt-12 pb-12">
-        <p>Don&apos;t have an account? <a href="register.html" className="underline font-semibold">Register here.</a></p>
+        <p>Don&apos;t have an account? <Link href='/signup'><a className="underline font-semibold">Register here.</a></Link></p>
       </div>
       <div className="text-center pb-12">
         <p>Forgot your password? <a href="register.html" className="underline font-semibold">Click here.</a></p>
