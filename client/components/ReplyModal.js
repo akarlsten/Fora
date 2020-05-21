@@ -2,6 +2,7 @@ import { useToasts } from 'react-toast-notifications'
 import { useForm, ErrorMessage } from 'react-hook-form'
 import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
+import Loader from 'react-loader-spinner'
 
 import { FORUM_QUERY } from 'pages/f/[url]'
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
@@ -33,7 +34,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
   const { addToast } = useToasts()
   const { register, handleSubmit, errors: formErrors } = useForm()
 
-  const [createPost] = useMutation(CREATE_POST, {
+  const [createPost, { loading: mutationLoading }] = useMutation(CREATE_POST, {
     onCompleted: () => {
       addToast('Post made!', { appearance: 'success' })
       setReplyModal(false)
@@ -69,11 +70,14 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
             {formErrors.content && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
           </div>
           <span className="text-xs text-center text-gray-600">Markdown is enabled!</span>
-          <div className="flex justify-end">
+          <div className="flex justify-end items-center mt-8">
+            {mutationLoading && (
+              <Loader type="ThreeDots" color={color} width={40} height={40} />
+            )}
             {color === 'black' ? (
-              <input className={'bg-gray-600 text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded'} type="submit" value="Post" />
+              <input className={'ml-4 bg-gray-600 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Post" />
             ) : (
-              <input className={`bg-${color || 'pink'}-400 text-white font-bold text-lg hover:bg-${color || 'pink'}-700 p-2 mt-8 rounded`} type="submit" value="Post" />
+              <input className={`ml-4 bg-${color || 'pink'}-400 text-white font-bold text-lg hover:bg-${color || 'pink'}-700 p-2 rounded`} type="submit" value="Post" />
             )}
           </div>
         </div>

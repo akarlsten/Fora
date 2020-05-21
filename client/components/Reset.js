@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
 import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
-import PropTypes from 'prop-types'
 
 import useSimpleForm from 'hooks/useSimpleForm'
 import { CURRENT_USER_QUERY } from 'hooks/useUser'

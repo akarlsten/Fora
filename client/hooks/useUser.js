@@ -7,13 +7,12 @@ const CURRENT_USER_QUERY = gql`
       id
       name
       displayName
-      email
       isAdmin
       isGlobalBanned
       avatar {
         publicUrlTransformed(transformation: {
-        width:"100",
-        height:"100",
+        width:"300",
+        height:"300",
         crop:"fill",
         gravity:"center"
       })

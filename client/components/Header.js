@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 import { useUser } from 'hooks/useUser'
 import SigninButton from 'components/SigninButton'
+import SignupButton from 'components/SignupButton'
 import SignoutButton from 'components/SignoutButton'
 import UserBadge from 'components/UserBadge'
 import NavSearch from 'components/NavSearch'
@@ -52,7 +53,10 @@ const Header = () => {
               </React.Fragment>
             )}
             {!loggedIn && (
-              <SigninButton />
+              <div className="space-x-8 flex">
+                <SigninButton />
+                <SignupButton />
+              </div>
             )}
           </div>
         </div>

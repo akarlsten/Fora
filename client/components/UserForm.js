@@ -59,7 +59,7 @@ const UserForm = ({ prev }) => {
   const [nameCheck, { data: nameData }] = useLazyQuery(USERNAME_QUERY)
   const [emailCheck, { data: emailData }] = useLazyQuery(EMAIL_QUERY)
 
-  const [createUser, { loading: mutationLoading }] = useMutation(CREATE_USER, {
+  const [createUser, { loading: mutationLoading }] = useMutation(UPDATE_USER, {
     onCompleted: () => {
       addToast('Successfully registered!', { appearance: 'success' })
       router.push('/signin')
@@ -161,7 +161,7 @@ const UserForm = ({ prev }) => {
         <div className="flex items-center mt-8">
           <input className={`${mutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${mutationLoading ? 'text-pink-200' : 'text-white'} font-bold text-lg ${mutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
             type="submit" value="Sign Up" disabled={!!mutationLoading} />
-          {!mutationLoading && (
+          {mutationLoading && (
             <Loader type="ThreeDots" color="#f687b3" width={40} height={40} />
           )}
         </div>

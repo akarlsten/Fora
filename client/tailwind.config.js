@@ -10,7 +10,8 @@ module.exports = {
       '3xl': '1920px'
     },
     fontFamily: {
-      sans: ['Inter', 'sans-serif']
+      sans: ['Inter', 'sans-serif'],
+      display: ['Fredoka One', 'sans-serif']
     },
     extend: {
     }

@@ -6,6 +6,7 @@ import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
 import ForumItem from 'components/ForumItem'
 import ForumList from 'components/ForumList'
+import Landing from 'components/Landing'
 
 import { createClient } from 'lib/withApollo'
 
@@ -48,17 +49,23 @@ const Index = (/* data */) => {
   const sorted = data?.allForums && [...data.allForums].sort((a, b) => b._subscribersMeta.count - a._subscribersMeta.count)
 
   return (
-    <div className="container mx-auto">
-      <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Popular Forums</h1>
-      <ForumList>
-        {loading ? (
-          <p>Loading forums..</p>
-        )
-          : sorted.map(forum => (
-            <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
-          ))}
-      </ForumList>
-    </div>
+    <>
+      {!loggedIn && (
+        <Landing />
+      )
+      }
+      <div className="container mx-auto">
+        <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Popular Forums</h1>
+        <ForumList>
+          {loading ? (
+            <p>Loading forums..</p>
+          )
+            : sorted.map(forum => (
+              <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
+            ))}
+        </ForumList>
+      </div>
+    </>
   )
 }
 
