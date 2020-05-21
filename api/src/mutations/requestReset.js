@@ -14,7 +14,7 @@ export async function requestReset (parent, args, ctx, info, { query }) {
         id
       }
     }`
-  )
+    , { skipAccessControl: true })
 
   const [user] = response.data.allUsers
   if (!user) {
@@ -36,8 +36,8 @@ export async function requestReset (parent, args, ctx, info, { query }) {
 
   // 3. Email them that reset token
   const mailRes = await sgMail.send({
-    from: 'adam@karlsten.co',
-    to: user.email,
+    from: 'adamkarlsten@gmail.com',
+    to: `${user.email}`,
     subject: 'Your Password Reset Token',
     html: mailTemplate(`Your Password Reset Token is here!
       \n\n
