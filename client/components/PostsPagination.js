@@ -6,9 +6,9 @@ import { useRouter } from 'next/router'
 
 import { postsPerPage } from 'config'
 
-function Pagination ({ count, page, color }) {
+function Pagination ({ count, page, color, perPage }) {
   const router = useRouter()
-  const pages = Math.ceil(count / postsPerPage)
+  const pages = Math.ceil(count / (perPage || postsPerPage))
 
   color = color || 'pink'
 
@@ -58,7 +58,7 @@ function Pagination ({ count, page, color }) {
         </>
       )}
       <p>
-        Page {page} of{' '}
+        {page} of{' '}
         <span className="totalPages" data-testid="totalPages">
           {pages}
         </span>

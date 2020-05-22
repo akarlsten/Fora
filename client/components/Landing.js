@@ -6,8 +6,8 @@ const Landing = () => {
       <div className="flex flex-col justify-center my-10 lg:my-20">
         <div className="flex items-center justify-center flex-wrap">
           <div className="w-full lg:w-2/6">
-            <h2 className="text-5xl font-display">Create your community and discuss the things you care about.</h2>
-            <p className="text-2xl mt-8">
+            <h2 className="text-4xl sm:text-5xl font-display">Create your community and discuss the things you care about.</h2>
+            <p className="text-xl sm:text-2xl mt-8">
               <Link href="/signup">
                 <a className="font-semibold underline">Sign up</a></Link> now to start posting!
             </p>

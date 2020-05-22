@@ -62,6 +62,13 @@ export default {
         update: userIsAdmin
       }
     },
+    lastPoster: {
+      type: Relationship,
+      ref: 'User',
+      access: {
+        update: userIsAdmin
+      }
+    },
     forum: { type: Relationship, ref: 'Forum.threads', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,
@@ -96,13 +103,14 @@ export default {
     delete: false
   },
   hooks: {
-    resolveInput: async ({ operation, resolvedData }) => {
-      console.log(operation)
+    resolveInput: async ({ operation, resolvedData, context }) => {
       if (operation !== 'create') return resolvedData
+
+      const user = context.authedItem
 
       const now = new Date()
 
-      return { ...resolvedData, lastPost: `${now.toISOString()}` }
+      return { ...resolvedData, lastPost: `${now.toISOString()}`, lastPoster: `${user.id}` }
     },
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
       // these functions will throw errors to prevent invalid requests

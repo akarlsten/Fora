@@ -1,6 +1,12 @@
 import ThreadItem from 'components/ThreadItem'
+import { useUser } from 'hooks/useUser'
+import { postsPerPage } from 'config'
 
 const ThreadList = ({ url, threads, color }) => {
+  const user = useUser()
+
+  const perPage = user?.postsPerPage || postsPerPage
+
   if (threads?.length < 1) {
     return (
       <div className="w-full flex flex-col justify-center items-center mt-10">
@@ -10,18 +16,10 @@ const ThreadList = ({ url, threads, color }) => {
     )
   }
 
-  // const sorted = [...threads].sort((a, b) => b.posts[0].createdAt > a.posts[0].createdAt)
-
-  // myArray.sort(function (a, b) {
-  //   return (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0)
-  // })
-
-  // console.log(sorted)
-
   return (
     <div className={`w-full rounded bg-white border border-${color || 'pink'}-200 divide-y divide-${color || 'pink'}-200`}>
       {threads.map(thread => (
-        <ThreadItem key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
+        <ThreadItem perPage={perPage} key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
       ))}
     </div>
   )

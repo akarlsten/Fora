@@ -145,18 +145,22 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
 // signature, we can reuse the same function
 export async function updateLastPostOnThread ({
   operation,
-  existingItem, // The child post
+  context,
   updatedItem,
   actions: { query }
 }) {
   // Ignore operations other than create and delete
   if (operation !== 'create' && operation !== 'delete') return
 
+  const user = context.authedItem
+
   // Save the new cout to the parent comment item
   const { errors: updateErrors } = await query(`
-    mutation($threadID: ID!, $newDate: String!) {
-      updateThread(id: $threadID, data: { lastPost: $newDate }) { id }
+    mutation($threadID: ID!, $newDate: String!, $poster: UserRelateToOneInput!) {
+      updateThread(id: $threadID, data: { lastPost: $newDate, lastPoster: $poster }) { id }
     }`,
-  { skipAccessControl: true, variables: { newDate: `${updatedItem.createdAt}`, threadID: `${updatedItem.thread}` } }
+  { skipAccessControl: true, variables: { newDate: `${updatedItem.createdAt}`, poster: { connect: { id: `${user.id}` } }, threadID: `${updatedItem.thread}` } }
   )
+
+  console.log(updateErrors)
 }

@@ -85,7 +85,7 @@ const ThreadContainer = (props) => {
         <PostList color={forum.colorScheme} posts={posts} />
       </div>
       <div className="flex justify-end my-4">
-        <PostsPagination count={count} page={page} color={forum?.colorScheme} />
+        <PostsPagination count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
       </div>
       {loggedIn && canPost && !replyModalOpen && (
         <div className="flex justify-end my-4">

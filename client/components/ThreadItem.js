@@ -1,7 +1,7 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
 
-const ThreadItem = ({ forumUrl, url, title, count, color }) => {
+const ThreadItem = ({ forumUrl, url, title, count, color, perPage }) => {
   return (
     <Link href="/f/[url]/[tid]" as={`/f/${forumUrl}/${url}`}>
       <a className="flex justify-between items-center">
