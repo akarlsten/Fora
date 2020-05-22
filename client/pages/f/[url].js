@@ -4,13 +4,16 @@ import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import Head from 'next/head'
 
+import { useUser } from 'hooks/useUser'
 import ForumContainer from 'components/ForumContainer'
 import NotFound from 'components/404'
 import Error from 'components/Error'
 import LoadingSpinner from 'components/LoadingSpinner'
 
+import { threadsPerPage } from 'config'
+
 export const FORUM_QUERY = gql`
-query FORUM_QUERY($url: String) {
+query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage}) {
   allForums(where: {
     url: $url
   }) {
@@ -32,11 +35,14 @@ query FORUM_QUERY($url: String) {
         gravity:"center"
       })
     }
-    threads(orderBy: "lastPost_DESC") {
+    threads(first: $first, skip: $skip, orderBy: "lastPost_DESC") {
       id
       title
       url
       lastPost
+      lastPoster {
+        name
+      }
       _postsMeta {
         count
       }
@@ -60,11 +66,17 @@ query FORUM_QUERY($url: String) {
 }
 `
 const Forum = () => {
+  const user = useUser()
   const router = useRouter()
 
-  const { url } = router.query
+  const { url, p } = router.query
+
+  // cast p to number
+  const page = +p || 1
+  const perPage = user?.postsPerPage || threadsPerPage
+
   const { data, loading, error } = useQuery(FORUM_QUERY, {
-    variables: { url }
+    variables: { url, first: perPage, skip: page * perPage - perPage }
   })
 
   if (loading) {
@@ -73,6 +85,20 @@ const Forum = () => {
     return <Error />
   } else if (data?.allForums?.length > 0) {
     const forum = data.allForums[0]
+    const count = forum._threadsMeta.count
+    const pages = Math.ceil(count / perPage)
+
+    if (page > pages) {
+      router.push({
+        pathname: '/f/[url]',
+        query: { p: pages }
+      },
+      {
+        pathname: `/f/${url}`,
+        query: { p: pages }
+      })
+    }
+
     return (
       <>
         <Head>
@@ -80,7 +106,7 @@ const Forum = () => {
             Fora | {forum.name}
           </title>
         </Head>
-        <ForumContainer {...forum} />
+        <ForumContainer page={page} pages={pages} count={count} {...forum} />
       </>
     )
   } else {

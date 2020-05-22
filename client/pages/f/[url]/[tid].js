@@ -71,7 +71,7 @@ const Thread = ({ query }) => {
   const perPage = user?.postsPerPage || postsPerPage
 
   const { data, loading, error } = useQuery(THREAD_QUERY, {
-    variables: { slug: tid, skip: page * perPage - perPage }
+    variables: { slug: tid, first: perPage, skip: page * perPage - perPage }
   })
 
   if (loading) {
@@ -101,7 +101,7 @@ const Thread = ({ query }) => {
           Fora | {thread.title} | Page {page} of {pages}
           </title>
         </Head>
-        <ThreadContainer page={page} count={count} {...thread} />
+        <ThreadContainer page={page} pages={pages} count={count} {...thread} />
       </>
     )
   } else {

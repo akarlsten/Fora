@@ -5,10 +5,10 @@ import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
 import PostList from 'components/PostList'
 import ReplyModal from 'components/ReplyModal'
-import PostsPagination from 'components/PostsPagination'
+import Pagination from 'components/Pagination'
 
 const ThreadContainer = (props) => {
-  const { title, forum, posts, isBanned, bannedUsers, url, id: threadID, count, page } = props
+  const { title, forum, posts, isBanned, bannedUsers, url, id: threadID, count, page, pages } = props
 
   const [replyModalOpen, setReplyModal] = useState(false)
   const { setTheme } = useTheme()
@@ -78,15 +78,19 @@ const ThreadContainer = (props) => {
           </div>
         )}
       </div>
-      <div className="flex justify-end my-4">
-        <PostsPagination count={count} page={page} color={forum?.colorScheme} />
-      </div>
+      {pages > 1 && (
+        <div className="flex justify-end my-4">
+          <Pagination type={'thread'} count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
+        </div>
+      )}
       <div className="flex flex-row items-start">
         <PostList color={forum.colorScheme} posts={posts} />
       </div>
-      <div className="flex justify-end my-4">
-        <PostsPagination count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
-      </div>
+      {pages > 1 && (
+        <div className="flex justify-end my-4">
+          <Pagination type={'thread'} count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
+        </div>
+      )}
       {loggedIn && canPost && !replyModalOpen && (
         <div className="flex justify-end my-4">
           <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-400 bg-${forum.colorScheme || 'pink'}-400 ml-4 flex items-center`}>

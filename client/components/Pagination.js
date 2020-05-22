@@ -4,23 +4,28 @@ import { Query, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { postsPerPage } from 'config'
+import { postsPerPage, threadsPerPage } from 'config'
 
-function Pagination ({ count, page, color, perPage }) {
+function Pagination ({ count, page, color, perPage, type }) {
+  const defaultPerPage = type === 'thread' ? postsPerPage : threadsPerPage
   const router = useRouter()
-  const pages = Math.ceil(count / (perPage || postsPerPage))
+  const pages = Math.ceil(count / (perPage || defaultPerPage))
 
   color = color || 'pink'
 
   const { url, tid } = router.query
+
+  const privatePath = type === 'thread' ? '/f/[url]/[tid]' : '/f/[url]'
+  const publicPath = type === 'thread' ? `/f/${url}/${tid}` : `/f/${url}`
+
   const handleChange = (e) => {
     const target = e.target.value
     router.push({
-      pathname: '/f/[url]/[tid]',
+      pathname: privatePath,
       query: { p: target }
     },
     {
-      pathname: `/f/${url}/${tid}`,
+      pathname: publicPath,
       query: { p: target }
     })
   }
@@ -31,7 +36,7 @@ function Pagination ({ count, page, color, perPage }) {
         <>
           <Link
             href={{
-              pathname: '/f/[url]/[tid]',
+              pathname: privatePath,
               query: { p: 1 }
             }}
 
@@ -43,7 +48,7 @@ function Pagination ({ count, page, color, perPage }) {
           </Link>
           <Link
             href={{
-              pathname: '/f/[url]/[tid]',
+              pathname: privatePath,
               query: { p: page - 1 }
             }}
 
@@ -57,22 +62,26 @@ function Pagination ({ count, page, color, perPage }) {
           </Link>
         </>
       )}
-      <p>
-        {page} of{' '}
-        <span className="totalPages" data-testid="totalPages">
-          {pages}
-        </span>
-      </p>
-      <select value={page} className={`input-select font-bold px-2 py-1 border rounded border-${color}-400`} onChange={handleChange}>
-        {
-          [...Array(pages).keys()].map(opt => (<option className="font-bold" key={opt + 1} value={opt + 1}>{opt + 1}</option>))
-        }
-      </select>
+      {pages === 1 && (
+        <p>
+          Page {page} of{' '}
+          <span className="totalPages" data-testid="totalPages">
+            {pages}
+          </span>
+        </p>
+      )}
+      {pages > 1 && (
+        <select value={page} className={`input-select font-bold px-2 py-1 border rounded border-${color}-400`} onChange={handleChange}>
+          {
+            [...Array(pages).keys()].map(opt => (<option className="font-bold" key={opt + 1} value={opt + 1}>{opt + 1}</option>))
+          }
+        </select>
+      )}
       {page !== pages && (
         <>
           <Link
             href={{
-              pathname: '/f/[url]/[tid]',
+              pathname: privatePath,
               query: { p: page + 1 }
             }}
 
@@ -86,7 +95,7 @@ function Pagination ({ count, page, color, perPage }) {
           </Link>
           <Link
             href={{
-              pathname: '/f/[url]/[tid]',
+              pathname: privatePath,
               query: { p: pages }
             }}
 

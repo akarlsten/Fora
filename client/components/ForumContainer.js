@@ -4,11 +4,27 @@ import Link from 'next/link'
 import ThreadList from 'components/ThreadList'
 import ForumSidebar from 'components/ForumSidebar'
 import SubscribeButton from 'components/SubscribeButton'
+import Pagination from 'components/Pagination'
+
 import { useTheme } from 'context/ColorContext'
 import { useUser } from 'hooks/useUser'
 
 const ForumContainer = (props) => {
-  const { id, url, icon, name, threads, colorScheme, moderators, owner, bannedUsers, isBanned } = props
+  const {
+    id,
+    url,
+    icon,
+    name,
+    threads,
+    colorScheme,
+    moderators,
+    owner,
+    bannedUsers,
+    isBanned,
+    count,
+    page,
+    pages
+  } = props
 
   const loggedIn = useUser()
 
@@ -52,6 +68,11 @@ const ForumContainer = (props) => {
       </div>
       <div className="flex flex-row flex-wrap space-y-8 lg:flex-no-wrap lg:space-y-0 items-start">
         <div className="flex flex-col w-full">
+          {pages > 1 && (
+            <div className="flex justify-end mb-4">
+              <Pagination count={count} page={page} perPage={loggedIn?.postsPerPage} color={colorScheme} />
+            </div>
+          )}
           <ThreadList url={url} color={colorScheme} threads={threads} />
           {loggedIn && canPost && (
             <div className="flex justify-end my-4">
