@@ -159,5 +159,4 @@ export async function updateLastPostOnThread ({
     }`,
   { skipAccessControl: true, variables: { newDate: `${updatedItem.createdAt}`, threadID: `${updatedItem.thread}` } }
   )
-  console.log(updateErrors)
 }

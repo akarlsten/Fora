@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 const PostItem = ({ owner, content, color }) => {
   return (
     <div className={'flex'}>
-      <div className={'px-4 py-2 justify-center items-center flex flex-col self-center w-14 md:w-40 lg:w-56'}>
+      <div className={'px-4 py-2 justify-center items-center flex flex-col self-center w-14 md:w-40 lg:w-56 flex-shrink-0'}>
         <span className="font-bold">
           {owner.name}
         </span>

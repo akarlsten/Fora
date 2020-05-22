@@ -2,7 +2,13 @@ import { Text, Checkbox, Relationship, Select, Slug } from '@keystonejs/fields'
 import { byTracking, atTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin } from '../utils/access'
-import { userIsForumAdminModeratorOrOwner, userIsBanned, forumIsBanned, threadHasNoPosts, setPostsDeleted } from '../hooks/threadHooks'
+import {
+  userIsForumAdminModeratorOrOwner,
+  userIsBanned,
+  forumIsBanned,
+  threadHasNoPosts,
+  setPostsDeleted
+} from '../hooks/threadHooks'
 
 export default {
   fields: {
@@ -90,6 +96,14 @@ export default {
     delete: false
   },
   hooks: {
+    resolveInput: async ({ operation, resolvedData }) => {
+      console.log(operation)
+      if (operation !== 'create') return resolvedData
+
+      const now = new Date()
+
+      return { ...resolvedData, lastPost: `${now.toISOString()}` }
+    },
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
       // these functions will throw errors to prevent invalid requests
       await Promise.all([
