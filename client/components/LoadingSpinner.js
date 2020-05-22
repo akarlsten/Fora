@@ -1,5 +1,8 @@
+import { useTheme } from 'context/ColorContext'
 
-const LoadingSpinner = ({ color }) => {
+const LoadingSpinner = () => {
+  const { theme } = useTheme()
+
   return (
     <div className="LoadingSpinner">
       <div className="lds-ripple">
@@ -30,7 +33,7 @@ const LoadingSpinner = ({ color }) => {
 
 .lds-ripple div {
   position: absolute;
-  border: 5px solid #f687b3;
+  border: 5px solid ${theme};
   opacity: 1;
   border-radius: 50%;
   animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;

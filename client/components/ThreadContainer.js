@@ -5,9 +5,10 @@ import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
 import PostList from 'components/PostList'
 import ReplyModal from 'components/ReplyModal'
+import PostsPagination from 'components/PostsPagination'
 
 const ThreadContainer = (props) => {
-  const { title, forum, posts, isBanned, bannedUsers, url, id: threadID } = props
+  const { title, forum, posts, isBanned, bannedUsers, url, id: threadID, count, page } = props
 
   const [replyModalOpen, setReplyModal] = useState(false)
   const { setTheme } = useTheme()
@@ -38,7 +39,7 @@ const ThreadContainer = (props) => {
           </div>
         </div>
       </Link>
-      <div className="flex items-center justify-between w-full mb-8">
+      <div className="flex items-center justify-between w-full mb-4">
         <h1 className="font-bold text-4xl">{title}</h1>
         {loggedIn && canPost && !replyModalOpen && (
           <div className="flex justify-end my-4">
@@ -77,8 +78,14 @@ const ThreadContainer = (props) => {
           </div>
         )}
       </div>
+      <div className="flex justify-end my-4">
+        <PostsPagination count={count} page={page} color={forum?.colorScheme} />
+      </div>
       <div className="flex flex-row items-start">
         <PostList color={forum.colorScheme} posts={posts} />
+      </div>
+      <div className="flex justify-end my-4">
+        <PostsPagination count={count} page={page} color={forum?.colorScheme} />
       </div>
       {loggedIn && canPost && !replyModalOpen && (
         <div className="flex justify-end my-4">

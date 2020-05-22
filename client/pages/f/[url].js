@@ -2,6 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
+import Head from 'next/head'
 
 import ForumContainer from 'components/ForumContainer'
 import NotFound from 'components/404'
@@ -71,7 +72,17 @@ const Forum = () => {
   } else if (error) {
     return <Error />
   } else if (data?.allForums?.length > 0) {
-    return <ForumContainer {...data.allForums[0]} />
+    const forum = data.allForums[0]
+    return (
+      <>
+        <Head>
+          <title>
+            Fora | {forum.name}
+          </title>
+        </Head>
+        <ForumContainer {...forum} />
+      </>
+    )
   } else {
     return <NotFound />
   }
