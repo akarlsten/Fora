@@ -148,60 +148,62 @@ const EditForum = () => {
           </Link>
           <h1 className="text-3xl mb-4 text-gray-700">Editing: <span className="font-semibold text-black">{forum.name}</span></h1>
           <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full px-3">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Description</label>
-              <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
-              {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2">
-                <ColorRadio color="red" oldColor={forum.colorScheme} register={register} />
-                <ColorRadio color="orange" oldColor={forum.colorScheme} register={register} />
-                <ColorRadio color="green" oldColor={forum.colorScheme} register={register} />
-                <ColorRadio color="teal" oldColor={forum.colorScheme} register={register}/>
-                <ColorRadio color="blue" oldColor={forum.colorScheme} register={register} />
-                <ColorRadio color="indigo" oldColor={forum.colorScheme} register={register} />
-                <ColorRadio color="purple" oldColor={forum.colorScheme} register={register}/>
-                <ColorRadio color="pink" oldColor={forum.colorScheme} register={register} />
-                <label className="inline-flex bg-gray-200 items-center p-1 sm:p-2 border-black border-2 sm:border-4 rounded">
-                  <input type="radio" ref={register} defaultChecked={forum.colorScheme === 'black'} className="form-radio h-4 sm:h-6 w-4 sm:w-6 text-black" name="colorScheme" value="black" />
-                  <span className="ml-1 sm:ml-2 text-sm sm:text-base text-gray-800 font-bold">Gray/Black</span>
-                </label>
-              </div>
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
-              <div className="flex p-4 flex-col sm:flex-row sm:items-center">
-                <div className="flex justify-center mb-4 sm:mb-0 mr-0 sm:mr-4">
-                  {iconPreview ? (
-                    <img className={'max-w-none my-2 w-24 md:w-32 lg:w-48 h-24 md:h-32 lg:h-48 rounded-full'} src={iconPreview} alt="" />
+            <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Description</label>
+                <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
+                {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2">
+                  <ColorRadio color="red" oldColor={forum.colorScheme} register={register} />
+                  <ColorRadio color="orange" oldColor={forum.colorScheme} register={register} />
+                  <ColorRadio color="green" oldColor={forum.colorScheme} register={register} />
+                  <ColorRadio color="teal" oldColor={forum.colorScheme} register={register}/>
+                  <ColorRadio color="blue" oldColor={forum.colorScheme} register={register} />
+                  <ColorRadio color="indigo" oldColor={forum.colorScheme} register={register} />
+                  <ColorRadio color="purple" oldColor={forum.colorScheme} register={register}/>
+                  <ColorRadio color="pink" oldColor={forum.colorScheme} register={register} />
+                  <label className="inline-flex bg-gray-200 items-center p-1 sm:p-2 border-black border-2 sm:border-4 rounded">
+                    <input type="radio" ref={register} defaultChecked={forum.colorScheme === 'black'} className="form-radio h-4 sm:h-6 w-4 sm:w-6 text-black" name="colorScheme" value="black" />
+                    <span className="ml-1 sm:ml-2 text-sm sm:text-base text-gray-800 font-bold">Gray/Black</span>
+                  </label>
+                </div>
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
+                <div className="flex p-4 flex-col sm:flex-row sm:items-center">
+                  <div className="flex justify-center mb-4 sm:mb-0 mr-0 sm:mr-4">
+                    {iconPreview ? (
+                      <img className={'max-w-none my-2 w-24 md:w-32 lg:w-48 h-24 md:h-32 lg:h-48 rounded-full'} src={iconPreview} alt="" />
+                    ) : (
+                      <svg className={'my-2 w-24 md:w-32 lg:w-40 rounded-full fill-current'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle className={`text-${forum.colorScheme}-400`} cx="79.5" cy="79.5" r="79.5" />
+                        <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
+                        <circle cx="96" cy="59" r="43" fill="white" />
+                      </svg>
+                    )}
+                  </div>
+                  <input onChange={() => getValues('icon')} accept={validImageTypes} type="file" ref={register({
+                    required: false,
+                    validate: {
+                      largerThan5MB: value => (!value[0] || value[0].size < 5 * 1024 * 1024) || '⚠ Avatar cannot exceed 5MB.',
+                      wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
+                    }
+                  })} name="icon" />
+                </div>
+                {formErrors.icon && (<span className="text-sm text-red-600">{formErrors.icon.message}</span>)}
+                <div className="flex align-start items-center mt-8">
+                  {forum?.colorScheme === 'black' && !mutationLoading ? (
+                    <input className={'bg-gray-600 mr-4 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
+                  ) : !mutationLoading ? (
+                    <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
                   ) : (
-                    <svg className={'my-2 w-24 md:w-32 lg:w-40 rounded-full fill-current'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle className={`text-${forum.colorScheme}-400`} cx="79.5" cy="79.5" r="79.5" />
-                      <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
-                      <circle cx="96" cy="59" r="43" fill="white" />
-                    </svg>
+                    <>
+                      <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
+                      <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
+                    </>
                   )}
                 </div>
-                <input onChange={() => getValues('icon')} accept={validImageTypes} type="file" ref={register({
-                  required: false,
-                  validate: {
-                    largerThan5MB: value => (!value[0] || value[0].size < 5 * 1024 * 1024) || '⚠ Avatar cannot exceed 5MB.',
-                    wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
-                  }
-                })} name="icon" />
               </div>
-              {formErrors.icon && (<span className="text-sm text-red-600">{formErrors.icon.message}</span>)}
-              <div className="flex align-start items-center mt-8">
-                {forum?.colorScheme === 'black' && !mutationLoading ? (
-                  <input className={'bg-gray-600 mr-4 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
-                ) : !mutationLoading ? (
-                  <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
-                ) : (
-                  <>
-                    <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
-                    <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
-                  </>
-                )}
-              </div>
-            </div>
+            </fieldset>
           </form>
         </div>
       </PleaseSignIn>

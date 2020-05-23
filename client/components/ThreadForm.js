@@ -90,21 +90,28 @@ const ThreadForm = () => {
         <div className="container mx-auto flex flex-col items-center">
           <h1 className="text-3xl mb-4 text-gray-700">Post a new thread..</h1>
           <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full px-3">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Title</label>
-              <input ref={register({ minLength: 4, maxLength: 75, required: true })} className="form-input block w-full" name="title" type="text" />
-              {formErrors.title && (<span className="text-sm text-red-600">Title must be between 4 and 75 characters.</span>)}
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Post</label>
-              <div>
-                <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="post" type="text" />
-                {formErrors.post && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+            <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Title</label>
+                <input ref={register({ minLength: 4, maxLength: 75, required: true })} className="form-input block w-full" name="title" type="text" />
+                {formErrors.title && (<span className="text-sm text-red-600">Title must be between 4 and 75 characters.</span>)}
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Post</label>
+                <div>
+                  <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="post" type="text" />
+                  {formErrors.post && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+                </div>
+                <div className="flex align-start items-center mt-8 space-x-4">
+                  {forum?.colorScheme === 'black' ? (
+                    <input className={'bg-gray-600 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Post" />
+                  ) : (
+                    <input className={`bg-${forum.colorScheme || 'pink'}-400 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Post" />
+                  )}
+                  {mutationLoading && (
+                    <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
+                  )}
+                </div>
               </div>
-              {forum?.colorScheme === 'black' ? (
-                <input className={'bg-gray-600 mx-auto text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 rounded'} type="submit" value="Post" />
-              ) : (
-                <input className={`bg-${forum.colorScheme || 'pink'}-400 mx-auto text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 mt-8 rounded`} type="submit" value="Post" />
-              )}
-            </div>
+            </fieldset>
           </form>
         </div>
       </PleaseSignIn>
