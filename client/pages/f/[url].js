@@ -35,7 +35,7 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
         gravity:"center"
       })
     }
-    threads(first: $first, skip: $skip, orderBy: "lastPost_DESC") {
+    threads(skip: $skip, first: $first, orderBy: "lastPost_DESC") {
       id
       title
       url
@@ -75,8 +75,10 @@ const Forum = () => {
   const page = +p || 1
   const perPage = user?.postsPerPage || threadsPerPage
 
+  // TODO: server is returning stale items, nothing to do with apollo
   const { data, loading, error } = useQuery(FORUM_QUERY, {
-    variables: { url, first: perPage, skip: page * perPage - perPage }
+    variables: { url, first: perPage, skip: page * perPage - perPage },
+    fetchPolicy: 'network-only' // maybe cache-and-network
   })
 
   if (loading) {
@@ -88,7 +90,7 @@ const Forum = () => {
     const count = forum._threadsMeta.count
     const pages = Math.ceil(count / perPage)
 
-    if (page > pages) {
+    if (pages > 1 && page > pages) {
       router.push({
         pathname: '/f/[url]',
         query: { p: pages }

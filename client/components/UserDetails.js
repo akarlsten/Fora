@@ -1,9 +1,16 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
 
+import { useTheme } from 'context/ColorContext'
 import { useUser } from 'hooks/useUser'
 
 const UserDetails = ({ user }) => {
+  const { setTheme } = useTheme()
   const me = useUser()
+
+  useEffect(() => {
+    setTheme('pink')
+  }, [])
 
   const canEditUser = me?.isAdmin || me?.id === user.id
 

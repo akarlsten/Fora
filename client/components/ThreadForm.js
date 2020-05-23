@@ -5,7 +5,9 @@ import { useToasts } from 'react-toast-notifications'
 import { useEffect } from 'react'
 import gql from 'graphql-tag'
 import Link from 'next/link'
+import Loader from 'react-loader-spinner'
 
+import colorConverter from 'lib/colorConverter'
 import { useTheme } from 'context/ColorContext'
 import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -46,7 +48,7 @@ const ThreadForm = () => {
     }
   }, [forum])
 
-  const [createThread] = useMutation(CREATE_THREAD, {
+  const [createThread, { loading: mutationLoading }] = useMutation(CREATE_THREAD, {
     onCompleted: ({ createThread: { url: threadUrl } }) => {
       addToast('Thread created!', { appearance: 'success' })
       router.push('/f/[url]/[tid]', `/f/${url}/${threadUrl}`)

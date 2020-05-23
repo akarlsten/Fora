@@ -4,6 +4,8 @@ import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import Loader from 'react-loader-spinner'
 
+import colorConverter from 'lib/colorConverter'
+
 import { FORUM_QUERY } from 'pages/f/[url]'
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 
@@ -33,6 +35,8 @@ fragment myThread on Thread {
 const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) => {
   const { addToast } = useToasts()
   const { register, handleSubmit, errors: formErrors } = useForm()
+  // color is the color name, we convert it to hex with this
+  const hexColor = colorConverter(color)
 
   const [createPost, { loading: mutationLoading }] = useMutation(CREATE_POST, {
     onCompleted: () => {
@@ -72,7 +76,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
           <span className="text-xs text-center text-gray-600">Markdown is enabled!</span>
           <div className="flex justify-end items-center mt-8">
             {mutationLoading && (
-              <Loader type="ThreeDots" color={color} width={40} height={40} />
+              <Loader type="ThreeDots" color={hexColor} width={40} height={40} />
             )}
             {color === 'black' ? (
               <input className={'ml-4 bg-gray-600 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Post" />

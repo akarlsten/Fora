@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
 import { useTheme } from 'context/ColorContext'
+import colorConverter from 'lib/colorConverter'
 import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
@@ -196,7 +197,7 @@ const EditForum = () => {
                 ) : (
                   <>
                     <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
-                    <Loader type="ThreeDots" color={forum.colorScheme} width={40} height={40} />
+                    <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
                   </>
                 )}
               </div>

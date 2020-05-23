@@ -71,7 +71,8 @@ const Thread = ({ query }) => {
   const perPage = user?.postsPerPage || postsPerPage
 
   const { data, loading, error } = useQuery(THREAD_QUERY, {
-    variables: { slug: tid, first: perPage, skip: page * perPage - perPage }
+    variables: { slug: tid, first: perPage, skip: page * perPage - perPage },
+    fetchPolicy: 'network-only' // maybe change to cache-and-network
   })
 
   if (loading) {
@@ -83,7 +84,7 @@ const Thread = ({ query }) => {
     const count = thread._postsMeta.count
     const pages = Math.ceil(count / perPage)
 
-    if (page > pages) {
+    if (pages > 1 && page > pages) {
       router.push({
         pathname: '/f/[url]/[tid]',
         query: { p: pages }
