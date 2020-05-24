@@ -41,6 +41,7 @@ query FORUM_QUERY {
 const SUBSCRIBED_QUERY = gql`
 query SUBSCRIBED_QUERY {
   authenticatedUser {
+    id
     subscriptions {
       id
       name

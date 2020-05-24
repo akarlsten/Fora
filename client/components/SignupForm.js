@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
 import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
+import ImageSelector from 'components/ImageSelector'
+
 const EMAIL_QUERY = gql`
 query EMAIL_QUERY($email: String!) {
   allUsers(where: {email: $email}) {
@@ -30,32 +32,12 @@ mutation CREATE_USER($data: UserCreateInput!) {
 }
 `
 
-const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
-
 const SignupForm = () => {
   const router = useRouter()
   const { addToast } = useToasts()
-  const { register, handleSubmit, errors: formErrors, watch, getValues, triggerValidation } = useForm({
-    defaultValues: { avatar: '' }
-  })
+  const { register, handleSubmit, errors: formErrors, watch, getValues, triggerValidation } = useForm()
   const password = useRef({})
   password.current = watch('password', '')
-  const files = watch('avatar')
-
-  const [avatarPreview, setAvatarPreview] = useState()
-
-  // trigger validation and updating the avatar preview when changes are made to the file upload field
-  useEffect(() => {
-    if (files && files[0]) {
-      triggerValidation('avatar')
-      if (!formErrors?.avatar?.message) {
-        const imgUrl = URL.createObjectURL(files[0])
-        setAvatarPreview(imgUrl)
-      } else {
-        setAvatarPreview(null)
-      }
-    }
-  }, [files, files[0], formErrors?.avatar?.message])
 
   const [nameCheck, { data: nameData }] = useLazyQuery(USERNAME_QUERY)
   const [emailCheck, { data: emailData }] = useLazyQuery(EMAIL_QUERY)
@@ -68,11 +50,11 @@ const SignupForm = () => {
     onError: () => addToast('Couldn\'t register user, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
-  const onSubmit = ({ name, email, password }) => {
+  const onSubmit = ({ name, email, password, image }) => {
     if (Object.keys(formErrors).length === 0) {
-      if (files && files[0]) {
+      if (image && image[0]) {
         createUser({
-          variables: { data: { name, displayName: name, email, password, avatar: files[0] } }
+          variables: { data: { name, displayName: name, email, password, avatar: image[0] } }
         })
       } else {
         createUser({
@@ -141,27 +123,13 @@ const SignupForm = () => {
               {formErrors.confirm && (<span className="text-sm text-red-600">{formErrors.confirm.message}</span>)}
             </div>
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Avatar</label>
-            <div className="flex p-4 items-center">
-              <div className="flex mr-4">
-                {avatarPreview ? (
-                  <img className={'max-w-none my-2 w-24 md:w-32 lg:w-48 h-24 md:h-32 lg:h-48'} src={avatarPreview} alt="" />
-                ) : (
-                  <svg className={'my-2 w-24 md:w-32 lg:w-40 rounded-full fill-current'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle className={'text-pink-400'} cx="79.5" cy="79.5" r="79.5" />
-                    <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
-                    <circle cx="96" cy="59" r="43" fill="white" />
-                  </svg>
-                )}
-              </div>
-              <input className="align-right" onChange={() => getValues('avatar')} accept={validImageTypes} type="file" ref={register({
-                required: false,
-                validate: {
-                  largerThan5MB: value => (!value[0] || value[0].size < 5 * 1024 * 1024) || '⚠ Avatar cannot exceed 5MB.',
-                  wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.'
-                }
-              })} name="avatar" />
-            </div>
-            {formErrors.avatar && (<span className="text-sm text-red-600">{formErrors.avatar.message}</span>)}
+            <ImageSelector
+              getValues={getValues}
+              watch={watch}
+              triggerValidation={triggerValidation}
+              formErrors={formErrors}
+              register={register}
+            />
             <div className="flex items-center mt-8">
               <input className={`${mutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${mutationLoading ? 'text-pink-200' : 'text-white'} font-bold text-lg ${mutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
                 type="submit" value="Sign Up" disabled={!!mutationLoading} />
