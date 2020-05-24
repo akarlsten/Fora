@@ -7,6 +7,8 @@ import { useTheme } from 'context/ColorContext'
 import ForumItem from 'components/ForumItem'
 import ForumList from 'components/ForumList'
 import Landing from 'components/Landing'
+import LoadingSpinner from 'components/LoadingSpinner'
+import Error from 'components/Error'
 
 import { createClient } from 'lib/withApollo'
 
@@ -66,8 +68,8 @@ query SUBSCRIBED_QUERY {
 
 const Index = (/* data */) => {
   const loggedIn = useUser()
-  const { data, loading } = useQuery(FORUM_QUERY)
-  const { data: subData, loading: subLoading } = useQuery(SUBSCRIBED_QUERY)
+  const { data, loading, error } = useQuery(FORUM_QUERY)
+  const { data: subData, loading: subLoading, error: subError } = useQuery(SUBSCRIBED_QUERY)
   const { setTheme } = useTheme()
 
   useEffect(() => {
@@ -76,8 +78,14 @@ const Index = (/* data */) => {
 
   console.log(subData)
   // TODO: Try to do this in the request to server, we need orderBy on the nested field _subscribersMeta, which doesnt work?
-  const sorted = data?.allForums && [...data.allForums].sort((a, b) => b._subscribersMeta.count - a._subscribersMeta.count)
+  const sorted = data?.allForums && [...data.allForums]
+    .filter(forum => !subData?.authenticatedUser?.subscriptions.some(a => a.id === forum.id))
+    .sort((a, b) => b._subscribersMeta.count - a._subscribersMeta.count)
+
   const subSorted = subData?.authenticatedUser?.subscriptions && [...subData.authenticatedUser.subscriptions].sort((a, b) => b._subscribersMeta.count - a._subscribersMeta.count)
+
+  if (error || subError) return <Error />
+
   return (
     <>
       {!loggedIn && (
@@ -85,26 +93,34 @@ const Index = (/* data */) => {
       )}
       <div className="container mx-auto">
         {loggedIn && (
-          <div className="mb-8">
-            <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Your subscriptions</h1>
-            <ForumList>
-              {subData && (
-                subSorted.map(forum => (
-                  <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
-                ))
-              )}
-            </ForumList>
-          </div>
-        )}
-        <h1 className="font-sans text-gray-700 font-bold text-2xl mb-2">Popular Forums</h1>
-        <ForumList>
-          {loading ? (
-            <p>Loading forums..</p>
+          subLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="mb-8">
+              <h1 className="font-sans font-bold text-2xl mb-2">Your subscriptions</h1>
+              <ForumList>
+                {subData && (
+                  subSorted.map(forum => (
+                    <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
+                  ))
+                )}
+              </ForumList>
+            </div>
           )
-            : sorted.map(forum => (
-              <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
-            ))}
-        </ForumList>
+        )}
+        {sorted?.length >= 1 && (
+          <>
+            <h1 className="font-sans font-bold text-2xl mb-2">Popular Forums</h1>
+            <ForumList>
+              {loading ? (
+                <LoadingSpinner />
+              )
+                : (sorted.map(forum => (
+                  <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
+                )))}
+            </ForumList>
+          </>
+        )}
       </div>
     </>
   )

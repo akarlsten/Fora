@@ -62,7 +62,7 @@ const Header = () => {
         </div>
       </div>
       {sidebarOpen && (
-        <NavMenu loggedIn={loggedIn} />
+        <NavMenu loggedIn={loggedIn} setSidebar={setSidebar} />
       )}
     </div>
   )

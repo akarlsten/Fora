@@ -3,9 +3,9 @@ import SignoutButton from 'components/SignoutButton'
 import SigninButton from 'components/SigninButton'
 import SignupButton from 'components/SignupButton'
 
-const NavMenu = ({ loggedIn }) => {
+const NavMenu = ({ loggedIn, setSidebar }) => {
   return (
-    <div className="lg:hidden border-b border-l border-t border-gray-200 absolute right-0 mt-20 py-4 z-20 px-10 bg-white flex flex-col rounded-l-lg">
+    <div onClick={() => setSidebar(false)} className="lg:hidden border-b border-l border-t border-gray-200 absolute right-0 mt-20 py-4 z-20 px-10 bg-white flex flex-col rounded-l-lg">
       {loggedIn && (
         <div className="flex flex-col space-y-2">
           <UserBadge name={loggedIn.name} avatar={loggedIn.avatar} />

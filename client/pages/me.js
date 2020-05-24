@@ -40,11 +40,7 @@ const Me = () => {
     return <LoadingSpinner />
   } else if (data) {
     const user = data.authenticatedUser
-    return (
-      <PleaseSignIn>
-        <UserDetails user={user} />
-      </PleaseSignIn>
-    )
+    return <UserDetails user={user} />
   } else {
     return <Error />
   }
