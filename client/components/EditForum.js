@@ -9,6 +9,9 @@ import Loader from 'react-loader-spinner'
 
 import { useTheme } from 'context/ColorContext'
 import colorConverter from 'lib/colorConverter'
+
+import ColorRadio from 'components/ColorRadio'
+import ColorSelector from 'components/ColorSelector'
 import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
@@ -56,13 +59,6 @@ mutation UPDATE_COLOR_DESC($forumID: ID!, $data: ForumUpdateInput!) {
   }
 }
 `
-
-export const ColorRadio = ({ color, register, oldColor }) => (
-  <label className={`inline-flex items-center p-1 sm:p-2 bg-${color}-200 border-${color}-400 border-2 sm:border-4 rounded`}>
-    <input type="radio" ref={register} className={`form-radio text-${color}-400 h-4 w-4 sm:h-6 sm:w-6`} name="colorScheme" value={color} defaultChecked={oldColor === color} />
-    <span className={`ml-1 sm:ml-2 text-sm sm:text-base text-${color}-800 font-bold`}>{color.charAt(0).toUpperCase() + color.slice(1)}</span>
-  </label>
-)
 
 export const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
 
@@ -154,20 +150,7 @@ const EditForum = () => {
                 <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
                 {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2">
-                  <ColorRadio color="red" oldColor={forum.colorScheme} register={register} />
-                  <ColorRadio color="orange" oldColor={forum.colorScheme} register={register} />
-                  <ColorRadio color="green" oldColor={forum.colorScheme} register={register} />
-                  <ColorRadio color="teal" oldColor={forum.colorScheme} register={register}/>
-                  <ColorRadio color="blue" oldColor={forum.colorScheme} register={register} />
-                  <ColorRadio color="indigo" oldColor={forum.colorScheme} register={register} />
-                  <ColorRadio color="purple" oldColor={forum.colorScheme} register={register}/>
-                  <ColorRadio color="pink" oldColor={forum.colorScheme} register={register} />
-                  <label className="inline-flex bg-gray-200 items-center p-1 sm:p-2 border-black border-2 sm:border-4 rounded">
-                    <input type="radio" ref={register} defaultChecked={forum.colorScheme === 'black'} className="form-radio h-4 sm:h-6 w-4 sm:w-6 text-black" name="colorScheme" value="black" />
-                    <span className="ml-1 sm:ml-2 text-sm sm:text-base text-gray-800 font-bold">Gray/Black</span>
-                  </label>
-                </div>
+                <ColorSelector oldColor={forum.colorScheme} register={register} />
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
                 <div className="flex p-4 flex-col sm:flex-row sm:items-center">
                   <div className="flex justify-center mb-4 sm:mb-0 mr-0 sm:mr-4">

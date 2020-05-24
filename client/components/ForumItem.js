@@ -19,7 +19,7 @@ const ForumItem = ({ icon, name, description, threadCount, userCount, colorSchem
                   <circle cx="96" cy="59" r="43" fill="white" />
                 </svg>
               )}
-              <div className={`text-gray-800 font-bold text-lg xl:text-xl ${name.length > 18 ? 'md:text-base' : ''}`}>{name}</div>
+              <div className={`text-gray-800 font-bold text-lg truncate xl:text-xl ${name.length > 18 ? 'md:text-base' : ''}`}>{name}</div>
             </div>
             {description && (
               <p className="text-gray-700 text-sm pt-1">

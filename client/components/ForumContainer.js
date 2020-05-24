@@ -41,17 +41,17 @@ const ForumContainer = (props) => {
     <div className="flex flex-col max-w-full">
       <div className="flex items-center mb-8">
         {icon ? (
-          <img className="w-20 h-20 rounded-full mr-4" src={icon.publicUrlTransformed} alt="" />
+          <img className="w-10 h-10 sm:w-20 sm:h-20 rounded-full mr-4" src={icon.publicUrlTransformed} alt="" />
         ) : (
-          <svg className="w-20 h-20 rounded-full mr-4 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-10 h-10 sm:w-20 sm:h-20  rounded-full mr-4 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle className={`text-${colorScheme || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
             <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
             <circle cx="96" cy="59" r="43" fill="white" />
           </svg>
         )}
         <div className="flex items-center justify-between w-full">
-          <h1 className="font-bold text-4xl">{name}</h1>
-          <div className="flex items-center flex-wrap">
+          <h1 className="font-bold text-2xl sm:text-4xl">{name}</h1>
+          <div className="flex space-y-2 sm:space-y-0 items-center flex-wrap">
             {canEditForum && (
               <Link href="/f/[url]/a/[action]" as={`/f/${url}/a/edit`}>
                 <button className={`p-2 rounded border border-${colorScheme || 'pink'}-400 bg-${colorScheme || 'pink'}-400 ml-4 flex items-center`}>
