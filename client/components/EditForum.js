@@ -106,7 +106,7 @@ const EditForum = () => {
     return (
       <PleaseSignIn>
         <div className="container mx-auto flex flex-col items-center">
-          <BackToForum url={forum.url} iconUrl={forum.icon.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
+          <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
           <h1 className="text-3xl mb-4 text-gray-700">Editing: <span className="font-semibold text-black">{forum.name}</span></h1>
           <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
             <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>

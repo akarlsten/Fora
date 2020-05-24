@@ -20,6 +20,7 @@ query FORUM_QUERY {
     url
     description
     colorScheme
+    isBanned
     icon {
       publicUrlTransformed(transformation: {
         width:"100",
@@ -48,6 +49,7 @@ query SUBSCRIBED_QUERY {
       url
       description
       colorScheme
+      isBanned
       icon {
         publicUrlTransformed(transformation: {
           width:"100",

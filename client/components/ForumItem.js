@@ -1,7 +1,7 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
 
-const ForumItem = ({ icon, name, description, threadCount, userCount, colorScheme, url }) => {
+const ForumItem = ({ icon, name, description, threadCount, userCount, colorScheme, url, isBanned }) => {
   const color = colorScheme || 'pink'
 
   return (
@@ -21,10 +21,13 @@ const ForumItem = ({ icon, name, description, threadCount, userCount, colorSchem
               )}
               <div className={`text-gray-800 font-bold text-lg truncate xl:text-xl ${name.length > 18 ? 'md:text-base' : ''}`}>{name}</div>
             </div>
-            {description && (
+            {description && !isBanned && (
               <p className="text-gray-700 text-sm pt-1">
                 {description}
               </p>
+            )}
+            {isBanned && (
+              <p className="text-red-500 font-bold">BANNED!</p>
             )}
           </div>
           <div className="flex flex-col justify-around leading-normal pl-2">
