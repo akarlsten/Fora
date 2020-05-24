@@ -57,14 +57,14 @@ mutation UPDATE_COLOR_DESC($forumID: ID!, $data: ForumUpdateInput!) {
 }
 `
 
-const ColorRadio = ({ color, register, oldColor }) => (
+export const ColorRadio = ({ color, register, oldColor }) => (
   <label className={`inline-flex items-center p-1 sm:p-2 bg-${color}-200 border-${color}-400 border-2 sm:border-4 rounded`}>
     <input type="radio" ref={register} className={`form-radio text-${color}-400 h-4 w-4 sm:h-6 sm:w-6`} name="colorScheme" value={color} defaultChecked={oldColor === color} />
     <span className={`ml-1 sm:ml-2 text-sm sm:text-base text-${color}-800 font-bold`}>{color.charAt(0).toUpperCase() + color.slice(1)}</span>
   </label>
 )
 
-const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
+export const validImageTypes = 'image/gif, image/jpeg, image/jpg, image/png'
 
 const EditForum = () => {
   const router = useRouter()
