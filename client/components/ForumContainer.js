@@ -35,7 +35,7 @@ const ForumContainer = (props) => {
   }, [])
 
   const canEditForum = loggedIn?.isAdmin || moderators?.some(mod => mod.id === loggedIn?.id) || owner?.id === loggedIn?.id
-  const canPost = !loggedIn?.isGlobalBanned || !isBanned || !bannedUsers.some(banned => banned.id === loggedIn?.id)
+  const canPost = !loggedIn?.isGlobalBanned && !isBanned && !bannedUsers?.some(banned => banned.id === loggedIn?.id)
 
   return (
     <div className="flex flex-col max-w-full">

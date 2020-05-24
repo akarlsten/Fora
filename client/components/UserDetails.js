@@ -43,6 +43,11 @@ const UserDetails = ({ user }) => {
             </Link>
           )}
         </div>
+        {user.isGlobalBanned && (
+          <div className="my-8 font-bold text-red-500 text-2xl uppercase">
+            YOU ARE BANNED!
+          </div>
+        )}
         <div>
           <p>You have: {user._postsMeta.count} posts.</p>
         </div>

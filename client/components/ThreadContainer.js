@@ -19,7 +19,7 @@ const ThreadContainer = (props) => {
     setTheme(forum.colorScheme)
   }, [])
 
-  const canPost = !loggedIn?.isGlobalBanned || !isBanned || !bannedUsers.some(banned => banned.id === loggedIn?.id)
+  const canPost = !loggedIn?.isGlobalBanned && !isBanned && !bannedUsers?.some(banned => banned.id === loggedIn?.id)
 
   return (
     <div className="flex flex-col max-w-full">
