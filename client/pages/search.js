@@ -105,7 +105,7 @@ const Search = () => {
           </title>
         </Head>
         <div className="flex flex-col">
-          <h1 className="font-sans font-bold text-2xl mb-8">Search results for <span className="text-3xl text-pink-600">{q}</span>:</h1>
+          <h1 className="font-sans font-medium text-2xl mb-8">Search results for <span className="text-3xl font-bold">{q}</span>:</h1>
           {forums.length >= 1 && (
             <div className="mb-8">
               <h1 className="font-sans font-semibold text-xl mb-2">Forums:</h1>

@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import { useEffect } from 'react'
+import Link from 'next/link'
 
 import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
@@ -98,16 +99,28 @@ const Index = (/* data */) => {
           subLoading ? (
             <LoadingSpinner />
           ) : (
-            <div className="mb-8">
-              <h1 className="font-sans font-bold text-2xl mb-2">Your subscriptions</h1>
-              <ForumList>
-                {subData && (
-                  subSorted.map(forum => (
-                    <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
-                  ))
-                )}
-              </ForumList>
-            </div>
+            <>
+              {!loggedIn.isGlobalBanned && (
+                <div className="flex justify-end items-center">
+                  <Link href="/create">
+                    <button className={'p-2 rounded border border-pink-400 bg-pink-400 hover:bg-pink-500 hover:border-pink-500 ml-4 flex items-center'}>
+                      <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                  Create Forum
+                    </button>
+                  </Link>
+                </div>
+              )}
+              <div className="mb-8">
+                <h1 className="font-sans font-bold text-2xl mb-2">Your subscriptions</h1>
+                <ForumList>
+                  {subData && (
+                    subSorted.map(forum => (
+                      <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
+                    ))
+                  )}
+                </ForumList>
+              </div>
+            </>
           )
         )}
         {sorted?.length >= 1 && (

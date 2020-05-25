@@ -37,7 +37,7 @@ function Signin () {
     email: '',
     password: ''
   })
-  const [signin, { error, loading }] = useMutation(SIGNIN_MUTATION, {
+  const [signin, { error, loading, client }] = useMutation(SIGNIN_MUTATION, {
     variables: inputs,
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
     onError: () => addToast('Couldn\'t sign you in, make sure you\'ve entered your details correctly!', { appearance: 'error', autoDismiss: true })

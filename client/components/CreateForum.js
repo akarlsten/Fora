@@ -102,10 +102,10 @@ const CreateForum = () => {
                 register={register} />
               <div className="flex align-start items-center mt-8">
                 {!mutationLoading ? (
-                  <input className={'bg-pink-400 mr-4 text-white font-bold text-lg hover:bg-\'pink\'-700 p-2 rounded'} type="submit" value="Save Changes" />
+                  <input className={'bg-pink-400 mr-4 text-white font-bold text-lg hover:bg-\'pink\'-700 p-2 rounded'} type="submit" value="Create Forum" />
                 ) : (
                   <>
-                    <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
+                    <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Creating.." />
                     <Loader type="ThreeDots" color={colorConverter('pink')} width={40} height={40} />
                   </>
                 )}

@@ -1,8 +1,12 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
+import { useUser } from 'hooks/useUser'
 
-const PostItem = ({ owner, content, color }) => {
+const PostItem = ({ owner, content, color, canEditAll }) => {
+  const loggedIn = useUser()
+
+  const canEdit = canEditAll || loggedIn?.id === owner.id
   return (
     <div className={'flex'}>
       <div className={'px-4 py-2 justify-start items-center flex flex-col w-14 md:w-40 lg:w-56 flex-shrink-0'}>
@@ -19,7 +23,16 @@ const PostItem = ({ owner, content, color }) => {
           </svg>
         )}
       </div>
-      <div className={`px-4 py-2 border-l border-${color || 'pink'}-200`}><ReactMarkdown source={content} /></div>
+      <div className={`flex flex-grow px-4 py-2 border-l border-${color || 'pink'}-200`}>
+        <div className="w-full">
+          <ReactMarkdown source={content} />
+        </div>
+        {canEdit && (
+          <div className="self-end">
+            <a className={`px-2 -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+          </div>
+        )}
+      </div>
       <div className={`flex justify-center items-center divide-x divide-${color || 'pink'}-200`}>
       </div>
     </div>

@@ -132,7 +132,7 @@ const EditForum = () => {
                     <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
                   ) : (
                     <>
-                      <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Save Changes" />
+                      <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Saving.." />
                       <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
                     </>
                   )}

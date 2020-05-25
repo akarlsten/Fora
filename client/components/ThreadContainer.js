@@ -9,7 +9,7 @@ import Pagination from 'components/Pagination'
 import BackToForum from 'components/BackToForum'
 
 const ThreadContainer = (props) => {
-  const { title, forum, posts, isBanned, bannedUsers, url, id: threadID, count, page, pages } = props
+  const { title, forum, posts, isBanned, owner, moderators, bannedUsers, url, id: threadID, count, page, pages } = props
 
   const [replyModalOpen, setReplyModal] = useState(false)
   const { setTheme } = useTheme()
@@ -20,6 +20,7 @@ const ThreadContainer = (props) => {
   }, [])
 
   const canPost = !loggedIn?.isGlobalBanned && !isBanned && !bannedUsers?.some(banned => banned.id === loggedIn?.id)
+  const canEditAll = loggedIn?.isAdmin || (loggedIn && loggedIn.id === owner?.id) || moderators?.some(mod => mod.id === loggedIn?.id)
 
   return (
     <div className="flex flex-col max-w-full">
@@ -69,7 +70,7 @@ const ThreadContainer = (props) => {
         </div>
       )}
       <div className="flex flex-row items-start">
-        <PostList color={forum.colorScheme} posts={posts} />
+        <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} />
       </div>
       {pages > 1 && (
         <div className="flex justify-end my-4">

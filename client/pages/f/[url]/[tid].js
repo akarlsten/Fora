@@ -26,6 +26,12 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
       bannedUsers {
         id
       }
+      owner {
+        id
+      }
+      moderators {
+        id
+      }
       isBanned
       icon {
         publicUrlTransformed(transformation: {
@@ -42,6 +48,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
     posts(first: $first, skip: $skip, orderBy: "createdAt_ASC") {
       id
       owner {
+        id
         name
         avatar {
         publicUrlTransformed(transformation: {
