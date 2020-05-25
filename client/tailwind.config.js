@@ -32,7 +32,9 @@ module.exports = {
     extend: {
     }
   },
-  variants: {},
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'odd', 'even']
+  },
   plugins: [
     require('@tailwindcss/custom-forms')
   ]

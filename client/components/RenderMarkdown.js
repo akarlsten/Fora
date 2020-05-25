@@ -74,6 +74,14 @@ const RenderMarkdown = ({ content, color }) => {
     }
   }
 
+  // const TableBody = (props) => (
+  //   <tbody className={`bg-white even:bg-${color || 'pink'}-200`}>{props.children}</tbody>
+  // )
+
+  const TableRow = (props) => (
+    <tr className={`even:bg-${color || 'pink'}-200`}>{props.children}</tr>
+  )
+
   const List = ({ start, ordered, tight, depth, children }) => {
     if (ordered) {
       return <ol className="m-4 list-decimal">{children}</ol>
@@ -110,6 +118,7 @@ const RenderMarkdown = ({ content, color }) => {
         image: Image,
         table: Table,
         tableCell: TableCell,
+        tableRow: TableRow,
         list: List,
         break: Break
       }}
