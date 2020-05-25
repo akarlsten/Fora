@@ -3,16 +3,17 @@ import { useState } from 'react'
 import gql from 'graphql-tag'
 
 import { useUser } from 'hooks/useUser'
+import { SUBSCRIBED_QUERY } from 'pages/index'
 
-const SUBSCRIBED_QUERY = gql`
-query SUBSCRIBED_QUERY($userID: ID!, $forumID: ID!) {
-  User(where: { id: $userID }) {
-    subscriptions(where: { id: $forumID }) {
-      id
-    }
-  }
-}
-`
+// const SUBSCRIBED_QUERY = gql`
+// query SUBSCRIBED_QUERY($userID: ID!, $forumID: ID!) {
+//   User(where: { id: $userID }) {
+//     subscriptions(where: { id: $forumID }) {
+//       id
+//     }
+//   }
+// }
+// `
 
 const SUBSCRIBED_FRAGMENT = gql`
 fragment myForum on Forum {
@@ -50,9 +51,11 @@ mutation UNSUBSCRIBE($userID: ID!, $forumID: ID!) {
 const SubscribeButton = ({ forumID, color }) => {
   const user = useUser()
 
-  const { data, loading } = useQuery(SUBSCRIBED_QUERY, {
-    variables: { userID: user.id, forumID }
-  })
+  // const { data, loading } = useQuery(SUBSCRIBED_QUERY, {
+  //   variables: { userID: user.id, forumID }
+  // })
+
+  const { data, loading } = useQuery(SUBSCRIBED_QUERY)
 
   const [setSubscribed] = useMutation(SUBSCRIBE, {
     variables: {
@@ -90,9 +93,11 @@ const SubscribeButton = ({ forumID, color }) => {
     return ''
   }
 
-  const { subscriptions } = data && data.User
+  // const { subscriptions } = data && data.User
 
-  return subscriptions.length > 0 ? (
+  const subscriptions = data?.authenticatedUser?.subscriptions
+
+  return subscriptions.some(sub => sub.id === forumID) ? (
     <button onClick={async e => {
       e.preventDefault()
       await setUnsubscribed()
