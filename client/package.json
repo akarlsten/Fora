@@ -29,6 +29,7 @@
     "react-markdown": "^4.3.1",
     "react-select": "^3.1.0",
     "react-toast-notifications": "^2.4.0",
+    "remark-emoji": "^2.1.0",
     "tailwindcss": "^1.4.4"
   },
   "devDependencies": {

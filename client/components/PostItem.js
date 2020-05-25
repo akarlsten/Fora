@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 import { useToasts } from 'react-toast-notifications'
 import { useState, useEffect } from 'react'
 import { formatRelative, parseISO } from 'date-fns'
-import ReactMarkdown from 'react-markdown'
 import { useUser } from 'hooks/useUser'
 import Loader from 'react-loader-spinner'
 
@@ -13,6 +12,8 @@ import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 import { postsPerPage } from 'config'
 import MarkdownHelp from './MarkdownHelp'
 import colorConverter from 'lib/colorConverter'
+
+import RenderMarkdown from 'components/RenderMarkdown'
 
 const UPDATE_POST = gql`
 mutation UPDATE_POST($id: ID!, $data: PostUpdateInput!) {
@@ -71,7 +72,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
         <span className="text-xs">{formatRelative(parseISO(createdAt), new Date())}</span>
       </div>
       <div className={`flex flex-grow px-4 py-2 ${!editing && 'border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
-        <div className="w-full">
+        <div className="w-full mr-2">
           {editing ? (
             <form id="edit" className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
               <textarea ref={register({
@@ -82,7 +83,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
               })} onChange={() => triggerValidation('content')} name="content" className={'w-full h-full resize-y mr-1'} defaultValue={content}></textarea>
             </form>
           ) : (
-            <ReactMarkdown source = { content } />
+            <RenderMarkdown content={content} color={color} />
           )}
         </div>
         {canEdit && !editing && (
