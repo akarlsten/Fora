@@ -12,7 +12,7 @@ import Error from 'components/Error'
 
 import { createClient } from 'lib/withApollo'
 
-const FORUM_QUERY = gql`
+export const FORUM_QUERY = gql`
 query FORUM_QUERY {
   allForums(orderBy: "subscribers_DESC", first: 9) {
     id
@@ -39,7 +39,7 @@ query FORUM_QUERY {
 }
 `
 
-const SUBSCRIBED_QUERY = gql`
+export const SUBSCRIBED_QUERY = gql`
 query SUBSCRIBED_QUERY {
   authenticatedUser {
     id
@@ -79,7 +79,6 @@ const Index = (/* data */) => {
     setTheme('pink')
   }, [])
 
-  console.log(subData)
   // TODO: Try to do this in the request to server, we need orderBy on the nested field _subscribersMeta, which doesnt work?
   const sorted = data?.allForums && [...data.allForums]
     .filter(forum => !subData?.authenticatedUser?.subscriptions.some(a => a.id === forum.id))

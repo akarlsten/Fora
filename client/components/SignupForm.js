@@ -75,7 +75,7 @@ const SignupForm = () => {
               maxLength: { value: 20, message: '⚠ Username can be at most 20 characters long.' },
               required: '⚠ You need to enter a username.',
               validate: async value => {
-                nameCheck({ variables: { name: value } })
+                await nameCheck({ variables: { name: value } })
                 if (nameData?.allUsers?.length > 0) {
                   return '⚠ Username already taken.'
                 }

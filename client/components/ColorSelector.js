@@ -15,6 +15,8 @@ const ColorRadio = ({ color, register, oldColor }) => {
 }
 
 const ColorSelector = ({ oldColor, register }) => {
+  oldColor = oldColor || 'pink'
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 sm:gap-2">
       <ColorRadio color="red" oldColor={oldColor} register={register} />
