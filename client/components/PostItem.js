@@ -1,18 +1,64 @@
-import { format } from 'd3-format'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
+import { useForm } from 'react-hook-form'
+import gql from 'graphql-tag'
+import { useToasts } from 'react-toast-notifications'
+import { useState, useEffect } from 'react'
+import { formatRelative, parseISO } from 'date-fns'
 import ReactMarkdown from 'react-markdown'
 import { useUser } from 'hooks/useUser'
+import Loader from 'react-loader-spinner'
 
-const PostItem = ({ owner, content, color, canEditAll }) => {
+import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
+import { postsPerPage } from 'config'
+import MarkdownHelp from './MarkdownHelp'
+import colorConverter from 'lib/colorConverter'
+
+const UPDATE_POST = gql`
+mutation UPDATE_POST($id: ID!, $data: PostUpdateInput!) {
+  updatePost(id: $id, data: $data) {
+    id
+  }
+}
+`
+
+const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
+  const [editing, setEditing] = useState(false)
+  const { addToast } = useToasts()
+  const { register, handleSubmit, errors: formErrors, triggerValidation } = useForm()
   const loggedIn = useUser()
+  const router = useRouter()
+
+  const { url, tid, p } = router.query
+
+  const page = +p || 1
+  const perPage = loggedIn?.postsPerPage || postsPerPage
+
+  const [updatePost, { loading: mutationLoading }] = useMutation(UPDATE_POST, {
+    refetchQueries: [{ query: THREAD_QUERY, variables: { slug: tid, first: perPage, skip: page * perPage - perPage } }],
+    onCompleted: () => {
+      addToast('Post edited!', { appearance: 'success' })
+      setEditing(false)
+    },
+    onError: () => addToast('Couldn\'t update post, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+  })
+
+  const onSubmit = ({ content }) => {
+    triggerValidation('content')
+    if (!formErrors.content) {
+      updatePost({ variables: { id: id, data: { content } } })
+    }
+  }
 
   const canEdit = canEditAll || loggedIn?.id === owner.id
+  // TODO: maybe add a badge for moderators and admins?
   return (
     <div className={'flex'}>
-      <div className={'px-4 py-2 justify-start items-center flex flex-col w-14 md:w-40 lg:w-56 flex-shrink-0'}>
-        <span className="font-bold">
-          {owner.name}
+      <div className={'px-4 py-2 justify-start items-center flex flex-col w-20 sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
+        <span className="font-bold break-words text-sm sm:text-base">
+          {owner.displayName}
         </span>
+        <span className="text-xs sm:text-sm">@{owner.name}</span>
         {owner.avatar ? (
           <img className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
         ) : (
@@ -22,14 +68,46 @@ const PostItem = ({ owner, content, color, canEditAll }) => {
             <circle cx="96" cy="59" r="43" fill="white" />
           </svg>
         )}
+        <span className="text-xs">{formatRelative(parseISO(createdAt), new Date())}</span>
       </div>
-      <div className={`flex flex-grow px-4 py-2 border-l border-${color || 'pink'}-200`}>
+      <div className={`flex flex-grow px-4 py-2 ${!editing && 'border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
         <div className="w-full">
-          <ReactMarkdown source={content} />
+          {editing ? (
+            <form id="edit" className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+              <textarea ref={register({
+                minLength: { value: 1, message: '< 1' },
+                maxLength: { value: 20000, message: '> 20k' },
+                required: 'Required',
+                validate: value => value.trim().length >= 1 || '< 1'
+              })} onChange={() => triggerValidation('content')} name="content" className={'w-full h-full resize-y mr-1'} defaultValue={content}></textarea>
+            </form>
+          ) : (
+            <ReactMarkdown source = { content } />
+          )}
         </div>
-        {canEdit && (
+        {canEdit && !editing && (
           <div className="self-end">
-            <a className={`px-2 -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+            <a onClick={() => setEditing(true)} className={`px-2 -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+          </div>
+        )}
+        {canEdit && editing && (
+          <div className="ml-2 self-end flex flex-col items-end h-full">
+            <div className="flex flex-col items-center h-full justify-between -mr-2">
+              <div className="flex items-center">
+                <MarkdownHelp color={color} />
+                <button onClick={() => setEditing(false)} className={'self-end mb-1 px-1 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>
+                  <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                </button>
+              </div>
+              <div className="flex flex-col items-center">
+                {formErrors?.content && (<span className="-mb-1 text-lg text-red-600">⚠</span>)}
+                {formErrors?.content && (<span className="mb-1 text-xs text-red-600">{formErrors?.content?.message}</span>)}
+                {mutationLoading && (
+                  <Loader type="ThreeDots" color={colorConverter(color)} width={30} height={30} />
+                )}
+                <button disabled={mutationLoading} form="edit" type="submit" className={`px-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600 ${mutationLoading && 'opacity-50'}`}>Save</button>
+              </div>
+            </div>
           </div>
         )}
       </div>

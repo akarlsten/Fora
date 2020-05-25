@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import Loader from 'react-loader-spinner'
 
 import colorConverter from 'lib/colorConverter'
+import MarkdownHelp from 'components/MarkdownHelp'
 
 import { FORUM_QUERY } from 'pages/f/[url]'
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
@@ -65,7 +66,15 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
 
   return (
     <div className={`absolute bottom-0 right-0 p-4 bg-${color === 'black' ? 'gray' : (color || 'pink')}-300 w-full sm:w-3/4 lg:w-1/2 xl:w-1/4 sm:rounded-tl-lg`}>
-      <h1 className={`font-bold text-2xl text-${color || 'pink'}-800`}>Quick Reply</h1>
+      <div className="flex items-center justify-between">
+        <h1 className={`font-bold text-2xl text-${color || 'pink'}-800`}>Quick Reply</h1>
+        <div className="flex items-center">
+          <MarkdownHelp color={color} />
+          <button onClick={() => setReplyModal(false)} className={'self-end mb-1 px-1 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>
+            <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
       <form className="w-full max-w-xl flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full px-3">
           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Content</label>

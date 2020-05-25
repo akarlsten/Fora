@@ -70,15 +70,22 @@ const SignupForm = () => {
         <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
           <div className="px-3">
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Username</label>
-            <input ref={register({
+            <input onChange={(e) => {
+              if (e.target.value.length >= 1) {
+                triggerValidation('name')
+              }
+            }} ref={register({
               minLength: { value: 1, message: '⚠ Username must have at least 1 character.' },
               maxLength: { value: 20, message: '⚠ Username can be at most 20 characters long.' },
               required: '⚠ You need to enter a username.',
-              validate: async value => {
-                await nameCheck({ variables: { name: value } })
-                if (nameData?.allUsers?.length > 0) {
-                  return '⚠ Username already taken.'
-                }
+              validate: {
+                notTaken: async value => {
+                  await nameCheck({ variables: { name: value } })
+                  if (nameData?.allUsers?.length > 0) {
+                    return '⚠ Username already taken.'
+                  }
+                },
+                trimmed: value => value.trim().length >= 1 || '⚠ Username must have at least 1 character.'
               }
             })}
             className="form-input block sm:w-full" name="name" type="text" />

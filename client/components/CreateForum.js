@@ -80,11 +80,14 @@ const CreateForum = () => {
                 minLength: { value: 1, message: '⚠ Forum name must have at least 1 character.' },
                 maxLength: { value: 20, message: '⚠ Forum name can be at most 20 characters long.' },
                 required: '⚠ You need to enter a forum name.',
-                validate: async value => {
-                  forumNameCheck({ variables: { name: value } })
-                  if (nameData?.allForums?.length > 0) {
-                    return '⚠ A forum with this name already exists.'
-                  }
+                validate: {
+                  notTaken: async value => {
+                    forumNameCheck({ variables: { name: value } })
+                    if (nameData?.allForums?.length > 0) {
+                      return '⚠ A forum with this name already exists.'
+                    }
+                  },
+                  trimmed: value => value.trim().length >= 1 || '⚠ Forum name must have at least 1 character.'
                 }
               })} className="form-input block w-full" name="name" type="text" />
               {formErrors.name && (<span className="text-sm text-red-600">{formErrors.name.message}</span>)}

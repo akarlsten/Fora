@@ -13,6 +13,7 @@ import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
 import BackToForum from 'components/BackToForum'
+import MarkdownHelp from 'components/MarkdownHelp'
 
 import { FORUM_QUERY } from 'pages/f/[url]'
 
@@ -78,12 +79,16 @@ const ThreadForm = () => {
             <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Title</label>
-                <input ref={register({ minLength: 4, maxLength: 75, required: true })} className="form-input block w-full" name="title" type="text" />
+                <input ref={register({ minLength: 4, maxLength: 75, required: true, validate: value => value.trim().length >= 4 })} className="form-input block w-full" name="title" type="text" />
                 {formErrors.title && (<span className="text-sm text-red-600">Title must be between 4 and 75 characters.</span>)}
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Post</label>
                 <div>
                   <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="post" type="text" />
                   {formErrors.post && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+                  <div className="flex items-center mt-2">
+                    <span className="text-xs text-center text-gray-600 mr-2">Markdown is enabled!</span>
+                    <MarkdownHelp color={forum.colorScheme} />
+                  </div>
                 </div>
                 <div className="flex align-start items-center mt-8 space-x-4">
                   {forum?.colorScheme === 'black' ? (

@@ -50,6 +50,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
       owner {
         id
         name
+        displayName
         avatar {
         publicUrlTransformed(transformation: {
           width:"300",
@@ -59,6 +60,8 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
         })
         }
       }
+      isEdited
+      isDeleted
       content
       createdAt
       updatedAt
