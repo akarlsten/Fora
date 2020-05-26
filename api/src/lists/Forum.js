@@ -60,8 +60,9 @@ export default {
           if (resolvedData.description.length > 140 || resolvedData.description.length < 1) {
             addFieldValidationError('Description cannot be empty or longer than 140 characters.')
           }
-
-          userIsAdminModeratorOrOwner({ existingItem, context, actions })
+          if (existingItem) {
+            userIsAdminModeratorOrOwner({ existingItem, context, actions })
+          }
         }
       }
     },
@@ -104,7 +105,11 @@ export default {
       type: CloudinaryImage,
       adapter: cloudinaryAdapter,
       hooks: {
-        validateInput: userIsAdminModeratorOrOwner
+        validateInput: async ({ resolvedData, addFieldValidationError, existingItem, context, actions }) => {
+          if (existingItem) {
+            userIsAdminModeratorOrOwner({ existingItem, context, actions })
+          }
+        }
       }
     },
     isBanned: {

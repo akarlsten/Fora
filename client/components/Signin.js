@@ -7,6 +7,7 @@ import { useToasts } from 'react-toast-notifications'
 
 import RequestReset from 'components/RequestReset'
 import { useUser, CURRENT_USER_QUERY } from 'hooks/useUser'
+import { FORUM_QUERY } from 'pages/index'
 import useSimpleForm from 'hooks/useSimpleForm'
 
 export const SIGNIN_MUTATION = gql`
@@ -39,7 +40,7 @@ function Signin () {
   })
   const [signin, { error, loading, client }] = useMutation(SIGNIN_MUTATION, {
     variables: inputs,
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    refetchQueries: [{ query: CURRENT_USER_QUERY }, { query: FORUM_QUERY }],
     onError: () => addToast('Couldn\'t sign you in, make sure you\'ve entered your details correctly!', { appearance: 'error', autoDismiss: true })
   })
   return (

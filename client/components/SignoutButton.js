@@ -11,8 +11,11 @@ const SIGN_OUT_MUTATION = gql`
 `
 
 function SignoutButton () {
-  const [signout] = useMutation(SIGN_OUT_MUTATION, {
-    refetchQueries: [{ query: CURRENT_USER_QUERY }]
+  const [signout, { client }] = useMutation(SIGN_OUT_MUTATION, {
+    // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    onCompleted: async () => {
+      client.resetStore()
+    }
   })
   return (
     <button className="flex items-center font-medium text-gray-800 transition duration-100 ease-in-out transform hover:scale-105" type="button" onClick={signout}>

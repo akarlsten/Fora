@@ -10,8 +10,13 @@ export async function userIsGlobalBanned ({ resolvedData, existingItem, context,
 
 export async function userIsAdminModeratorOrOwner ({ existingItem, context, actions: { query } }) {
   const user = context.authedItem
+
   if (!user) {
     throw new AccessDeniedError()
+  }
+
+  if (!existingItem) {
+    return
   }
 
   if (!!user.isAdmin || user.id === `${existingItem.owner}`) {
