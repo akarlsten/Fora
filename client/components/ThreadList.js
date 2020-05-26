@@ -16,10 +16,13 @@ const ThreadList = ({ url, threads, color }) => {
     )
   }
 
+  // put stickies at the top, maybe try to do this server side? (cant combine sorting args tho)
+  const sortedThreads = threads && [...threads].sort((a, b) => a.isStickied ? -1 : b.isStickied ? 1 : 0)
+
   return (
     <div className={`w-full rounded bg-white border border-${color || 'pink'}-200 divide-y divide-${color || 'pink'}-200`}>
-      {threads.map(thread => (
-        <ThreadItem lastPoster={thread.lastPoster} perPage={perPage} key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
+      {sortedThreads.map(thread => (
+        <ThreadItem isStickied={thread.isStickied} state={thread.state} lastPoster={thread.lastPoster} perPage={perPage} key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
       ))}
     </div>
   )

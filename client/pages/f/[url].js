@@ -47,6 +47,9 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
         count
       }
       updatedAt
+      state
+      isStickied
+      isDeleted
     }
     _threadsMeta {
       count
@@ -75,7 +78,6 @@ const Forum = () => {
   const page = +p || 1
   const perPage = user?.postsPerPage || threadsPerPage
 
-  // TODO: server is returning stale items, nothing to do with apollo
   const { data, loading, error } = useQuery(FORUM_QUERY, {
     variables: { url, first: perPage, skip: page * perPage - perPage },
     fetchPolicy: 'network-only' // maybe cache-and-network

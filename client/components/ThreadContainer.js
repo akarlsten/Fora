@@ -67,6 +67,20 @@ const ThreadContainer = (props) => {
     onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
+  const [updateThreadState] = useMutation(UPDATE_THREAD, {
+    refetchQueries: [{ query: THREAD_QUERY, variables: { slug: url, first: perPage, skip: page * perPage - perPage } }],
+    onCompleted: () => {
+      addToast('Thread edited!', { appearance: 'success' })
+    },
+    onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+  })
+
+  const handleClick = () => {
+    const operation = state === 'opened' ? 'closed' : 'opened'
+
+    updateThreadState({ variables: { id: threadID, data: { state: operation } } })
+  }
+
   const onSubmit = ({ title }) => {
     triggerValidation('title')
     if (!formErrors.content) {
@@ -90,13 +104,13 @@ const ThreadContainer = (props) => {
             <>
               <form className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col">
-                  <input ref={register({
+                  <input onChange={() => triggerValidation('title')} ref={register({
                     minLength: { value: 4, message: '⚠ Title must be at least 4 characters long.' },
                     maxLength: { value: 75, message: '⚠ Title can be a maximum of 75 characters long.' },
                     required: '⚠ You need to enter a title.',
                     validate: value => value.trim().length >= 4
                   })} name="title" className={`rounded border-4 border-dashed border-${forum.colorScheme || 'pink'}-400 bg-transparent font-bold text-4xl`} defaultValue={title} type="text"/>
-                  {!formErrors.title && (<span className="text-sm text-red-600">{formErrors?.title?.message}</span>)}
+                  {formErrors.title && (<span className="text-sm text-red-600">{formErrors?.title?.message}</span>)}
                 </div>
                 <div className="ml-4">
                   <button type="submit" className={`cursor-pointer px-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Save</button>
@@ -107,12 +121,28 @@ const ThreadContainer = (props) => {
               </button>
             </>
           ) : (
-            <h1 className="font-bold text-4xl">{title}</h1>
+            <>
+              <h1 className="font-bold text-4xl">{title}</h1>
+              {state === 'closed' && (
+                <p className="ml-8 text-red-400">This thread is closed and cannot be posted in.</p>
+              )}
+            </>
           )}
           {canEditAll && !editingTitle && (
-            <div className="ml-4">
-              <a onClick={() => setEditingTitle(true)} className={`cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Edit</a>
-            </div>
+            <>
+              <div className="ml-4">
+                <a onClick={() => setEditingTitle(true)} className={`cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Edit</a>
+              </div>
+              {state === 'opened' ? (
+                <div className="ml-4">
+                  <a onClick={handleClick} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>Close Thread</a>
+                </div>
+              ) : (
+                <div className="ml-4">
+                  <a onClick={handleClick} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Reopen Thread</a>
+                </div>
+              )}
+            </>
           )}
         </div>
         {loggedIn && canPost && !replyModalOpen && (
