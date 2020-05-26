@@ -65,7 +65,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
   }
 
   return (
-    <div className={`absolute bottom-0 right-0 p-4 bg-${color === 'black' ? 'gray' : (color || 'pink')}-300 w-full sm:w-3/4 lg:w-1/2 xl:w-1/4 sm:rounded-tl-lg`}>
+    <div className={`absolute bottom-0 right-0 p-4 bg-${color === 'black' ? 'gray' : (color || 'pink')}-300 w-full sm:w-3/4 lg:w-1/2 xl:w-1/3 sm:rounded-tl-lg`}>
       <div className="flex items-center justify-between">
         <h1 className={`font-bold text-2xl text-${color || 'pink'}-800`}>Quick Reply</h1>
         <div className="flex items-center">
@@ -79,7 +79,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
         <div className="w-full px-3">
           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Content</label>
           <div>
-            <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="content" type="text" />
+            <textarea rows="10" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="content" type="text" />
             {formErrors.content && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
           </div>
           <span className="text-xs text-center text-gray-600">Markdown is enabled!</span>

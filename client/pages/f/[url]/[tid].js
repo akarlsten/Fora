@@ -19,6 +19,8 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
     url
     title
     state
+    isStickied
+    isDeleted
     forum {
       name
       url
@@ -112,7 +114,7 @@ const Thread = ({ query }) => {
           Fora | {thread.title} | Page {page} of {pages}
           </title>
         </Head>
-        <ThreadContainer page={page} pages={pages} count={count} {...thread} />
+        <ThreadContainer perPage={perPage} page={page} pages={pages} count={count} {...thread} />
       </>
     )
   } else {

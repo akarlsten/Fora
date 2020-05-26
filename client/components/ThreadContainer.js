@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { useMutation, gql } from '@apollo/client'
+import { useToasts } from 'react-toast-notifications'
+import { useForm } from 'react-hook-form'
 
 import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
@@ -8,25 +11,110 @@ import ReplyModal from 'components/ReplyModal'
 import Pagination from 'components/Pagination'
 import BackToForum from 'components/BackToForum'
 
+import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
+import { useRouter } from 'next/router'
+
+const UPDATE_THREAD = gql`
+mutation UPDATE_THREAD($id: ID!, $data: ThreadUpdateInput!) {
+    updateThread(id: $id, data: $data) {
+    id
+    title
+    url
+  }
+}
+`
+
 const ThreadContainer = (props) => {
-  const { title, forum, posts, isBanned, owner, moderators, bannedUsers, url, id: threadID, count, page, pages } = props
+  const {
+    title,
+    forum,
+    posts,
+    isBanned,
+    owner,
+    moderators,
+    bannedUsers,
+    url,
+    id: threadID,
+    count,
+    page,
+    pages,
+    perPage,
+    state,
+    isDeleted
+  } = props
+
+  const router = useRouter()
+  const { addToast } = useToasts()
 
   const [replyModalOpen, setReplyModal] = useState(false)
+  const [editingTitle, setEditingTitle] = useState(false)
   const { setTheme } = useTheme()
   const loggedIn = useUser()
+
+  const { register, handleSubmit, errors: formErrors, triggerValidation } = useForm()
 
   useEffect(() => {
     setTheme(forum.colorScheme)
   }, [])
 
-  const canPost = !loggedIn?.isGlobalBanned && !isBanned && !bannedUsers?.some(banned => banned.id === loggedIn?.id)
+  const [updateThread, { loading: mutationLoading }] = useMutation(UPDATE_THREAD, {
+    refetchQueries: [{ query: THREAD_QUERY, variables: { slug: url, first: perPage, skip: page * perPage - perPage } }],
+    onCompleted: ({ updateThread: { url: threadUrl } }) => {
+      addToast('Thread edited!', { appearance: 'success' })
+      setEditingTitle(false)
+      router.push('/f/[url]/[tid]', `/f/${forum.url}/${threadUrl}`)
+    },
+    onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+  })
+
+  const onSubmit = ({ title }) => {
+    triggerValidation('title')
+    if (!formErrors.content) {
+      updateThread({ variables: { id: threadID, data: { title } } })
+    }
+  }
+
+  const canPost = !loggedIn?.isGlobalBanned &&
+  !isBanned &&
+  !bannedUsers?.some(banned => banned.id === loggedIn?.id) &&
+  (loggedIn?.isAdmin || (state === 'opened' && !isDeleted))
+
   const canEditAll = loggedIn?.isAdmin || (loggedIn && loggedIn.id === owner?.id) || moderators?.some(mod => mod.id === loggedIn?.id)
 
   return (
     <div className="flex flex-col max-w-full">
       <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
       <div className="flex items-center justify-between w-full mb-4">
-        <h1 className="font-bold text-4xl">{title}</h1>
+        <div className="flex items-center">
+          {editingTitle ? (
+            <>
+              <form className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col">
+                  <input ref={register({
+                    minLength: { value: 4, message: '⚠ Title must be at least 4 characters long.' },
+                    maxLength: { value: 75, message: '⚠ Title can be a maximum of 75 characters long.' },
+                    required: '⚠ You need to enter a title.',
+                    validate: value => value.trim().length >= 4
+                  })} name="title" className={`rounded border-4 border-dashed border-${forum.colorScheme || 'pink'}-400 bg-transparent font-bold text-4xl`} defaultValue={title} type="text"/>
+                  {!formErrors.title && (<span className="text-sm text-red-600">{formErrors?.title?.message}</span>)}
+                </div>
+                <div className="ml-4">
+                  <button type="submit" className={`cursor-pointer px-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Save</button>
+                </div>
+              </form>
+              <button onClick={() => setEditingTitle(false)} className={'ml-2 cursor-pointer px-1 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>
+                <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+              </button>
+            </>
+          ) : (
+            <h1 className="font-bold text-4xl">{title}</h1>
+          )}
+          {canEditAll && !editingTitle && (
+            <div className="ml-4">
+              <a onClick={() => setEditingTitle(true)} className={`cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Edit</a>
+            </div>
+          )}
+        </div>
         {loggedIn && canPost && !replyModalOpen && (
           <div className="flex justify-end my-4">
             <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-400 bg-${forum.colorScheme || 'pink'}-400 ml-4 flex items-center`}>

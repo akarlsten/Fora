@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
 import ImageSelector from 'components/ImageSelector'
+import { useUser } from 'hooks/useUser'
 
 const EMAIL_QUERY = gql`
 query EMAIL_QUERY($email: String!) {
@@ -38,6 +39,14 @@ const SignupForm = () => {
   const { register, handleSubmit, errors: formErrors, watch, getValues, triggerValidation } = useForm()
   const password = useRef({})
   password.current = watch('password', '')
+
+  const loggedIn = useUser()
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push('/')
+    }
+  }, [loggedIn])
 
   const [nameCheck, { data: nameData }] = useLazyQuery(USERNAME_QUERY)
   const [emailCheck, { data: emailData }] = useLazyQuery(EMAIL_QUERY)

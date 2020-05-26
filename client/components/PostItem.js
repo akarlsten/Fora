@@ -88,7 +88,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
         </div>
         {canEdit && !editing && (
           <div className="self-end">
-            <a onClick={() => setEditing(true)} className={`px-2 -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+            <a onClick={() => setEditing(true)} className={`px-2 cursor-pointer -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
           </div>
         )}
         {canEdit && editing && (
@@ -96,7 +96,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
             <div className="flex flex-col items-center h-full justify-between -mr-2">
               <div className="flex items-center">
                 <MarkdownHelp color={color} />
-                <button onClick={() => setEditing(false)} className={'self-end mb-1 px-1 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>
+                <button onClick={() => setEditing(false)} className={'cursor-pointer self-end mb-1 px-1 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>
                   <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20"><path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
                 </button>
               </div>
@@ -106,7 +106,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
                 {mutationLoading && (
                   <Loader type="ThreeDots" color={colorConverter(color)} width={30} height={30} />
                 )}
-                <button disabled={mutationLoading} form="edit" type="submit" className={`px-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600 ${mutationLoading && 'opacity-50'}`}>Save</button>
+                <button disabled={mutationLoading} form="edit" type="submit" className={`px-2 cursor-pointer font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600 ${mutationLoading && 'opacity-50'}`}>Save</button>
               </div>
             </div>
           </div>
