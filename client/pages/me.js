@@ -5,8 +5,11 @@ import PleaseSignIn from 'components/PleaseSignIn'
 import UserDetails from 'components/UserDetails'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
+import Signin from 'components/Signin'
 
-const DETAILED_USER_QUERY = gql`
+import { useUser } from 'hooks/useUser'
+
+export const DETAILED_USER_QUERY = gql`
   query {
     authenticatedUser {
       id
@@ -40,7 +43,9 @@ const Me = () => {
     return <LoadingSpinner />
   } else if (data) {
     const user = data.authenticatedUser
-    return <UserDetails user={user} />
+    return (
+      <UserDetails user={user} />
+    )
   } else {
     return <Error />
   }

@@ -8,9 +8,9 @@ const ForumSidebar = ({ name, color, description, owner, createdAt, moderators }
       <h2 className="font-bold text-xl">{name}</h2>
       <div className="my-4 flex flex-col items-center">
         {description ? (
-          <p>
-            <RenderMarkdown content={description} color={color} />
-          </p>
+          <div>
+            {description}
+          </div>
         ) : (
           <>
             <p>A forum without a description.</p>

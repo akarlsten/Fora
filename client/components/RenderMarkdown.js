@@ -90,10 +90,6 @@ const RenderMarkdown = ({ content, color }) => {
     }
   }
 
-  const Break = (props) => (
-    <div className="mb-4"/>
-  )
-
   const disallowedTypes = [
     'html',
     'definition',
@@ -119,8 +115,7 @@ const RenderMarkdown = ({ content, color }) => {
         table: Table,
         tableCell: TableCell,
         tableRow: TableRow,
-        list: List,
-        break: Break
+        list: List
       }}
       plugins={[emoji]}
     />

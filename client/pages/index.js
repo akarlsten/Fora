@@ -110,16 +110,18 @@ const Index = (/* data */) => {
                   </Link>
                 </div>
               )}
-              <div className="mb-8">
-                <h1 className="font-sans font-bold text-2xl mb-2">Your subscriptions</h1>
-                <ForumList>
-                  {subData && (
-                    subSorted.map(forum => (
-                      <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
-                    ))
-                  )}
-                </ForumList>
-              </div>
+              {subData && subSorted?.length >= 1 && (
+                <div className="mb-8">
+                  <h1 className="font-sans font-bold text-2xl mb-2">Your subscriptions</h1>
+                  <ForumList>
+                    {
+                      subSorted.map(forum => (
+                        <ForumItem key={forum.id} userCount={forum._subscribersMeta.count} threadCount={forum._threadsMeta.count} {...forum} />
+                      ))
+                    }
+                  </ForumList>
+                </div>
+              )}
             </>
           )
         )}

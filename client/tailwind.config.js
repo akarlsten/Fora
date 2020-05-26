@@ -1,5 +1,19 @@
 module.exports = {
-  purge: [],
+  purge: {
+    content: [
+      './components/**/*.js',
+      './pages/**/*.js',
+      './node_modules/next/dist/pages/**/*.js',
+      './node_modules/next/dist/pages/**/*.ts',
+      './node_modules/next/dist/pages/**/*.ts'
+    ],
+    options: {
+      whitelist: [
+        'bg-gray-100',
+        'bg-pink-400'
+      ]
+    }
+  },
   theme: {
     screens: {
       xs: '400px',
