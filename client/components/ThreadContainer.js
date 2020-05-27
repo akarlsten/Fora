@@ -20,6 +20,7 @@ mutation UPDATE_THREAD($id: ID!, $data: ThreadUpdateInput!) {
     id
     title
     url
+    state
   }
 }
 `
@@ -67,10 +68,10 @@ const ThreadContainer = (props) => {
     onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
-  const [updateThreadState] = useMutation(UPDATE_THREAD, {
+  const [updateThreadState, { loading: stateLoading }] = useMutation(UPDATE_THREAD, {
     refetchQueries: [{ query: THREAD_QUERY, variables: { slug: url, first: perPage, skip: page * perPage - perPage } }],
-    onCompleted: () => {
-      addToast('Thread edited!', { appearance: 'success' })
+    onCompleted: ({ updateThread: { state: newState } }) => {
+      addToast(`Thread ${newState}!`, { appearance: 'success' })
     },
     onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
@@ -135,11 +136,11 @@ const ThreadContainer = (props) => {
               </div>
               {state === 'opened' ? (
                 <div className="ml-4">
-                  <a onClick={handleClick} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>Close Thread</a>
+                  <a onClick={handleClick} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>Close Thread</a>
                 </div>
               ) : (
                 <div className="ml-4">
-                  <a onClick={handleClick} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Reopen Thread</a>
+                  <a onClick={handleClick} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Reopen Thread</a>
                 </div>
               )}
             </>
@@ -188,7 +189,7 @@ const ThreadContainer = (props) => {
         </div>
       )}
       <div className="flex flex-row items-start">
-        <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} />
+        <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} forum={forum} />
       </div>
       {pages > 1 && (
         <div className="flex justify-end my-4">

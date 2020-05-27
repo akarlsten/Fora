@@ -22,6 +22,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
     isStickied
     isDeleted
     forum {
+      id
       name
       url
       colorScheme
@@ -53,6 +54,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
         id
         name
         displayName
+        isGlobalBanned
         avatar {
         publicUrlTransformed(transformation: {
           width:"300",

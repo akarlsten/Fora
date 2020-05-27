@@ -1,14 +1,14 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
 
-const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster }) => {
+const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster, state, isStickied }) => {
   const pages = Math.ceil(count / (perPage))
 
   const pageArray = [...Array(pages).keys()].map(page => page + 1)
 
   return (
 
-    <div className="flex justify-between items-center text-xs xs:text-sm sm:text-base">
+    <div className={`flex justify-between items-center text-xs xs:text-sm sm:text-base ${state === 'closed' && 'opacity-50'}`}>
       <Link href="/f/[url]/[tid]" as={`/f/${forumUrl}/${url}`}>
         <a className="px-4 py-2 font-semibold flex-grow truncate">{title}</a>
       </Link>

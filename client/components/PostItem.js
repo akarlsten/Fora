@@ -12,6 +12,7 @@ import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 import { postsPerPage } from 'config'
 import MarkdownHelp from './MarkdownHelp'
 import colorConverter from 'lib/colorConverter'
+import BanButton from 'components/BanButton'
 
 import RenderMarkdown from 'components/RenderMarkdown'
 
@@ -23,7 +24,7 @@ mutation UPDATE_POST($id: ID!, $data: PostUpdateInput!) {
 }
 `
 
-const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
+const PostItem = ({ id, owner, content, color, canEditAll, createdAt, forum }) => {
   const [editing, setEditing] = useState(false)
   const { addToast } = useToasts()
   const { register, handleSubmit, errors: formErrors, triggerValidation } = useForm()
@@ -52,6 +53,8 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
   }
 
   const canEdit = canEditAll || loggedIn?.id === owner.id
+  const userIsBanned = owner?.isGlobalBanned || forum?.bannedUsers?.some(banned => banned.id === owner.id)
+
   // TODO: maybe add a badge for moderators and admins?
   return (
     <div className={'flex'}>
@@ -60,14 +63,27 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
           {owner.displayName}
         </span>
         <span className="text-xs sm:text-sm">@{owner.name}</span>
-        {owner.avatar ? (
-          <img className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
-        ) : (
-          <svg className={`my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
-            <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
-            <circle cx="96" cy="59" r="43" fill="white" />
-          </svg>
+        {!userIsBanned && (
+          owner.avatar ? (
+            <img className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
+          ) : (
+            <svg className={`my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
+              <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
+              <circle cx="96" cy="59" r="43" fill="white" />
+            </svg>
+          )
+        )}
+        {userIsBanned && (
+          <div className="my-2 flex flex-col text-red-500 items-center">
+            <svg className="h-15 w-15 fill-current" viewBox="0 0 20 20"><path d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+            <h2 className="text-sm sm:text-xl font-bold ">
+            BANNED!
+            </h2>
+            <p className="-mt-1 leading-tight text-xs sm:text-sm font-bold ">
+              {owner?.isGlobalBanned ? '(global)' : '(forum)'}
+            </p>
+          </div>
         )}
         <span className="text-xs">{formatRelative(parseISO(createdAt), new Date())}</span>
       </div>
@@ -87,8 +103,13 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt }) => {
           )}
         </div>
         {canEdit && !editing && (
-          <div className="self-end">
-            <a onClick={() => setEditing(true)} className={`px-2 cursor-pointer -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+          <div className="self-end flex flex-col">
+            {canEditAll && (
+              <BanButton color={color} userID={owner.id} forumID={forum.id} />
+            )}
+            <div className="self-end">
+              <a onClick={() => setEditing(true)} className={`px-2 cursor-pointer -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+            </div>
           </div>
         )}
         {canEdit && editing && (
