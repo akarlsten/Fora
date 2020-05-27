@@ -10,14 +10,19 @@ const ForumItem = ({ icon, name, description, threadCount, userCount, colorSchem
         <div className="overflow-hidden h-full divide-x shadow-md cursor-pointer hover:shadow-xl transition duration-100 ease-in-out transform hover:-translate-y-1 bg-white rounded p-4 flex flex-row justify-between">
           <div className="flex flex-col justify-between leading-normal pr-2 overflow-hidden">
             <div className="flex items-center pb-1">
-              {icon ? (
-                <img className="w-10 h-10 rounded-full mr-2" src={icon.publicUrlTransformed} alt="" />
-              ) : (
-                <svg className="w-10 h-10 rounded-full mr-2 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle className={`text-${color}-400`} cx="79.5" cy="79.5" r="79.5" />
-                  <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
-                  <circle cx="96" cy="59" r="43" fill="white" />
-                </svg>
+              {!isBanned && (
+                icon ? (
+                  <img className = "w-10 h-10 rounded-full mr-2" src = { icon.publicUrlTransformed } alt = "" />
+                ) : (
+                  <svg className = "w-10 h-10 rounded-full mr-2 fill-current" width = "159" height = "159" viewBox = "0 0 159 159" fill = "none" xmlns = "http://www.w3.org/2000/svg">
+                    <circle className = {`text-${color}-400`} cx="79.5" cy="79.5" r="79.5" />
+                    <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
+                    <circle cx="96" cy="59" r="43" fill="white" />
+                  </svg>
+                )
+              )}
+              {isBanned && (
+                <svg className="h-10 w-10 text-red-500 rounded-full mr-2 fill-current" viewBox="0 0 20 20"><path d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
               )}
               <div className={`text-gray-800 font-bold text-lg truncate xl:text-xl ${name.length > 18 ? 'md:text-base' : ''}`}>{name}</div>
             </div>

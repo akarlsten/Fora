@@ -78,7 +78,11 @@ export default {
       type: Select,
       options: 'red, orange, green, teal, blue, indigo, purple, pink, black',
       hooks: {
-        validateInput: userIsAdminModeratorOrOwner
+        validateInput: async ({ resolvedData, addFieldValidationError, existingItem, context, actions }) => {
+          if (existingItem) {
+            userIsAdminModeratorOrOwner({ existingItem, context, actions })
+          }
+        }
       }
     },
     moderators: {

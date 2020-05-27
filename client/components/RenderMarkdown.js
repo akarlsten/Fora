@@ -3,6 +3,8 @@ import { useState } from 'react'
 
 import emoji from 'remark-emoji'
 
+import youtubeParser from 'lib/youtubeParser'
+
 const Image = (props) => {
   const [fullSize, setFullSize] = useState(false)
   return (
@@ -15,9 +17,34 @@ const RenderMarkdown = ({ content, color }) => {
   // https://github.com/rexxars/react-markdown/issues/257
   // https://github.com/rexxars/react-markdown/issues/284
 
-  const Link = (props) => (
-    <a href={props.href} target="_blank" rel="nofollow noopener noreferrer" className={`underline text-${color || 'pink'}-500 hover:text-${color || 'pink'}-700 `}>{props.children}</a>
-  )
+  const Link = (props) => {
+    const ytRX = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/g
+
+    const isYT = ytRX.test(props.href)
+
+    if (isYT) {
+      const videoID = youtubeParser(props.href)
+
+      return (
+        <div className="my-4 embed-responsive aspect-ratio-16/9">
+          <iframe
+            src={`https://www.youtube.com/embed/${videoID}`}
+            frameBorder="0"
+            allow="accelerometer;
+                autoplay;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture"
+            allowFullScreen>
+          </iframe>
+        </div>
+      )
+    }
+
+    return (
+      <a href={props.href} target="_blank" rel="nofollow noopener noreferrer" className={`underline text-${color || 'pink'}-500 hover:text-${color || 'pink'}-700 `}>{props.children}</a>
+    )
+  }
 
   const BlockQuote = (props) => (
     <blockquote className={`border-l-4 border-${color || 'pink'}-400 pl-4 m-4`}>{props.children}</blockquote>
@@ -90,6 +117,13 @@ const RenderMarkdown = ({ content, color }) => {
     }
   }
 
+  const imagesWithoutPTags = (props) => {
+    const element = props.children[0]
+    const type = props.children[0]?.type?.name
+
+    return type === 'Image' || type === 'Link' ? { ...element } : <p {...props} />
+  }
+
   const disallowedTypes = [
     'html',
     'definition',
@@ -115,7 +149,8 @@ const RenderMarkdown = ({ content, color }) => {
         table: Table,
         tableCell: TableCell,
         tableRow: TableRow,
-        list: List
+        list: List,
+        paragraph: imagesWithoutPTags
       }}
       plugins={[emoji]}
     />

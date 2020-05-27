@@ -100,7 +100,7 @@ const ThreadContainer = (props) => {
     <div className="flex flex-col max-w-full">
       <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
       <div className="flex items-center justify-between w-full mb-4">
-        <div className="flex items-center">
+        <div className="flex items-center flex-wrap">
           {editingTitle ? (
             <>
               <form className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
@@ -147,7 +147,7 @@ const ThreadContainer = (props) => {
           )}
         </div>
         {loggedIn && canPost && !replyModalOpen && (
-          <div className="flex justify-end my-4">
+          <div className="flex justify-end">
             <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-400 bg-${forum.colorScheme || 'pink'}-400 ml-4 flex items-center`}>
               <svg className="h-6 w-6 fill-current mr-1" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0)">
@@ -184,7 +184,7 @@ const ThreadContainer = (props) => {
         )}
       </div>
       {pages > 1 && (
-        <div className="flex justify-end my-4">
+        <div className="flex justify-end mb-4">
           <Pagination type={'thread'} count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
         </div>
       )}
@@ -197,7 +197,7 @@ const ThreadContainer = (props) => {
         </div>
       )}
       {loggedIn && canPost && !replyModalOpen && (
-        <div className="flex justify-end my-4">
+        <div className="flex justify-end">
           <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-400 bg-${forum.colorScheme || 'pink'}-400 ml-4 flex items-center`}>
             <svg className="h-6 w-6 fill-current mr-1" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0)">

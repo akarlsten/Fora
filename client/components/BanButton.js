@@ -76,7 +76,7 @@ const BanButton = ({ userID, forumID, color }) => {
           </div>
         )
         : (
-          <a onClick={() => !userIsBanned && setConfirmBan(true)} className={`px-2 cursor-pointer -mr-2 font-bold py-1 rounded bg-red-400 ${!userIsBanned && 'hover:bg-red-600'} ${userIsBanned && 'opacity-50'}`}>Ban</a>
+          <a onClick={() => !userIsBanned && setConfirmBan(true)} className={`px-2 ${!userIsBanned && 'cursor-pointer'} -mr-2 font-bold py-1 rounded bg-red-400 ${!userIsBanned && 'hover:bg-red-600'} ${userIsBanned && 'opacity-50'}`}>Ban</a>
         )}
     </div>
   )

@@ -64,6 +64,8 @@ const CreateForum = () => {
     }
   }
 
+  // TODO: add slug preview when typing name
+
   return (
     <PleaseSignIn>
       <div className="container mx-auto flex flex-col items-center">
