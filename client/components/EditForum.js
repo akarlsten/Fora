@@ -16,6 +16,7 @@ import ImageSelector from 'components/ImageSelector'
 import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
+import ModsBansForm from './ModsBansForm'
 
 const EDIT_FORUM_QUERY = gql`
 query EDIT_FORUM_QUERY($url: String) {
@@ -30,6 +31,8 @@ query EDIT_FORUM_QUERY($url: String) {
     isBanned
     bannedUsers {
       id
+      name
+      displayName
     }
     icon {
       publicUrlTransformed(transformation: {
@@ -46,6 +49,7 @@ query EDIT_FORUM_QUERY($url: String) {
     moderators {
       id
       name
+      displayName
     }
   }
 }
@@ -118,7 +122,7 @@ const EditForum = () => {
                 <ColorSelector oldColor={forum.colorScheme} register={register} />
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
                 <ImageSelector
-                  oldImage={data?.allForums[0]?.icon?.publicUrlTransformed}
+                  oldImage={forum?.icon?.publicUrlTransformed}
                   getValues={getValues}
                   watch={watch}
                   triggerValidation={triggerValidation}
@@ -140,6 +144,7 @@ const EditForum = () => {
               </div>
             </fieldset>
           </form>
+          <ModsBansForm color={forum?.colorScheme} banned={forum.bannedUsers} mods={forum.moderators} />
         </div>
       </PleaseSignIn>
     )
