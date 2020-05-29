@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
 import { useTheme } from 'context/ColorContext'
+import { useUser } from 'hooks/useUser'
 import colorConverter from 'lib/colorConverter'
 
 import BackToForum from 'components/BackToForum'
@@ -18,7 +19,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
 import ModsBansForm from './ModsBansForm'
 
-const EDIT_FORUM_QUERY = gql`
+export const EDIT_FORUM_QUERY = gql`
 query EDIT_FORUM_QUERY($url: String) {
   allForums(where: {
     url: $url
@@ -33,6 +34,14 @@ query EDIT_FORUM_QUERY($url: String) {
       id
       name
       displayName
+      avatar {
+        publicUrlTransformed(transformation: {
+          width:"300",
+          height:"300",
+          crop:"fill",
+          gravity:"center"
+        })
+      }
     }
     icon {
       publicUrlTransformed(transformation: {
@@ -50,6 +59,14 @@ query EDIT_FORUM_QUERY($url: String) {
       id
       name
       displayName
+      avatar {
+        publicUrlTransformed(transformation: {
+          width:"300",
+          height:"300",
+          crop:"fill",
+          gravity:"center"
+        })
+      }
     }
   }
 }
@@ -66,6 +83,7 @@ mutation UPDATE_COLOR_DESC($forumID: ID!, $data: ForumUpdateInput!) {
 `
 
 const EditForum = () => {
+  const loggedIn = useUser()
   const router = useRouter()
   const { setTheme } = useTheme()
   const { addToast } = useToasts()
@@ -107,6 +125,12 @@ const EditForum = () => {
     return <LoadingSpinner />
   } else if (data?.allForums[0]) {
     const forum = data.allForums[0]
+    const canEditForum = loggedIn?.isAdmin || forum?.moderators?.some(mod => mod.id === loggedIn?.id) || forum?.owner?.id === loggedIn?.id
+
+    if (!canEditForum) {
+      router.push('/f/[url]', `/f/${url}`)
+    }
+
     return (
       <PleaseSignIn>
         <div className="container mx-auto flex flex-col items-center">
@@ -144,7 +168,7 @@ const EditForum = () => {
               </div>
             </fieldset>
           </form>
-          <ModsBansForm color={forum?.colorScheme} banned={forum.bannedUsers} mods={forum.moderators} />
+          <ModsBansForm id={forum.id} color={forum?.colorScheme} banned={forum.bannedUsers} mods={forum.moderators} />
         </div>
       </PleaseSignIn>
     )
