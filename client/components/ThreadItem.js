@@ -13,63 +13,65 @@ const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster, s
         <a className="px-4 py-2 font-semibold flex-grow truncate">{title}</a>
       </Link>
       <div className={'flex justify-end items-center flex-grow'}>
-        <div className="px-4 font-bold space-x-1">
-          {pages <= 5 && (
-            pageArray.map(page => (
-              <Link
-                key={`${url}-${page}-link`}
-                href={{
-                  pathname: '/f/[url]/[tid]',
-                  query: { p: page }
-                }}
+        {pages > 1 && (
+          <div className="px-4 font-bold space-x-1">
+            {pages <= 5 && (
+              pageArray.map(page => (
+                <Link
+                  key={`${url}-${page}-link`}
+                  href={{
+                    pathname: '/f/[url]/[tid]',
+                    query: { p: page }
+                  }}
 
-                as={{
-                  pathname: `/f/${forumUrl}/${url}`,
-                  query: { p: page }
-                }}
-              >
-                <a className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
-              </Link>
-            ))
-          )}
-          {pages > 5 && (
-            pageArray.slice(0, 3).map(page => (
-              <Link
-                key={`${url}-${page}-link`}
-                href={{
-                  pathname: '/f/[url]/[tid]',
-                  query: { p: page }
-                }}
+                  as={{
+                    pathname: `/f/${forumUrl}/${url}`,
+                    query: { p: page }
+                  }}
+                >
+                  <a className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
+                </Link>
+              ))
+            )}
+            {pages > 5 && (
+              pageArray.slice(0, 3).map(page => (
+                <Link
+                  key={`${url}-${page}-link`}
+                  href={{
+                    pathname: '/f/[url]/[tid]',
+                    query: { p: page }
+                  }}
 
-                as={{
-                  pathname: `/f/${forumUrl}/${url}`,
-                  query: { p: page }
-                }}
-              >
-                <a key={`${url}-${page}`} className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
-              </Link>
-            )))}
-          {pages > 6 && (
-            <span>...</span>
-          )}
-          {pages > 5 && (
-            pageArray.slice(-3).map(page => (
-              <Link
-                key={`${url}-${page}-link`}
-                href={{
-                  pathname: '/f/[url]/[tid]',
-                  query: { p: page }
-                }}
+                  as={{
+                    pathname: `/f/${forumUrl}/${url}`,
+                    query: { p: page }
+                  }}
+                >
+                  <a key={`${url}-${page}`} className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
+                </Link>
+              )))}
+            {pages > 6 && (
+              <span>...</span>
+            )}
+            {pages > 5 && (
+              pageArray.slice(-3).map(page => (
+                <Link
+                  key={`${url}-${page}-link`}
+                  href={{
+                    pathname: '/f/[url]/[tid]',
+                    query: { p: page }
+                  }}
 
-                as={{
-                  pathname: `/f/${forumUrl}/${url}`,
-                  query: { p: page }
-                }}
-              >
-                <a key={`${url}-${page}`} className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
-              </Link>
-            )))}
-        </div>
+                  as={{
+                    pathname: `/f/${forumUrl}/${url}`,
+                    query: { p: page }
+                  }}
+                >
+                  <a key={`${url}-${page}`} className={`px-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{page}</a>
+                </Link>
+              )))}
+          </div>
+        )}
         <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:block px-2 py-2 text-center w-18 sm:w-32 xl:w-42 font-bold`}>
           {lastPoster?.name || 'An unknown poster..'}
         </div>
