@@ -66,7 +66,7 @@ export async function forumIsBanned ({ resolvedData, existingItem, context, acti
   const options = {
     skipAccessControl: true,
     variables: {
-      forumID: forum
+      forumID: `${forum}`
     }
   }
 
@@ -155,4 +155,14 @@ export async function setPostsDeleted ({ existingItem, resolvedData, context, ac
 
     await query(mutationString, options2)
   }
+}
+
+export async function setLastPost ({ operation, resolvedData, context }) {
+  if (operation !== 'create') return resolvedData
+
+  const user = context.authedItem
+
+  const now = new Date()
+
+  return { ...resolvedData, lastPost: `${now.toISOString()}`, lastPoster: user.id }
 }

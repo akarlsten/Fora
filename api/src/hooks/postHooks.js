@@ -141,8 +141,6 @@ export async function userIsForumAdminModeratorOrOwner ({ existingItem, context,
   }
 }
 
-// Because the afterChange and afterDelete hooks have a similar
-// signature, we can reuse the same function
 export async function updateLastPostOnThread ({
   operation,
   context,
@@ -158,8 +156,40 @@ export async function updateLastPostOnThread ({
     mutation($threadID: ID!, $newDate: String!, $poster: UserRelateToOneInput!) {
       updateThread(id: $threadID, data: { lastPost: $newDate, lastPoster: $poster }) { id }
     }`,
-  { skipAccessControl: true, variables: { newDate: `${updatedItem.createdAt}`, poster: { connect: { id: `${user.id}` } }, threadID: `${updatedItem.thread}` } }
+  {
+    skipAccessControl: true,
+    variables: {
+      newDate: `${updatedItem.createdAt}`,
+      poster: { connect: { id: `${user.id}` } },
+      threadID: `${updatedItem.thread}`
+    }
+  }
   )
+}
 
-  console.log(updateErrors)
+export async function setPostNumber ({
+  operation,
+  context,
+  updatedItem,
+  resolvedData,
+  actions: { query }
+}) {
+  if (operation !== 'create') return
+
+  const { data, errors } = await query(`
+  query($threadID: ID!) {
+    Thread(where: { id: $threadID }) {
+      _postsMeta {
+        count
+      }
+    }
+  }
+  `, {
+    skipAccessControl: true,
+    variables: { threadID: `${resolvedData.thread}` }
+  })
+
+  const count = (data && data.Thread && data.Thread._postsMeta && data.Thread._postsMeta.count) || 0
+
+  return { ...resolvedData, postNumber: count + 1 }
 }

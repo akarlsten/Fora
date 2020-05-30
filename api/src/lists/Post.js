@@ -1,5 +1,5 @@
 import { AuthedRelationship } from '@keystonejs/fields-authed-relationship'
-import { Text, Checkbox, Virtual, Relationship } from '@keystonejs/fields'
+import { Text, Checkbox, Virtual, Relationship, Integer } from '@keystonejs/fields'
 import { atTracking, byTracking } from '@keystonejs/list-plugins'
 
 import { userIsLoggedIn, userIsAdmin, userIsAdminOrOwner } from '../utils/access'
@@ -8,7 +8,8 @@ import {
   userIsBanned,
   threadOrForumIsClosed,
   userOwnsPost,
-  updateLastPostOnThread
+  updateLastPostOnThread,
+  setPostNumber
 } from '../hooks/postHooks'
 
 export default {
@@ -50,6 +51,12 @@ export default {
       hooks: {
         validateInput: userIsForumAdminModeratorOrOwner
       }
+    },
+    postNumber: {
+      type: Integer,
+      access: {
+        update: false
+      }
     }
   },
   access: {
@@ -73,6 +80,7 @@ export default {
         ])
       }
     },
+    resolveInput: setPostNumber,
     afterChange: updateLastPostOnThread
   },
   plugins: [atTracking(), byTracking()]

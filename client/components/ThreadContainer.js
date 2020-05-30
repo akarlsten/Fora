@@ -30,10 +30,6 @@ const ThreadContainer = (props) => {
     title,
     forum,
     posts,
-    isBanned,
-    owner,
-    moderators,
-    bannedUsers,
     url,
     id: threadID,
     count,
@@ -90,11 +86,11 @@ const ThreadContainer = (props) => {
   }
 
   const canPost = !loggedIn?.isGlobalBanned &&
-  !isBanned &&
-  !bannedUsers?.some(banned => banned.id === loggedIn?.id) &&
+  !forum?.isBanned &&
+  !forum?.bannedUsers?.some(banned => banned.id === loggedIn?.id) &&
   (loggedIn?.isAdmin || (state === 'opened' && !isDeleted))
 
-  const canEditAll = loggedIn?.isAdmin || (loggedIn && loggedIn.id === owner?.id) || moderators?.some(mod => mod.id === loggedIn?.id)
+  const canEditAll = loggedIn?.isAdmin || (loggedIn && loggedIn.id === forum?.owner?.id) || forum?.moderators?.some(mod => mod.id === loggedIn?.id)
 
   return (
     <div className="flex flex-col max-w-full">
@@ -184,15 +180,15 @@ const ThreadContainer = (props) => {
         )}
       </div>
       {pages > 1 && (
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end">
           <Pagination type={'thread'} count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
         </div>
       )}
-      <div className="flex flex-row items-start">
+      <div className="flex flex-row items-start my-4">
         <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} forum={forum} />
       </div>
       {pages > 1 && (
-        <div className="flex justify-end my-4">
+        <div className="flex justify-end mb-4">
           <Pagination type={'thread'} count={count} page={page} perPage={loggedIn?.postsPerPage} color={forum?.colorScheme} />
         </div>
       )}

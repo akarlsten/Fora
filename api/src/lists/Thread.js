@@ -7,7 +7,8 @@ import {
   userIsBanned,
   forumIsBanned,
   threadHasNoPosts,
-  setPostsDeleted
+  setPostsDeleted,
+  setLastPost
 } from '../hooks/threadHooks'
 
 export default {
@@ -103,15 +104,7 @@ export default {
     delete: false
   },
   hooks: {
-    resolveInput: async ({ operation, resolvedData, context }) => {
-      if (operation !== 'create') return resolvedData
-
-      const user = context.authedItem
-
-      const now = new Date()
-
-      return { ...resolvedData, lastPost: `${now.toISOString()}`, lastPoster: `${user.id}` }
-    },
+    resolveInput: setLastPost,
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
       // these functions will throw errors to prevent invalid requests
       await Promise.all([
