@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import { postsPerPage, threadsPerPage } from 'config'
 
-function Pagination ({ count, page, color, perPage, type }) {
+function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl }) {
   const defaultPerPage = type === 'thread' ? postsPerPage : threadsPerPage
   const router = useRouter()
   const pages = Math.ceil(count / (perPage || defaultPerPage))
@@ -15,8 +15,8 @@ function Pagination ({ count, page, color, perPage, type }) {
 
   const { url, tid } = router.query
 
-  const privatePath = type === 'thread' ? '/f/[url]/[tid]' : '/f/[url]'
-  const publicPath = type === 'thread' ? `/f/${url}/${tid}` : `/f/${url}`
+  const privatePath = privateUrl || (type === 'thread' ? '/f/[url]/[tid]' : '/f/[url]')
+  const publicPath = publicUrl || (type === 'thread' ? `/f/${url}/${tid}` : `/f/${url}`)
 
   const handleChange = (e) => {
     const target = e.target.value

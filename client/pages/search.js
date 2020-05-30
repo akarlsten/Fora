@@ -31,8 +31,8 @@ query SEARCH_QUERY($query: String, $isAdmin: Boolean!) {
     colorScheme
     icon {
       publicUrlTransformed(transformation: {
-        width:"100",
-        height:"100",
+        width:"200",
+        height:"200",
         crop:"fill",
         gravity:"center"
       })
@@ -60,8 +60,8 @@ query SEARCH_QUERY($query: String, $isAdmin: Boolean!) {
       id
       icon {
       publicUrlTransformed(transformation: {
-        width:"100",
-        height:"100",
+        width:"200",
+        height:"200",
         crop:"fill",
         gravity:"center"
       })

@@ -6,6 +6,8 @@ import { useTheme } from 'context/ColorContext'
 import { useUser } from 'hooks/useUser'
 import PleaseSignIn from './PleaseSignIn'
 import Signin from 'components/Signin'
+import LoadingSpinner from 'components/LoadingSpinner'
+import PreviousPosts from 'components/PreviousPosts'
 
 const UserDetails = ({ user }) => {
   const router = useRouter()
@@ -16,13 +18,12 @@ const UserDetails = ({ user }) => {
     setTheme('pink')
   }, [])
 
-  useEffect(() => {
-    if (!user || !me) {
-      router.push('/signin')
-    }
-  }, [user, me])
-
   const canEditUser = me?.isAdmin || me?.id === user?.id
+
+  if (!user || !me) {
+    router.push('/signin')
+    return <LoadingSpinner />
+  }
 
   return (
     <div className="flex flex-col max-w-full">
@@ -62,11 +63,11 @@ const UserDetails = ({ user }) => {
       </div>
       {user?.isGlobalBanned && (
         <div className="my-8 font-bold text-red-500 text-2xl uppercase">
-            YOU ARE BANNED!
+            This account has been banned from the entire website by the admins.
         </div>
       )}
       <div>
-        <p>You have: {user?._postsMeta.count} posts.</p>
+        <p>{user?.id === me?.id ? 'You have' : 'User has'}: {user?._postsMeta.count} posts.</p>
       </div>
       <div className="flex flex-col mt-4">
         <p className="font-bold">Subscriptions:</p>
@@ -74,6 +75,7 @@ const UserDetails = ({ user }) => {
           <div className="mt-2 font-semibold" key={sub.id}>{sub.name}</div>
         ))}
       </div>
+      <PreviousPosts userID={user?.id} userName={user?.name} />
     </div>
   )
 }

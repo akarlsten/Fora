@@ -113,7 +113,7 @@ const Thread = ({ query }) => {
       <>
         <Head>
           <title>
-          Fora | {thread.title} | Page {page} of {pages}
+          Fora | {thread.forum.name} | {thread.title}
           </title>
         </Head>
         <ThreadContainer perPage={perPage} page={page} pages={pages} count={count} {...thread} />

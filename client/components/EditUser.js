@@ -42,12 +42,6 @@ const EditUser = ({ user }) => {
   const router = useRouter()
   const { addToast } = useToasts()
 
-  useEffect(() => {
-    if (!user || !loggedIn) {
-      router.push('/signin')
-    }
-  }, [user, loggedIn])
-
   // NOTE: 2 forms on this page, one for passwords and one for the rest of the info
   const { register, handleSubmit, errors: formErrors, watch, getValues, triggerValidation } = useForm()
   const { register: register2, handleSubmit: handleSubmit2, errors: passwordErrors, watch: watch2 } = useForm()
@@ -125,6 +119,10 @@ const EditUser = ({ user }) => {
         }
       }
     }
+  }
+
+  if (!user || !loggedIn) {
+    router.push('/signin')
   }
 
   return (

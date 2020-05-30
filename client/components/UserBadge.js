@@ -1,11 +1,11 @@
 import Link from 'next/link'
 
-const UserBadge = ({ name, avatar }) => {
+const UserBadge = ({ name, displayName, avatar }) => {
   return (
     <Link href='/me'>
-      <a className="flex items-center mx-2 text-gray-800">
+      <a className="flex items-center mr-4 text-gray-800">
         {avatar ? (
-          <img className="w-8 h-8 rounded-full mr-2" src={avatar.publicUrlTransformed} alt="" />
+          <img className="w-8 h-8 border border-gray-400 rounded-full mr-2" src={avatar.publicUrlTransformed} alt="" />
         ) : (
           <svg className="w-8 h-8 rounded-full mr-2 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle className={'text-pink-400'} cx="79.5" cy="79.5" r="79.5" />
@@ -13,7 +13,12 @@ const UserBadge = ({ name, avatar }) => {
             <circle cx="96" cy="59" r="43" fill="white" />
           </svg>
         )}
-        <p className="font-bold pr-2">{name}</p>
+        <div className="flex flex-col items-center">
+          <p className="text-sm leading-tight font-bold">{displayName}</p>
+          <div className="text-xs leading-tight text-gray-700">
+            @{name}
+          </div>
+        </div>
       </a>
     </Link>
   )

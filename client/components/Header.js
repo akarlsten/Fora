@@ -36,7 +36,7 @@ const Header = () => {
           </Link>
         </div>
         <div className="w-4/5 flex flex-grow justify-between">
-          <div className="w-full lg:px-6 sm:w-4/5 xl:w-3/4 xl:px-12">
+          <div className="w-full lg:px-6 sm:w-4/5 lg:w-3/5 xl:w-3/4 xl:px-12">
             <NavSearch />
           </div>
           <button onClick={() => setSidebar(true)} type="button" id="sidebar-open" className={`flex pl-6 items-center lg:hidden text-gray-500 focus:outline-none focus:text-gray-700 ${sidebarOpen && 'hidden'}`}>
@@ -48,7 +48,7 @@ const Header = () => {
           <div className={'hidden w-3/5 sm:w-2/5 lg:flex lg:items-center lg:justify-end px-6'}>
             {loggedIn && (
               <React.Fragment>
-                <UserBadge name={loggedIn.name} avatar={loggedIn.avatar} />
+                <UserBadge displayName={loggedIn.displayName} name={loggedIn.name} avatar={loggedIn.avatar} />
                 <SignoutButton />
               </React.Fragment>
             )}

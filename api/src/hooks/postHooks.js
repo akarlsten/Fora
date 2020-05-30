@@ -154,7 +154,6 @@ export async function updateLastPostOnThread ({
 
   const user = context.authedItem
 
-  // Save the new cout to the parent comment item
   const { errors: updateErrors } = await query(`
     mutation($threadID: ID!, $newDate: String!, $poster: UserRelateToOneInput!) {
       updateThread(id: $threadID, data: { lastPost: $newDate, lastPoster: $poster }) { id }
