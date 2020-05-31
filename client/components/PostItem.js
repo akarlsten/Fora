@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useUser } from 'hooks/useUser'
 import Loader from 'react-loader-spinner'
+import Link from 'next/link'
 
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 import { postsPerPage } from 'config'
@@ -60,10 +61,14 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt, isEdited, 
     <div id={id} className={'flex'}>
       <div className={'px-2 md:px-4 py-2 justify-start items-center flex flex-col w-20 sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
         <a name={id}></a>
-        <span className="font-bold break-words text-sm sm:text-base">
-          {owner.displayName}
-        </span>
-        <span className="text-xs sm:text-sm">@{owner.name}</span>
+        <Link href='/u/[username]' as={`/u/${owner.name}`}>
+          <a className={`flex flex-col items-center hover:text-${color || 'pink'}-400`}>
+            <span className="font-bold break-words text-sm sm:text-base">
+              {owner.displayName}
+            </span>
+            <span className="text-xs sm:text-sm">@{owner.name}</span>
+          </a>
+        </Link>
         {!userIsBanned && (
           owner.avatar ? (
             <img className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />

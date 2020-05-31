@@ -12,10 +12,10 @@ const NavSearch = () => {
       <form method="post"
         onSubmit={async e => {
           e.preventDefault()
-          if (inputs.searchQuery.length > 0) {
+          if (inputs.searchQuery.trim().length > 0) {
             router.push({
               pathname: '/search',
-              query: { q: inputs.searchQuery }
+              query: { q: inputs.searchQuery.trim() }
             })
             clearForm()
           }

@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
-const UserBadge = ({ name, displayName, avatar }) => {
+const UserBadge = ({ name, displayName, avatar, isAdmin }) => {
   return (
     <Link href='/u/[username]' as={`/u/${name}`}>
-      <a className="flex items-center mr-4 text-gray-800">
+      <a className={'flex items-center text-gray-800'}>
         {avatar ? (
           <img className="w-8 h-8 border border-gray-400 rounded-full mr-2" src={avatar.publicUrlTransformed} alt="" />
         ) : (
@@ -13,8 +13,8 @@ const UserBadge = ({ name, displayName, avatar }) => {
             <circle cx="96" cy="59" r="43" fill="white" />
           </svg>
         )}
-        <div className="flex flex-col items-center">
-          <p className="text-sm leading-tight font-bold">{displayName}</p>
+        <div className="flex flex-col">
+          <p className={`text-sm leading-tight font-bold ${isAdmin && 'text-red-400'}`}>{displayName}</p>
           <div className="text-xs leading-tight text-gray-700">
             @{name}
           </div>

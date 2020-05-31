@@ -72,7 +72,7 @@ const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster, s
               )))}
           </div>
         )}
-        <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:block px-2 py-2 text-center w-18 sm:w-32 xl:w-42 font-bold`}>
+        <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:block px-2 py-2 text-center w-18 sm:w-32 xl:w-42 font-bold truncate`}>
           {lastPoster?.name || 'An unknown poster..'}
         </div>
         <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:flex px-4 py-2 font-bold justify-center items-center flex-row self-center w-18 sm:w-24`}>
