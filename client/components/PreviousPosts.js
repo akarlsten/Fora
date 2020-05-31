@@ -98,7 +98,7 @@ const PreviousPosts = ({ userID, userName }) => {
     }
     return (
       <div className="flex flex-col mt-10">
-        <div className="flex justify-between items-center my-4">
+        <div className="flex justify-between items-center my-4 max-w-6xl">
           <h1 className="text-2xl mr-4">Post History</h1>
           <Pagination count={count} page={page} perPage={perPage} privateUrl={privateUrl} publicUrl={publicUrl} />
         </div>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const UserBadge = ({ name, displayName, avatar }) => {
   return (
-    <Link href='/me'>
+    <Link href='/u/[username]' as={`/u/${name}`}>
       <a className="flex items-center mr-4 text-gray-800">
         {avatar ? (
           <img className="w-8 h-8 border border-gray-400 rounded-full mr-2" src={avatar.publicUrlTransformed} alt="" />

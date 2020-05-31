@@ -22,17 +22,17 @@ const UserDetails = ({ user }) => {
 
   const canEditUser = me?.isAdmin || me?.id === user?.id
 
-  if (!user || !me) {
-    router.push('/signin')
-    return <LoadingSpinner />
-  }
+  // if (!user || !me) {
+  //   router.push('/signin')
+  //   return <LoadingSpinner />
+  // }
 
   return (
     <div className="flex flex-col max-w-full">
       <div className="flex items-center justify-between flex-wrap">
         <div className="flex items-center mb-4">
           {user?.avatar ? (
-            <img className={'my-2 rounded-full w-24 md:w-32 lg:w-40'} src={user.avatar.publicUrlTransformed} alt="" />
+            <img className={'my-2 bg-white rounded-full w-24 md:w-32 lg:w-40'} src={user.avatar.publicUrlTransformed} alt="" />
           ) : (
             <svg className={'my-2 rounded-full border border-pink-200 fill-current w-24 md:w-32 lg:w-40'} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle className={'text-pink-400'} cx="79.5" cy="79.5" r="79.5" />
@@ -71,8 +71,8 @@ const UserDetails = ({ user }) => {
       <div>
         <p>{user?.id === me?.id ? 'You have' : 'User has'}: <span className="font-bold">{user?._postsMeta.count} posts</span></p>
       </div>
-      {canEditUser && (
-        <div className="flex flex-col mt-4">
+      {canEditUser && user?.subscriptions?.length >= 1 && (
+        <div className="flex flex-col mt-10">
           <h1 className="text-2xl mb-4">Subscriptions</h1>
           <ForumList>
             {user?.subscriptions.map(sub => (

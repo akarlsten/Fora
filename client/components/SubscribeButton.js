@@ -60,10 +60,10 @@ const SubscribeButton = ({ forumID, color, small }) => {
 
   const [setSubscribed] = useMutation(SUBSCRIBE, {
     variables: {
-      userID: user.id,
+      userID: user?.id,
       forumID
     },
-    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user.id, forumID } }],
+    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user?.id, forumID } }],
     update (cache) {
       const { _subscribersMeta: { count } } = cache.readFragment({ id: `Forum:${forumID}`, fragment: SUBSCRIBED_FRAGMENT })
       cache.writeFragment({
@@ -76,10 +76,10 @@ const SubscribeButton = ({ forumID, color, small }) => {
 
   const [setUnsubscribed] = useMutation(UNSUBSCRIBE, {
     variables: {
-      userID: user.id,
+      userID: user?.id,
       forumID
     },
-    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user.id, forumID } }],
+    refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user?.id, forumID } }],
     onCompleted: () => { addToast('Unsubscribed!', { appearance: 'success' }) },
     update (cache) {
       const { _subscribersMeta: { count } } = cache.readFragment({ id: `Forum:${forumID}`, fragment: SUBSCRIBED_FRAGMENT })
