@@ -176,6 +176,8 @@ export async function setPostNumber ({
 }) {
   if (operation !== 'create') return
 
+  // NOTE: this function may assign the same post number if two posts are made at the same time
+  // unsure if that is actually the case, the window for this should be tiny
   const { data, errors } = await query(`
   query($threadID: ID!) {
     Thread(where: { id: $threadID }) {

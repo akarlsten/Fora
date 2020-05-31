@@ -6,6 +6,7 @@ import { postsPerPage } from 'config'
 import Pagination from 'components/Pagination'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
+import PostWithThread from 'components/PostWithThread'
 
 const USER_POSTS = gql`
 query USER_POSTS($userID: ID!, $viewerIsAdmin: Boolean, $skip: Int = 0, $first: Int = ${postsPerPage}) {
@@ -19,7 +20,7 @@ query USER_POSTS($userID: ID!, $viewerIsAdmin: Boolean, $skip: Int = 0, $first: 
     }) {
       count
     }
-    posts(first: $first, skip: $skip, orderBy: "createdAt_ASC", where: {
+    posts(first: $first, skip: $skip, orderBy: "createdAt_DESC", where: {
       OR: [
         { thread: { forum: { isBanned: false } }},
         { thread: {forum: { isBanned: $viewerIsAdmin }}}
@@ -31,6 +32,7 @@ query USER_POSTS($userID: ID!, $viewerIsAdmin: Boolean, $skip: Int = 0, $first: 
       content
       createdAt
       updatedAt
+      postNumber
       thread {
         id
         title
@@ -96,12 +98,12 @@ const PreviousPosts = ({ userID, userName }) => {
     }
     return (
       <div className="flex flex-col mt-10">
-        <h1 className="text-2xl">Post History</h1>
-        <div className="self-end my-4">
+        <div className="flex justify-between items-center my-4">
+          <h1 className="text-2xl mr-4">Post History</h1>
           <Pagination count={count} page={page} perPage={perPage} privateUrl={privateUrl} publicUrl={publicUrl} />
         </div>
         {user?.posts.map(post => (
-          <div key={post.id}>{post.content}</div>
+          <PostWithThread key={post.id} post={post} thread={post.thread} forum={post.thread.forum} perPage={perPage} />
         ))}
       </div>
     )

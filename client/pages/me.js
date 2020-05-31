@@ -29,6 +29,16 @@ export const DETAILED_USER_QUERY = gql`
       subscriptions {
         id
         name
+        url
+        colorScheme
+        icon {
+          publicUrlTransformed(transformation: {
+            width:"200",
+            height:"200",
+            crop:"fill",
+            gravity:"center"
+          })
+        }
       }
       _postsMeta {
         count

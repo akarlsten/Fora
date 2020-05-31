@@ -6,6 +6,8 @@ import { useTheme } from 'context/ColorContext'
 import { useUser } from 'hooks/useUser'
 import PleaseSignIn from './PleaseSignIn'
 import Signin from 'components/Signin'
+import ForumList from 'components/ForumList'
+import ForumItem from 'components/ForumItem'
 import LoadingSpinner from 'components/LoadingSpinner'
 import PreviousPosts from 'components/PreviousPosts'
 
@@ -67,14 +69,18 @@ const UserDetails = ({ user }) => {
         </div>
       )}
       <div>
-        <p>{user?.id === me?.id ? 'You have' : 'User has'}: {user?._postsMeta.count} posts.</p>
+        <p>{user?.id === me?.id ? 'You have' : 'User has'}: <span className="font-bold">{user?._postsMeta.count} posts</span></p>
       </div>
-      <div className="flex flex-col mt-4">
-        <p className="font-bold">Subscriptions:</p>
-        {user?.subscriptions.map(sub => (
-          <div className="mt-2 font-semibold" key={sub.id}>{sub.name}</div>
-        ))}
-      </div>
+      {canEditUser && (
+        <div className="flex flex-col mt-4">
+          <h1 className="text-2xl mb-4">Subscriptions</h1>
+          <ForumList>
+            {user?.subscriptions.map(sub => (
+              <ForumItem key={sub.id} url={sub.url} small={true} {...sub} />
+            ))}
+          </ForumList>
+        </div>
+      )}
       <PreviousPosts userID={user?.id} userName={user?.name} />
     </div>
   )

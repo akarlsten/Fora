@@ -54,6 +54,15 @@ const ThreadContainer = (props) => {
     setTheme(forum.colorScheme)
   }, [])
 
+  const { post } = router.query
+
+  // scrolls us to the correct post if a post query param is supplied
+  // TODO: see if we can do this without the ugly query + hash combo that happens here:
+  // &post=5ed30ed9e234f3192df58853#5ed30ed9e234f3192df58853
+  useEffect(() => {
+    router.replace(`${router.pathname}#${post}`, `${router.asPath}#${post}`)
+  }, [post])
+
   const [updateThread, { loading: mutationLoading }] = useMutation(UPDATE_THREAD, {
     refetchQueries: [{ query: THREAD_QUERY, variables: { slug: url, first: perPage, skip: page * perPage - perPage } }],
     onCompleted: ({ updateThread: { url: threadUrl } }) => {

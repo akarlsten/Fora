@@ -31,7 +31,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
   }
 
   return (
-    <div className="flex items-center space-x-4 font-bold" data-testid="pagination">
+    <div className="flex text-base sm:text-base items-center space-x-2 sm:space-x-4 font-bold" data-testid="pagination">
       {page > 1 && (
         <>
           <Link
@@ -44,7 +44,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
               query: { p: 1 }
             }}
           >
-            <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>« {1}</a>
+            <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>« <span className="hidden sm:inline">{1}</span></a>
           </Link>
           <Link
             href={{
@@ -57,7 +57,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
             }}
           >
             <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`} aria-disabled={page <= 1}>
-          ← Prev
+              ← <span className="hidden sm:inline">Prev</span>
             </a>
           </Link>
         </>
@@ -90,7 +90,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
             }}
           >
             <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`} aria-disabled={page >= pages}>
-            Next →
+              <span className="hidden sm:inline">Next</span> →
             </a>
           </Link>
           <Link
@@ -103,7 +103,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
               query: { p: pages }
             }}
           >
-            <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>{pages} »</a>
+            <a className={`px-2 py-1 rounded bg-${color}-400 hover:bg-${color}-600`}><span className="hidden sm:inline">{pages}</span> »</a>
           </Link>
         </>
       )}

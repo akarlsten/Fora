@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import gql from 'graphql-tag'
+import { useToasts } from 'react-toast-notifications'
 
 import { useUser } from 'hooks/useUser'
 import { SUBSCRIBED_QUERY } from 'pages/index'
@@ -48,9 +49,9 @@ mutation UNSUBSCRIBE($userID: ID!, $forumID: ID!) {
 }
 `
 
-const SubscribeButton = ({ forumID, color }) => {
+const SubscribeButton = ({ forumID, color, small }) => {
   const user = useUser()
-
+  const { addToast } = useToasts()
   // const { data, loading } = useQuery(SUBSCRIBED_QUERY, {
   //   variables: { userID: user.id, forumID }
   // })
@@ -79,6 +80,7 @@ const SubscribeButton = ({ forumID, color }) => {
       forumID
     },
     refetchQueries: [{ query: SUBSCRIBED_QUERY, variables: { userID: user.id, forumID } }],
+    onCompleted: () => { addToast('Unsubscribed!', { appearance: 'success' }) },
     update (cache) {
       const { _subscribersMeta: { count } } = cache.readFragment({ id: `Forum:${forumID}`, fragment: SUBSCRIBED_FRAGMENT })
       cache.writeFragment({
@@ -101,7 +103,7 @@ const SubscribeButton = ({ forumID, color }) => {
     <button onClick={async e => {
       e.preventDefault()
       await setUnsubscribed()
-    }} className={`p-2 rounded border border-${color || 'pink'}-200 ml-4 flex text-${color || 'pink'}-300 items-center`}>
+    }} className={`${small ? 'p-1 text-sm' : 'p-2 ml-4'} rounded border border-${color || 'pink'}-200 hover:bg-${color || 'pink'}-400 hover:text-white flex text-${color || 'pink'}-300 items-center`}>
       <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
     Subscribed!
     </button>

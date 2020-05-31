@@ -64,6 +64,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
         })
         }
       }
+      postNumber
       isEdited
       isDeleted
       content
