@@ -60,7 +60,9 @@ const ThreadContainer = (props) => {
   // TODO: see if we can do this without the ugly query + hash combo that happens here:
   // &post=5ed30ed9e234f3192df58853#5ed30ed9e234f3192df58853
   useEffect(() => {
-    router.replace(`${router.pathname}#${post}`, `${router.asPath}#${post}`)
+    if (post) {
+      router.replace(`${router.pathname}#${post}`, `${router.asPath}#${post}`)
+    }
   }, [post])
 
   const [updateThread, { loading: mutationLoading }] = useMutation(UPDATE_THREAD, {
