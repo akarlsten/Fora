@@ -196,7 +196,7 @@ const ThreadContainer = (props) => {
         </div>
       )}
       <div className="flex flex-row items-start my-4">
-        <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} forum={forum} />
+        <PostList color={forum.colorScheme} canEditAll={canEditAll} posts={posts} forum={forum} threadID={threadID} />
       </div>
       {pages > 1 && (
         <div className="flex justify-end mb-4">

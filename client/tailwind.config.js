@@ -15,6 +15,19 @@ module.exports = {
     }
   },
   theme: {
+    animations: {
+      floatUpDown: {
+        '0%': {
+          transform: 'translateY(0%)'
+        },
+        '50%': {
+          transform: 'translateY(10%)'
+        },
+        '100%': {
+          transform: 'translateY(0%)'
+        }
+      }
+    },
     screens: {
       xs: '400px',
       sm: '640px',
@@ -65,6 +78,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/custom-forms'),
     require('tailwindcss-responsive-embed'),
-    require('tailwindcss-aspect-ratio')
+    require('tailwindcss-aspect-ratio'),
+    require('tailwindcss-animations')
   ]
 }

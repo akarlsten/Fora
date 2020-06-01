@@ -8,6 +8,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useUser } from 'hooks/useUser'
 import Loader from 'react-loader-spinner'
 import Link from 'next/link'
+import { useInView } from 'react-intersection-observer'
 
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 import { postsPerPage } from 'config'
@@ -25,12 +26,22 @@ mutation UPDATE_POST($id: ID!, $data: PostUpdateInput!) {
 }
 `
 
-const PostItem = ({ id, owner, content, color, canEditAll, createdAt, isEdited, updatedAt, forum }) => {
+const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll, createdAt, isEdited, updatedAt, forum }) => {
   const [editing, setEditing] = useState(false)
   const { addToast } = useToasts()
   const { register, handleSubmit, errors: formErrors, triggerValidation } = useForm()
   const loggedIn = useUser()
   const router = useRouter()
+
+  // once a user has scrolled through 70% of a post we count it as read and update the "last read post" in localstorage
+  const [ref, inView] = useInView({ triggerOnce: true, rootMargin: '70%' })
+  useEffect(() => {
+    if (window.localStorage) {
+      if (window.localStorage.getItem(`${threadID}/${loggedIn?.id || 'anon'}`) < postNumber) {
+        window.localStorage.setItem(`${threadID}/${loggedIn?.id || 'anon'}`, `${postNumber}`)
+      }
+    }
+  }, [inView])
 
   const { url, tid, p } = router.query
 
@@ -58,7 +69,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt, isEdited, 
 
   // TODO: maybe add a badge for moderators and admins?
   return (
-    <div id={id} className={'flex'}>
+    <div id={id} className={'flex'} ref={ref}>
       <div className={'px-2 md:px-4 py-2 justify-start items-center flex flex-col w-20 sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
         <a name={id}></a>
         <Link href='/u/[username]' as={`/u/${owner.name}`}>

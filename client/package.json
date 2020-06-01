@@ -25,12 +25,14 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^5.7.2",
+    "react-intersection-observer": "^8.26.2",
     "react-loader-spinner": "^3.1.14",
     "react-markdown": "^4.3.1",
     "react-select": "^3.1.0",
     "react-toast-notifications": "^2.4.0",
     "remark-emoji": "^2.1.0",
-    "tailwindcss": "^1.4.4"
+    "tailwindcss": "^1.4.4",
+    "tailwindcss-animations": "^2.0.0"
   },
   "devDependencies": {
     "@tailwindcss/custom-forms": "^0.2.1",

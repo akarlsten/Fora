@@ -15,7 +15,7 @@ import { createClient } from 'lib/withApollo'
 
 export const FORUM_QUERY = gql`
 query FORUM_QUERY {
-  allForums(orderBy: "subscribers_DESC", first: 9) {
+  allForums(orderBy: "subscribers_DESC", first: 15) {
     id
     name
     url
