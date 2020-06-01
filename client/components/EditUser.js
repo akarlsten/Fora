@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
-import { DETAILED_USER_QUERY } from 'pages/me'
+import { DETAILED_USER_QUERY } from 'pages/u/[username]/edit'
 import Signin, { SIGNIN_MUTATION } from 'components/Signin'
 
 import ImageSelector from 'components/ImageSelector'

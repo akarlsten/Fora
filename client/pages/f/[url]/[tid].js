@@ -55,6 +55,7 @@ query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage})
         name
         displayName
         isGlobalBanned
+        isAdmin
         avatar {
         publicUrlTransformed(transformation: {
           width:"300",

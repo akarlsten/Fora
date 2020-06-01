@@ -20,7 +20,8 @@ const UserDetails = ({ user }) => {
     setTheme('pink')
   }, [])
 
-  const canEditUser = me?.isAdmin || me?.id === user?.id
+  const viewingSelf = me?.id === user?.id
+  const canEditUser = me?.isAdmin || viewingSelf
 
   // if (!user || !me) {
   //   router.push('/signin')
@@ -46,21 +47,12 @@ const UserDetails = ({ user }) => {
           </div>
         </div>
         {canEditUser && (
-            me?.id === user?.id ? (
-              <Link href="/me/edit">
-                <button className={'p-2 rounded border border-pink-400 bg-pink-400 ml-4 flex items-center'}>
-                  <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+          <Link href="/u/[username]/edit" as={`/u/${user?.name}/edit`}>
+            <a className={'p-2 rounded border border-pink-400 bg-pink-400 ml-4 flex items-center'}>
+              <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
                   Edit Details
-                </button>
-              </Link>
-            ) : (
-              <Link href="/u/[uname]/edit" as={`/u/${user?.name}/edit`}>
-                <button className={'p-2 rounded border border-pink-400 bg-pink-400 ml-4 flex items-center'}>
-                  <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
-                  Edit User
-                </button>
-              </Link>
-            )
+            </a>
+          </Link>
         )}
       </div>
       {user?.isGlobalBanned && (
@@ -76,7 +68,7 @@ const UserDetails = ({ user }) => {
           <h1 className="text-2xl mb-4">Subscriptions</h1>
           <ForumList>
             {user?.subscriptions.map(sub => (
-              <ForumItem key={sub.id} url={sub.url} small={true} {...sub} />
+              <ForumItem key={sub.id} url={sub.url} viewingSelf={viewingSelf} {...sub} />
             ))}
           </ForumList>
         </div>

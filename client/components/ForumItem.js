@@ -1,17 +1,19 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
+import { useUser } from 'hooks/useUser'
 
 import SubscribeButton from 'components/SubscribeButton'
 
-const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorScheme, url, isBanned, small }) => {
+const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorScheme, url, isBanned, viewingSelf }) => {
   const color = colorScheme || 'pink'
+  const loggedIn = useUser()
 
   return (
     <Link href="/f/[url]" as={`/f/${url}`}>
       <a className="max-w-sm w-full md:max-w-lg lg:max-w-full">
-        <div className={`overflow-hidden h-full ${small ? 'items-center' : 'divide-x'} shadow-md cursor-pointer hover:shadow-xl transition duration-100 ease-in-out transform hover:-translate-y-1 bg-white rounded ${small ? 'p-2' : 'p-4'} flex flex-row justify-between`}>
+        <div className={`overflow-hidden h-full ${viewingSelf ? 'items-center' : 'divide-x'} shadow-md cursor-pointer hover:shadow-xl transition duration-100 ease-in-out transform hover:-translate-y-1 bg-white rounded ${viewingSelf ? 'p-2' : 'p-4'} flex flex-row justify-between`}>
           <div className="flex flex-col justify-between leading-normal pr-2 overflow-hidden">
-            <div className={`flex items-center ${!small && 'pb-1'}`}>
+            <div className={`flex items-center ${!viewingSelf && 'pb-1'}`}>
               {!isBanned && (
                 icon ? (
                   <img className = "w-10 h-10 rounded-full mr-2" src = { icon.publicUrlTransformed } alt = "" />
@@ -37,7 +39,7 @@ const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorS
               <p className="text-red-500 font-bold">BANNED!</p>
             )}
           </div>
-          {!small ? (
+          {!viewingSelf ? (
             <div className="flex flex-col justify-around leading-normal pl-2">
               <div className="flex flex-col align-middle justify-center text-center mb-1">
                 <div className="flex flex-row self-center">
@@ -55,9 +57,11 @@ const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorS
               </div>
             </div>
           ) : (
-            <div className="px-2">
-              <SubscribeButton small={small} forumID={id} color={color} />
-            </div>
+            viewingSelf && (
+              <div className="px-2">
+                <SubscribeButton small={viewingSelf} forumID={id} color={color} />
+              </div>
+            )
           )}
         </div>
       </a>

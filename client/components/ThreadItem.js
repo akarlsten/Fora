@@ -1,5 +1,6 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
+import UserBadge from 'components/UserBadge'
 
 const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster, state, isStickied }) => {
   const pages = Math.ceil(count / (perPage))
@@ -72,8 +73,8 @@ const ThreadItem = ({ forumUrl, url, title, count, color, perPage, lastPoster, s
               )))}
           </div>
         )}
-        <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:block px-2 py-2 text-center w-18 sm:w-32 xl:w-42 font-bold truncate`}>
-          {lastPoster?.name || 'An unknown poster..'}
+        <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:block px-2 py-1 text-center w-18 sm:w-32 md:w-48 lg:w-56 xl:w-64 text-gray-700 text-sm truncate`}>
+          <UserBadge name={lastPoster?.name} displayName={lastPoster?.displayName} avatar={lastPoster?.avatar} isAdmin={lastPoster?.isAdmin} color={color} />
         </div>
         <div className={`sm:border-l border-${color || 'pink'}-200 hidden sm:flex px-4 py-2 font-bold justify-center items-center flex-row self-center w-18 sm:w-24`}>
           <span className="font-base mr-1">{format('.3~s')(count)}</span>

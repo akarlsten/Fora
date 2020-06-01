@@ -47,10 +47,10 @@ const Header = () => {
           </button>
           <div className={'hidden w-3/5 sm:w-2/5 lg:flex lg:items-center lg:justify-end px-6'}>
             {loggedIn && (
-              <React.Fragment>
+              <div className="space-x-4 flex">
                 <UserBadge displayName={loggedIn.displayName} name={loggedIn.name} avatar={loggedIn.avatar} />
                 <SignoutButton />
-              </React.Fragment>
+              </div>
             )}
             {!loggedIn && (
               <div className="space-x-8 flex">

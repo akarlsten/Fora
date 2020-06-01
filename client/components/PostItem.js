@@ -63,7 +63,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt, isEdited, 
         <a name={id}></a>
         <Link href='/u/[username]' as={`/u/${owner.name}`}>
           <a className={`flex flex-col items-center hover:text-${color || 'pink'}-400`}>
-            <span className="font-bold break-words text-sm sm:text-base">
+            <span className={`font-bold break-words text-sm sm:text-base ${owner.isAdmin && 'text-red-400'}`}>
               {owner.displayName}
             </span>
             <span className="text-xs sm:text-sm">@{owner.name}</span>

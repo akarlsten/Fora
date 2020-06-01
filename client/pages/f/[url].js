@@ -42,6 +42,16 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
       lastPost
       lastPoster {
         name
+        displayName
+        isAdmin
+        avatar {
+          publicUrlTransformed(transformation: {
+            width:"300",
+            height:"300",
+            crop:"fill",
+            gravity:"center"
+          })
+        }
       }
       _postsMeta {
         count
@@ -60,10 +70,30 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
     owner {
       id
       name
+      displayName
+      isAdmin
+      avatar {
+        publicUrlTransformed(transformation: {
+          width:"300",
+          height:"300",
+          crop:"fill",
+          gravity:"center"
+        })
+      }
     }
     moderators {
       id
       name
+      displayName
+      isAdmin
+      avatar {
+        publicUrlTransformed(transformation: {
+          width:"300",
+          height:"300",
+          crop:"fill",
+          gravity:"center"
+        })
+      }
     }
   }
 }
