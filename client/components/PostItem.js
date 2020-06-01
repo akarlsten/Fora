@@ -71,7 +71,7 @@ const PostItem = ({ id, owner, content, color, canEditAll, createdAt, isEdited, 
         </Link>
         {!userIsBanned && (
           owner.avatar ? (
-            <img className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
+            <img loading="lazy" className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
           ) : (
             <svg className={`my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />

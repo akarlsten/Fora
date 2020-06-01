@@ -136,6 +136,12 @@ const Search = () => {
           </title>
         </Head>
         <h1 className="font-sans font-medium text-2xl mb-8">Search results for <span className="text-3xl font-bold">{q}</span>:</h1>
+        {users.length < 1 && threads.length < 1 && forums.length < 1 && (
+          <div className="w-full flex flex-col justify-center items-center mt-10">
+            <img className="w-64 self-center mb-10" src="/ufo.svg" style={{ filter: 'grayscale(0%) opacity(100%)' }} alt="" />
+            <p className="text-3xl font-light text-gray-600">Sorry, we couldn&apos;t find anything!</p>
+          </div>
+        )}
         <div className="flex flex-col sm:flex-row">
           <div className="flex flex-col sm:w-3/4">
             {forums.length >= 1 && (
@@ -173,12 +179,6 @@ const Search = () => {
                   </div>
                 ))}
               </>
-            )}
-            {users.length < 1 && threads.length < 1 && forums.length < 1 && (
-              <div className="w-full flex flex-col justify-center items-center mt-10">
-                <img className="w-64 self-center mb-10" src="/ufo.svg" style={{ filter: 'grayscale(0%) opacity(100%)' }} alt="" />
-                <p className="text-3xl font-light text-gray-600">Sorry, we couldn&apos;t find anything!</p>
-              </div>
             )}
           </div>
           <div className="sm:ml-4 flex flex-col sm:w-1/4">
