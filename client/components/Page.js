@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 
 import Meta from 'components/Meta'
 import Header from 'components/Header'
+import Footer from 'components/Footer'
 import { useTheme } from 'context/ColorContext'
 
 const Page = ({ children }) => {
@@ -19,7 +20,8 @@ const Page = ({ children }) => {
       <Meta />
       <div className={`h-screen w-screen overflow-x-hidden text-gray-800 bg-${color === 'black' ? 'gray' : color}-100`}>
         <Header />
-        <div className="container mx-auto px-6 p-20">{children}</div>
+        <div className="container mx-auto px-6 p-20 min-h-screen">{children}</div>
+        <Footer />
       </div>
     </React.Fragment>
   )

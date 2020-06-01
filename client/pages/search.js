@@ -174,6 +174,12 @@ const Search = () => {
                 ))}
               </>
             )}
+            {users.length < 1 && threads.length < 1 && forums.length < 1 && (
+              <div className="w-full flex flex-col justify-center items-center mt-10">
+                <img className="w-64 self-center mb-10" src="/ufo.svg" style={{ filter: 'grayscale(0%) opacity(100%)' }} alt="" />
+                <p className="text-3xl font-light text-gray-600">Sorry, we couldn&apos;t find anything!</p>
+              </div>
+            )}
           </div>
           <div className="sm:ml-4 flex flex-col sm:w-1/4">
             {users.length >= 1 && (
