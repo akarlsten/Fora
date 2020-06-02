@@ -63,10 +63,10 @@ const BanButton = ({ userID, forumID, color }) => {
   const userIsBanned = data?.Forum?.bannedUsers?.some(banned => banned.id === userID)
 
   return (
-    <div className="mb-2">
+    <div className="sm:mb-2">
       {confirmBan
         ? (
-          <div className="flex -mr-2">
+          <div className="flex sm:-mr-2">
             <button disabled={mutationLoading || userIsBanned} onClick={handleClick} style={{ padding: '0.15rem' }} className={'self-end mr-1 font-bold rounded bg-green-400 hover:bg-green-600'}>
               <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
             </button>

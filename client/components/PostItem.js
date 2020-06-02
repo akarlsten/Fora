@@ -76,52 +76,56 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
 
   // TODO: maybe add a badge for moderators and admins?
   return (
-    <div id={id} className={'flex'} ref={ref}>
-      <div className={'px-2 md:px-4 py-2 justify-start items-center flex flex-col w-20 sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
-        <a name={id}></a>
-        <Link href='/u/[username]' as={`/u/${owner.name}`}>
-          <a className={`flex flex-col items-center hover:text-${color || 'pink'}-400`}>
-            <span className={`font-bold break-words text-sm sm:text-base ${owner.isAdmin && 'text-red-400'}`}>
-              {owner.displayName}
-            </span>
-            <span className="text-xs sm:text-sm">@{owner.name}</span>
-          </a>
-        </Link>
-        {!userIsBanned && (
-          owner.avatar ? (
-            <img loading="lazy" className={`my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
-          ) : (
-            <svg className={`my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
-              <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
-              <circle cx="96" cy="59" r="43" fill="white" />
-            </svg>
-          )
-        )}
-        {userIsBanned && (
-          <div className="my-2 flex flex-col text-red-500 items-center">
-            <svg className="h-15 w-15 fill-current" viewBox="0 0 20 20"><path d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
-            <h2 className="text-sm sm:text-xl font-bold ">
+    <div id={id} className={'flex flex-col sm:flex-row'} ref={ref}>
+      <div className={'px-2 md:px-4 py-2 flex flex-row sm:flex-col justify-between sm:justify-start items-center  w-full sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
+        <div className="flex flex-row-reverse items-center sm:flex-col">
+          <a name={id}></a>
+          <Link href='/u/[username]' as={`/u/${owner.name}`}>
+            <a className={`ml-2 sm:ml-0 flex flex-col items-start hover:text-${color || 'pink'}-400`}>
+              <span className={`font-bold break-words text-sm sm:text-base ${owner.isAdmin && 'text-red-400'}`}>
+                {owner.displayName}
+              </span>
+              <span className="text-xs sm:text-sm">@{owner.name}</span>
+            </a>
+          </Link>
+          {!userIsBanned && (
+            owner.avatar ? (
+              <img loading="lazy" className={`sm:my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
+            ) : (
+              <svg className={`sm:my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
+                <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
+                <circle cx="96" cy="59" r="43" fill="white" />
+              </svg>
+            )
+          )}
+          {userIsBanned && (
+            <div className="sm:my-2 flex flex-col text-red-500 items-center">
+              <svg className="h-15 w-15 fill-current" viewBox="0 0 20 20"><path d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+              <h2 className="text-sm sm:text-xl font-bold ">
             BANNED!
-            </h2>
-            <p className="-mt-1 leading-tight text-xs sm:text-sm font-bold ">
-              {owner?.isGlobalBanned ? '(global)' : '(forum)'}
-            </p>
-          </div>
-        )}
-        <span title={parseISO(createdAt)} className="text-xs text-gray-600 flex break-word">
-          <svg className="fill-current h-4 w-4 mr-1" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path></svg>
-          {formatDistanceToNow(parseISO(createdAt), new Date())} ago
-        </span>
-        {isEdited && (
-          <span title={parseISO(updatedAt)} className="text-xs text-gray-600 flex break-word">
-            <svg className="fill-current h-4 w-4 mr-1" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
-            {formatDistanceToNow(parseISO(updatedAt), new Date())} ago
+              </h2>
+              <p className="-mt-1 leading-tight text-xs sm:text-sm font-bold ">
+                {owner?.isGlobalBanned ? '(global)' : '(forum)'}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <span title={parseISO(createdAt)} className="text-xs text-gray-600 flex items-center break-word">
+            <svg className="fill-current h-4 w-4 mr-1" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path></svg>
+            {formatDistanceToNow(parseISO(createdAt), new Date())} ago
           </span>
-        )}
+          {isEdited && (
+            <span title={parseISO(updatedAt)} className="text-xs text-gray-600 flex items-center break-word">
+              <svg className="fill-current h-4 w-4 mr-1" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+              {formatDistanceToNow(parseISO(updatedAt), new Date())} ago
+            </span>
+          )}
+        </div>
       </div>
-      <div className={`flex flex-grow px-4 py-2 ${!editing && 'border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
-        <div className="w-full mr-2">
+      <div className={`flex flex-col sm:flex-row flex-grow sm:px-4 py-2 ${!editing && 'border-t sm:border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
+        <div className={`w-full sm:mr-2 px-2 ${canEdit && 'pb-2'} sm:pb-0 sm:px-0`}>
           {editing ? (
             <form id="edit" className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>
               <textarea ref={register({
@@ -136,12 +140,12 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
           )}
         </div>
         {canEdit && !editing && (
-          <div className="self-end flex flex-col">
+          <div className={`sm:self-end w-full pt-2 px-2 sm:py-0 sm:px-0 sm:w-auto border-t border-t items-center flex sm:flex-col border-${color || 'pink'}-200 sm:border-0`}>
             {canEditAll && (
               <BanButton color={color} userID={owner.id} forumID={forum.id} />
             )}
-            <div className="self-end">
-              <a onClick={() => setEditing(true)} className={`px-2 cursor-pointer -mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
+            <div className="ml-2 sm:ml-0 self-end">
+              <a onClick={() => setEditing(true)} className={`px-2 cursor-pointer sm:-mr-2 font-bold py-1 rounded bg-${color}-400 hover:bg-${color}-600`}>Edit</a>
             </div>
           </div>
         )}
