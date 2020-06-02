@@ -49,9 +49,9 @@ const ForumContainer = (props) => {
             <circle cx="96" cy="59" r="43" fill="white" />
           </svg>
         )}
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center sm:justify-between w-full">
           <h1 className="font-bold text-2xl sm:text-4xl">{name}</h1>
-          <div className="flex space-y-2 sm:space-y-0 items-center flex-wrap">
+          <div className="flex space-y-2 sm:space-y-0 transform scale-90 sm:scale-100 items-center justify-end flex-wrap">
             {canEditForum && (
               <Link href="/f/[url]/a/[action]" as={`/f/${url}/a/edit`}>
                 <button className={`p-2 rounded border border-${colorScheme || 'pink'}-400 bg-${colorScheme || 'pink'}-400 ml-4 flex items-center`}>
@@ -95,7 +95,9 @@ const ForumContainer = (props) => {
             </div>
           )}
         </div>
-        <ForumSidebar color={colorScheme} {...props} />
+        <div className="flex flex-col items-center w-full lg:w-auto">
+          <ForumSidebar color={colorScheme} {...props} />
+        </div>
       </div>
     </div>
   )

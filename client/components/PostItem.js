@@ -81,7 +81,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
         <div className="flex flex-row-reverse items-center sm:flex-col">
           <a name={id}></a>
           <Link href='/u/[username]' as={`/u/${owner.name}`}>
-            <a className={`ml-2 sm:ml-0 flex flex-col items-start hover:text-${color || 'pink'}-400`}>
+            <a className={`ml-2 sm:ml-0 flex flex-col items-start sm:items-center hover:text-${color || 'pink'}-400`}>
               <span className={`font-bold break-words text-sm sm:text-base ${owner.isAdmin && 'text-red-400'}`}>
                 {owner.displayName}
               </span>
