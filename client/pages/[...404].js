@@ -6,4 +6,10 @@ const NotFoundPage = () => {
   )
 }
 
+export async function getStaticProps (context) {
+  return {
+    props: {}
+  }
+}
+
 export default NotFoundPage

@@ -17,4 +17,10 @@ const SignupPage = props => {
   )
 }
 
+export async function getStaticProps (context) {
+  return {
+    props: {}
+  }
+}
+
 export default SignupPage
