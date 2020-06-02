@@ -17,12 +17,14 @@ import * as mutations from './mutations'
 
 const MongoStore = MongoStoreMaker(expressSession)
 
-const PROJECT_NAME = 'dev'
+const PROJECT_NAME = 'Fora'
+
+const dbUrl = process.env.NODE_ENV === 'production' ? process.env.MONGODB_ATLAS : process.env.DATABASE_URL
 
 const keystone = new Keystone({
   name: PROJECT_NAME,
-  adapter: new Adapter({ mongoUri: process.env.DATABASE_URL }),
-  sessionStore: new MongoStore({ url: process.env.DATABASE_URL }),
+  adapter: new Adapter({ mongoUri: dbUrl }),
+  sessionStore: new MongoStore({ url: dbUrl }),
   cookieSecret: process.env.COOKIE_SECRET,
   onConnect: initialiseData,
   cookie: {
@@ -86,15 +88,15 @@ export default {
       }
     }),
     new AdminUIApp({
-      enableDefaultRoute: true,
-      apiPath: '/api',
+      enableDefaultRoute: false,
+      apiPath: '/',
       // graphiqlPath: '/gql',
       adminPath: '/admin',
       authStrategy,
       isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
     })
-  ]/* , // uncomment this in production when behind nginx
+  ], // uncomment this in production when behind nginx
   configureExpress: app => {
-    app.set('trust proxy', true)
-  } */
+    app.set('trust proxy', process.env.NODE_ENV === 'production')
+  }
 }
