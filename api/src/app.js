@@ -24,8 +24,12 @@ const keystone = new Keystone({
   adapter: new Adapter({ mongoUri: process.env.DATABASE_URL }),
   sessionStore: new MongoStore({ url: process.env.DATABASE_URL }),
   cookieSecret: process.env.COOKIE_SECRET,
-  secureCookies: false, // TODO: true for production!!!!!
-  onConnect: initialiseData
+  onConnect: initialiseData,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+    sameSite: false,
+    secure: process.env.NODE_ENV === 'production'
+  }
 })
 
 keystone.createList('User', User)
