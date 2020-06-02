@@ -35,7 +35,7 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
         gravity:"center"
       })
     }
-    threads(skip: $skip, first: $first, orderBy: "lastPost_DESC") {
+    threads(skip: $skip, first: $first, sortBy: [isStickied_DESC, lastPost_DESC]) {
       id
       title
       url
