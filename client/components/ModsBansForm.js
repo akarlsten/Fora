@@ -127,7 +127,7 @@ const ModsBansForm = ({ id, mods, banned, color, url }) => {
       ...provided,
       borderRadius: '0.25rem',
       paddingLeft: '0',
-      width: '70vw',
+      width: '80vw',
       maxWidth: '900px'
     })
   }

@@ -20,7 +20,7 @@ const ImageSelector = ({ oldImage, getValues, watch, triggerValidation, formErro
 
   return (
     <>
-      <div className="flex p-4 flex-col sm:flex-row sm:items-center">
+      <div className="flex p-4 flex-col sm:flex-row items-center">
         <div className="flex justify-center mb-4 sm:mb-0 mr-0 sm:mr-4">
           {iconPreview ? (
             <img className={'max-w-none my-2 w-24 md:w-32 lg:w-48 h-24 md:h-32 lg:h-48 rounded-full'} src={iconPreview} alt="" />
@@ -32,7 +32,10 @@ const ImageSelector = ({ oldImage, getValues, watch, triggerValidation, formErro
             </svg>
           )}
         </div>
-        <input onChange={() => getValues('icon')} accept={validImageTypes} type="file" ref={register({
+        <label className={`p-2 cursor-pointer bg-${color || 'pink'}-400 text-white rounded hover:bg-${color || 'pink'}-600`} htmlFor="image-upload">
+          Choose Image
+        </label>
+        <input id="image-upload" className="hidden" onChange={() => getValues('icon')} accept={validImageTypes} type="file" ref={register({
           required: false,
           validate: {
             wrongFileType: value => (!value[0] || validImageTypes.indexOf(`${value[0].type}`) > 0) || '⚠ Please provide a valid image type: GIF, JPG, or PNG.',

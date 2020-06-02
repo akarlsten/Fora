@@ -75,7 +75,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) =>
           </button>
         </div>
       </div>
-      <form className="w-full max-w-xl flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-full max-w-2xl flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full px-3">
           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Content</label>
           <div>

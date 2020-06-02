@@ -182,7 +182,7 @@ const EditUser = ({ user }) => {
               register={register}
             />
             <div className="flex items-center mt-8">
-              <input className={`${mutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${mutationLoading ? 'text-pink-200' : 'text-white'} font-bold text-lg ${mutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
+              <input className={`${mutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${mutationLoading ? 'text-pink-200' : 'text-white'} font-medium text-lg ${mutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
                 type="submit" value="Update Info" disabled={!!mutationLoading} />
               {mutationLoading && (
                 <Loader type="ThreeDots" color="#f687b3" width={40} height={40} />
@@ -246,7 +246,7 @@ const EditUser = ({ user }) => {
                 {passwordErrors.old && (<span className="text-sm text-red-600">{passwordErrors.old.message}</span>)}
               </div>
               <div className="flex items-center mt-8">
-                <input className={`${pwMutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${pwMutationLoading ? 'text-pink-200' : 'text-white'} font-bold text-lg ${pwMutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
+                <input className={`${pwMutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${pwMutationLoading ? 'text-pink-200' : 'text-white'} font-medium text-lg ${pwMutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
                   type="submit" value="Change Password" disabled={!!pwMutationLoading || !!mutationLoading} />
                 {pwMutationLoading && (
                   <Loader type="ThreeDots" color="#f687b3" width={40} height={40} />

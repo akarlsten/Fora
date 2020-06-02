@@ -155,12 +155,12 @@ const EditForum = () => {
                   color={forum?.colorScheme} />
                 <div className="flex align-start items-center mt-8">
                   {forum?.colorScheme === 'black' && !mutationLoading ? (
-                    <input className={'bg-gray-600 mr-4 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
+                    <input className={'bg-gray-600 mr-4 text-white text-lg font-medium hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
                   ) : !mutationLoading ? (
-                    <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
+                    <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 font-medium text-white text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
                   ) : (
                     <>
-                      <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Saving.." />
+                      <input className={'border border-gray-500 mr-4 text-gray-500 font-medium text-lg p-2 rounded'} type="submit" value="Saving.." />
                       <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
                     </>
                   )}

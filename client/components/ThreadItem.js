@@ -49,7 +49,7 @@ const ThreadItem = ({ id, forumUrl, url, title, count, color, perPage, lastPoste
       <div className={'flex justify-end items-center flex-grow'}>
         {/* This will ensure lastRead.postNumber exists and is > 0 */}
         {lastRead?.postNumber - count < 0 && (
-          <div className={'px-4 flex items-center text-orange-400'}>
+          <div className={'pl-4 flex items-center text-orange-400'}>
             <Link
               href={{ pathname: '/f/[url]/[tid]', query: calculatedQueryString }}
               as={{
@@ -62,13 +62,13 @@ const ThreadItem = ({ id, forumUrl, url, title, count, color, perPage, lastPoste
                 </div>
               </a>
             </Link>
-            <a title="Forget this thread" onClick={handleForget} className="p-1 cursor-pointer rounded text-red-400 hover:text-red-600">
+            <a title="Forget this thread" onClick={handleForget} className="ml-1 mr-2 cursor-pointer rounded text-red-400 hover:text-red-600">
               <svg className="fill-current h-5 w-5" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"></path></svg>
             </a>
           </div>
         )}
         {pages > 1 && (
-          <div className="pr-4 font-bold space-x-1">
+          <div className="px-2 font-bold space-x-1">
             {pages <= 5 && (
               pageArray.map(page => (
                 <Link

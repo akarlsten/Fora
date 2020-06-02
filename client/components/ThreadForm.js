@@ -92,9 +92,9 @@ const ThreadForm = () => {
                 </div>
                 <div className="flex align-start items-center mt-8 space-x-4">
                   {forum?.colorScheme === 'black' ? (
-                    <input className={'bg-gray-600 text-white font-bold text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Post" />
+                    <input className={'bg-gray-600 text-white font-medium text-lg hover:bg-gray-700 p-2 rounded'} type="submit" value="Post" />
                   ) : (
-                    <input className={`bg-${forum.colorScheme || 'pink'}-400 text-white font-bold text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Post" />
+                    <input className={`bg-${forum.colorScheme || 'pink'}-400 text-white font-medium text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Post" />
                   )}
                   {mutationLoading && (
                     <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
