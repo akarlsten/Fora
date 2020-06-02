@@ -55,6 +55,8 @@ export async function forumIsBanned ({ resolvedData, existingItem, context, acti
     return
   }
 
+  if (resolvedData.title === 'banned thread') { console.log('hi this is the hook', resolvedData) }
+
   const queryString = `
           query ($forumID: ID!) {
             Forum(where: { id: $forumID}) {

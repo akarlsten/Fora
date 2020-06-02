@@ -127,7 +127,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toEqual({ createForum: null })
 
       expect(errors[0].name).toBe('ValidationFailureError')
-      expect(errors[0].data.messages[0]).toBe('Max length of forum name is 20 characters.')
+      expect(errors[0].data.messages[0]).toBe('Forum name must be between 1 and 20 characters.')
     }))
 
     test('should allow owner to set moderators', runner(setupTest, async ({ keystone, create, app }) => {

@@ -104,7 +104,6 @@ export default {
     delete: false
   },
   hooks: {
-    resolveInput: setLastPost,
     validateInput: async ({ existingItem, context, actions, resolvedData }) => {
       // these functions will throw errors to prevent invalid requests
       await Promise.all([
@@ -112,6 +111,7 @@ export default {
         forumIsBanned({ resolvedData, existingItem, context, actions }),
         threadHasNoPosts({ resolvedData, existingItem, context, actions })
       ])
-    }
+    },
+    resolveInput: setLastPost
   }
 }

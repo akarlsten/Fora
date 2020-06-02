@@ -10,7 +10,7 @@ export default async keystone => {
     Object.values(keystone.adapters).forEach(async adapter => {
       await adapter.dropDatabase()
     })
-    console.log('� Creating initial data...')
+    console.log('! Creating initial data...')
     // // Count existing users
     // const {
     //   data: {
@@ -25,8 +25,8 @@ export default async keystone => {
     // )
 
     // if (count === 0) {
-    const password = 'awoo1234'
-    const email = 'admin@example.com'
+    const password = process.env.ADMIN_PASSWORD
+    const email = process.env.ADMIN_USER
 
     const { errors } = await keystone.executeQuery(
       `mutation initialUser($password: String, $email: String) {

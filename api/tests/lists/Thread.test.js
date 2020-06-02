@@ -216,8 +216,8 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
         query: `
         mutation {
           createThread(data: {
-            title: "The first thread",
-            posts: { create: [{content: "hej hej hej"}]},
+            title: "banned thread",
+            posts: { create: [{content: "post in banned"}]},
             forum: { connect: { id: "${forumID}" } }
           }) {
             title
@@ -238,7 +238,7 @@ multiAdapterRunners('mongoose').map(({ runner, adapterName }) => {
       expect(data).toMatchObject({
         createThread: null
       })
-      expect(errors).toMatchObject([{ name: 'ForumBannedError' }])
+      expect(errors).toMatchObject([{ name: 'NestedError' }])
     }))
 
     test('should not allow user to change title of thread', runner(setupTest, async ({ keystone, create, app }) => {
