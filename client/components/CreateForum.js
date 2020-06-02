@@ -31,6 +31,7 @@ const CREATE_FORUM = gql`
 mutation CREATE_FORUM($data: ForumCreateInput!) {
   createForum(data: $data) {
     id
+    url
   }
 }
 `
@@ -41,12 +42,17 @@ const CreateForum = () => {
   const { addToast } = useToasts()
   const { url } = router.query
 
+  const [nameInput, setNameInput] = useState('')
+
   const [forumNameCheck, { data: nameData }] = useLazyQuery(FORUM_NAME_QUERY)
   const { register, handleSubmit, errors: formErrors, watch, triggerValidation, getValues } = useForm()
 
   const [createForum, { loading: mutationLoading }] = useMutation(CREATE_FORUM, {
     refetchQueries: [{ query: FORUM_QUERY }, { query: SUBSCRIBED_QUERY }],
-    onCompleted: () => { addToast('Successfully created forum!', { appearance: 'success' }) },
+    onCompleted: ({ createForum: { url: forumUrl } }) => {
+      addToast('Successfully created forum!', { appearance: 'success' })
+      router.push('/f/[url]', `/f/${forumUrl}/`)
+    },
     onError: () => addToast('Couldn\'t create forum, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
@@ -75,6 +81,7 @@ const CreateForum = () => {
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Name</label>
               <input onChange={(e) => {
+                setNameInput(e.target.value.replace(/\W/g, ''))
                 if (e.target.value.length >= 1) {
                   triggerValidation('name')
                 }
@@ -91,7 +98,7 @@ const CreateForum = () => {
                   },
                   trimmed: value => value.trim().length >= 1 || '⚠ Forum name must have at least 1 character.'
                 }
-              })} className="form-input block w-full" name="name" type="text" />
+              })} value={nameInput} className="form-input block w-full" name="name" type="text" />
               {formErrors.name && (<span className="text-sm text-red-600">{formErrors.name.message}</span>)}
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="description">Description</label>
               <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" />
@@ -107,10 +114,10 @@ const CreateForum = () => {
                 register={register} />
               <div className="flex align-start items-center mt-8">
                 {!mutationLoading ? (
-                  <input className={'bg-pink-400 mr-4 text-white font-bold text-lg hover:bg-\'pink\'-700 p-2 rounded'} type="submit" value="Create Forum" />
+                  <input className={'bg-pink-400 mr-4 text-white font-medium text-lg hover:bg-\'pink\'-700 p-2 rounded'} type="submit" value="Create Forum" />
                 ) : (
                   <>
-                    <input className={'border border-gray-500 mr-4 text-gray-500 font-bold text-lg p-2 rounded'} type="submit" value="Creating.." />
+                    <input className={'border border-gray-500 mr-4 text-gray-500 font-medium text-lg p-2 rounded'} type="submit" value="Creating.." />
                     <Loader type="ThreeDots" color={colorConverter('pink')} width={40} height={40} />
                   </>
                 )}

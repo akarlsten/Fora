@@ -71,7 +71,7 @@ const ThreadForm = () => {
     return <LoadingSpinner />
   } else if (forum) {
     return (
-      <PleaseSignIn>
+      <>
         <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
         <div className="container mx-auto flex flex-col items-center">
           <h1 className="text-3xl mb-4 text-gray-700">Post a new thread..</h1>
@@ -104,7 +104,7 @@ const ThreadForm = () => {
             </fieldset>
           </form>
         </div>
-      </PleaseSignIn>
+      </>
     )
   } else {
     return <Error />

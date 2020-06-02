@@ -124,7 +124,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
           )}
         </div>
       </div>
-      <div className={`flex flex-col sm:flex-row flex-grow sm:px-4 py-2 ${!editing && 'border-t sm:border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
+      <div className={`flex flex-col sm:flex-row flex-grow sm:px-4 py-2 ${!editing && 'border-t sm:border-t-0 sm:border-l'} ${editing && 'border-4 border-dashed'}  border-${color || 'pink'}-200`}>
         <div className={`w-full sm:mr-2 px-2 ${canEdit && 'pb-2'} sm:pb-0 sm:px-0`}>
           {editing ? (
             <form id="edit" className="w-full h-full" onSubmit={handleSubmit(onSubmit)}>

@@ -132,45 +132,43 @@ const EditForum = () => {
     }
 
     return (
-      <PleaseSignIn>
-        <div className="container mx-auto flex flex-col items-center">
-          <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
-          <h1 className="text-3xl mb-4 text-gray-700">Editing: <span className="font-semibold text-black">{forum.name}</span></h1>
-          <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
-            <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
-              <div className="w-full px-3">
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Description</label>
-                <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
-                {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
-                <ColorSelector oldColor={forum.colorScheme} register={register} />
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
-                <ImageSelector
-                  oldImage={forum?.icon?.publicUrlTransformed}
-                  getValues={getValues}
-                  watch={watch}
-                  triggerValidation={triggerValidation}
-                  formErrors={formErrors}
-                  register={register}
-                  color={forum?.colorScheme} />
-                <div className="flex align-start items-center mt-8">
-                  {forum?.colorScheme === 'black' && !mutationLoading ? (
-                    <input className={'bg-gray-600 mr-4 text-white text-lg font-medium hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
-                  ) : !mutationLoading ? (
-                    <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 font-medium text-white text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
-                  ) : (
-                    <>
-                      <input className={'border border-gray-500 mr-4 text-gray-500 font-medium text-lg p-2 rounded'} type="submit" value="Saving.." />
-                      <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
-                    </>
-                  )}
-                </div>
+      <div className="container mx-auto flex flex-col items-center">
+        <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
+        <h1 className="text-3xl mb-4 text-gray-700">Editing: <span className="font-semibold text-black">{forum.name}</span></h1>
+        <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
+          <fieldset disabled={mutationLoading} aria-busy={mutationLoading}>
+            <div className="w-full px-3">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Description</label>
+              <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" defaultValue={forum.description}/>
+              {formErrors.description && (<span className="text-sm text-red-600">Description must be between 1 and 140 characters.</span>)}
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="color">Color Theme</label>
+              <ColorSelector oldColor={forum.colorScheme} register={register} />
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4">Icon</label>
+              <ImageSelector
+                oldImage={forum?.icon?.publicUrlTransformed}
+                getValues={getValues}
+                watch={watch}
+                triggerValidation={triggerValidation}
+                formErrors={formErrors}
+                register={register}
+                color={forum?.colorScheme} />
+              <div className="flex align-start items-center mt-8">
+                {forum?.colorScheme === 'black' && !mutationLoading ? (
+                  <input className={'bg-gray-600 mr-4 text-white text-lg font-medium hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
+                ) : !mutationLoading ? (
+                  <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 font-medium text-white text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
+                ) : (
+                  <>
+                    <input className={'border border-gray-500 mr-4 text-gray-500 font-medium text-lg p-2 rounded'} type="submit" value="Saving.." />
+                    <Loader type="ThreeDots" color={colorConverter(forum.colorScheme)} width={40} height={40} />
+                  </>
+                )}
               </div>
-            </fieldset>
-          </form>
-          <ModsBansForm id={forum.id} color={forum?.colorScheme} banned={forum.bannedUsers} mods={forum.moderators} />
-        </div>
-      </PleaseSignIn>
+            </div>
+          </fieldset>
+        </form>
+        <ModsBansForm id={forum.id} color={forum?.colorScheme} banned={forum.bannedUsers} mods={forum.moderators} />
+      </div>
     )
   } else {
     return <Error />

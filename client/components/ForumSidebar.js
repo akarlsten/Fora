@@ -5,7 +5,7 @@ import UserBadge from 'components/UserBadge'
 
 const ForumSidebar = ({ name, icon, color, description, owner, createdAt, moderators }) => {
   return (
-    <div className={`px-4 w-72 lg:w-1/4 flex flex-col bg-white rounded p-4 lg:ml-4 border border-${color || 'pink'}-200`}>
+    <div className={`px-4 w-72 lg:w-full flex flex-col bg-white rounded p-4 lg:ml-4 border border-${color || 'pink'}-200`}>
       <div className="flex items-center">
         {icon ? (
           <img className="w-8 h-8 rounded-full mr-2" src={icon.publicUrlTransformed} alt="" />

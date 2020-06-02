@@ -11,9 +11,16 @@ const Action = () => {
   const { url, action } = router.query
 
   if (action === 'post') {
-    return <ThreadForm />
+    return (
+      <PleaseSignIn>
+        <ThreadForm />
+      </PleaseSignIn >
+    )
   } else if (action === 'edit') {
-    return <EditForum />
+    return (
+      <PleaseSignIn>
+        <EditForum />
+      </PleaseSignIn>)
   } else {
     return <NotFound />
   }
