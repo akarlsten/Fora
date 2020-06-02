@@ -37,8 +37,14 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
   const [ref, inView] = useInView({ triggerOnce: true, rootMargin: '70%' })
   useEffect(() => {
     if (window.localStorage) {
-      if (window.localStorage.getItem(`${threadID}/${loggedIn?.id || 'anon'}`) < postNumber) {
-        window.localStorage.setItem(`${threadID}/${loggedIn?.id || 'anon'}`, `${postNumber}`)
+      const previouslySet = JSON.parse(window.localStorage.getItem(`${threadID}/${loggedIn?.id || 'anon'}`))
+      if (!previouslySet || previouslySet.postNumber < postNumber) {
+        const data = {
+          postNumber,
+          postID: id
+        }
+
+        window.localStorage.setItem(`${threadID}/${loggedIn?.id || 'anon'}`, JSON.stringify(data))
       }
     }
   }, [inView])
@@ -58,6 +64,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
   })
 
   const onSubmit = ({ content }) => {
+    console.log(content)
     triggerValidation('content')
     if (!formErrors.content) {
       updatePost({ variables: { id: id, data: { content } } })

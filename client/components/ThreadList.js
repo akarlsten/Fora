@@ -22,7 +22,7 @@ const ThreadList = ({ url, threads, color }) => {
   return (
     <div className={`w-full rounded bg-white border border-${color || 'pink'}-200 divide-y divide-${color || 'pink'}-200`}>
       {sortedThreads.map(thread => (
-        <ThreadItem isStickied={thread.isStickied} state={thread.state} lastPoster={thread.lastPoster} perPage={perPage} key={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
+        <ThreadItem isStickied={thread.isStickied} state={thread.state} lastPoster={thread.lastPoster} perPage={perPage} key={thread.id} id={thread.id} forumUrl={url} url={thread.url} title={thread.title} count={thread._postsMeta.count} color={color} />
       ))}
     </div>
   )

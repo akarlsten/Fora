@@ -71,7 +71,7 @@ function Pagination ({ count, page, color, perPage, type, privateUrl, publicUrl 
         </p>
       )}
       {pages > 1 && (
-        <select value={page} className={`input-select font-bold px-2 py-1 border rounded border-${color}-400`} onChange={handleChange}>
+        <select value={page} className={`input-select bg-white font-bold px-2 py-1 border rounded border-${color}-400`} onChange={handleChange}>
           {
             [...Array(pages).keys()].map(opt => (<option className="font-bold" key={opt + 1} value={opt + 1}>{opt + 1}</option>))
           }

@@ -8,7 +8,7 @@ import youtubeParser from 'lib/youtubeParser'
 const Image = (props) => {
   const [fullSize, setFullSize] = useState(false)
   return (
-    <img onClick={() => setFullSize(prev => !prev)} loading="lazy" className={`${!fullSize && 'max-w-sm max-h-sm'}`} src={props.src} alt={props} />
+    <img onClick={() => setFullSize(prev => !prev)} loading="lazy" className={`${!fullSize && 'w-48 sm:w-auto max-w-sm max-h-sm'}`} src={props.src} alt={props} />
   )
 }
 
