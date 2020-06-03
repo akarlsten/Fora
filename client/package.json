@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.44",
@@ -16,6 +17,7 @@
     "autoprefixer": "^9.7.6",
     "d3-format": "^1.4.4",
     "date-fns": "^2.13.0",
+    "eslint-plugin-cypress": "^2.11.1",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "next": "9.4.1",
@@ -37,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/custom-forms": "^0.2.1",
     "babel-eslint": "^10.1.0",
+    "cypress": "^4.7.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
@@ -48,9 +51,13 @@
     "tailwindcss-responsive-embed": "^1.0.0"
   },
   "eslintConfig": {
+    "plugins": [
+      "cypress"
+    ],
     "parser": "babel-eslint",
     "extends": [
       "plugin:react/recommended",
+      "plugin:cypress/recommended",
       "standard"
     ],
     "rules": {
