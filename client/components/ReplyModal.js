@@ -3,6 +3,7 @@ import { useForm, ErrorMessage } from 'react-hook-form'
 import { useQuery, useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
 import Loader from 'react-loader-spinner'
+import { useRouter } from 'next/router'
 
 import colorConverter from 'lib/colorConverter'
 import MarkdownHelp from 'components/MarkdownHelp'
@@ -17,7 +18,7 @@ mutation CREATE_POST($threadID: ID!, $content: String!) {
     thread: { connect: { id: $threadID } }
     }) {
       id
-      content
+      postNumber
     }
   updateThread(id: $threadID, data: {}){
     id
@@ -33,16 +34,23 @@ fragment myThread on Thread {
   }
 `
 
-const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl }) => {
+const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl, page, perPage }) => {
   const { addToast } = useToasts()
+  const router = useRouter()
+
   const { register, handleSubmit, errors: formErrors } = useForm()
   // color is the color name, we convert it to hex with this
   const hexColor = colorConverter(color)
 
   const [createPost, { loading: mutationLoading }] = useMutation(CREATE_POST, {
-    onCompleted: () => {
+    onCompleted: ({ createPost: { postNumber } }) => {
       addToast('Post made!', { appearance: 'success' })
       setReplyModal(false)
+      // if this post creates a new page
+      if (Math.ceil(postNumber / perPage) > page) {
+        router.push({ pathname: '/f/[url]/[tid]', query: { p: page + 1 } },
+          { pathname: `/f/${forumUrl}/${threadSlug}`, query: { p: page + 1 } })
+      }
     },
     refetchQueries: [{ query: THREAD_QUERY, variables: { threadSlug } }, { query: FORUM_QUERY, variables: { forumUrl } }],
     onError: () => addToast('Couldn\'t create post, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true }),

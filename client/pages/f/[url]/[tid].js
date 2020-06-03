@@ -86,12 +86,13 @@ const Thread = ({ query }) => {
   const page = +p || 1
   const perPage = user?.postsPerPage || postsPerPage
 
-  const { data, loading, error } = useQuery(THREAD_QUERY, {
+  const { data, loading, error, refetch } = useQuery(THREAD_QUERY, {
     variables: { slug: tid, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'network-only' // maybe change to cache-and-network
+    fetchPolicy: 'cache-and-network', // maybe change to cache-and-network
+    pollInterval: 5000
   })
 
-  if (loading) {
+  if (loading && !data) {
     return <LoadingSpinner />
   } else if (error) {
     return <Error />

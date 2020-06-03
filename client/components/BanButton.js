@@ -54,7 +54,7 @@ const BanButton = ({ userID, forumID, color }) => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center -mr-2">
+      <div className="flex flex-col items-center sm:-mr-2">
         <Loader type="ThreeDots" color={colorConverter(color)} width={30} height={30} />
       </div>
     )
@@ -76,7 +76,7 @@ const BanButton = ({ userID, forumID, color }) => {
           </div>
         )
         : (
-          <a onClick={() => !userIsBanned && setConfirmBan(true)} className={`px-2 ${!userIsBanned && 'cursor-pointer'} -mr-2 font-bold py-1 rounded bg-red-400 ${!userIsBanned && 'hover:bg-red-600'} ${userIsBanned && 'opacity-50'}`}>Ban</a>
+          <a onClick={() => !userIsBanned && setConfirmBan(true)} className={`px-2 ${!userIsBanned && 'cursor-pointer'} sm:-mr-2 font-bold py-1 rounded bg-red-400 ${!userIsBanned && 'hover:bg-red-600'} ${userIsBanned && 'opacity-50'}`}>Ban</a>
         )}
     </div>
   )

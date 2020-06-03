@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import gql from 'graphql-tag'
 import { useToasts } from 'react-toast-notifications'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import { useUser } from 'hooks/useUser'
 import Loader from 'react-loader-spinner'
@@ -78,7 +78,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
   return (
     <div id={id} className={'flex flex-col sm:flex-row'} ref={ref}>
       <div className={'px-2 md:px-4 py-2 flex flex-row sm:flex-col justify-between sm:justify-start items-center  w-full sm:w-32 md:w-40 lg:w-56 flex-shrink-0'}>
-        <div className="flex flex-row-reverse items-center sm:flex-col">
+        <div className="flex flex-row-reverse items-center sm:flex-col flex-shrink">
           <a name={id}></a>
           <Link href='/u/[username]' as={`/u/${owner.name}`}>
             <a className={`ml-2 sm:ml-0 flex flex-col items-start sm:items-center hover:text-${color || 'pink'}-400`}>
@@ -111,7 +111,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
             </div>
           )}
         </div>
-        <div className="flex flex-col">
+        <div className="flex-col hidden xs:flex flex-shrink">
           <span title={parseISO(createdAt)} className="text-xs text-gray-600 flex items-center break-word">
             <svg className="fill-current h-4 w-4 mr-1" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path></svg>
             {formatDistanceToNow(parseISO(createdAt), new Date())} ago
@@ -176,4 +176,4 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
   )
 }
 
-export default PostItem
+export default memo(PostItem)

@@ -98,6 +98,7 @@ query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage})
   }
 }
 `
+
 const Forum = () => {
   const user = useUser()
   const router = useRouter()
@@ -108,12 +109,13 @@ const Forum = () => {
   const page = +p || 1
   const perPage = user?.postsPerPage || threadsPerPage
 
-  const { data, loading, error } = useQuery(FORUM_QUERY, {
+  const { data, loading, error, refetch } = useQuery(FORUM_QUERY, {
     variables: { url, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'network-only' // maybe cache-and-network
+    fetchPolicy: 'cache-and-network', // maybe cache-and-network
+    pollInterval: 10000 // poll the server for updates every 5 secs
   })
 
-  if (loading) {
+  if (loading && !data) {
     return <LoadingSpinner />
   } else if (error) {
     return <Error />

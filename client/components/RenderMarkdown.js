@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 
 import emoji from 'remark-emoji'
 
@@ -158,4 +158,4 @@ const RenderMarkdown = ({ content, color }) => {
   )
 }
 
-export default RenderMarkdown
+export default memo(RenderMarkdown)

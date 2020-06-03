@@ -239,7 +239,7 @@ const ThreadContainer = (props) => {
                 Replying..
             </button>
           </div>
-          <ReplyModal color={forum.colorScheme} setReplyModal={setReplyModal} forumUrl={forum.url} threadID={threadID} threadSlug={url} />
+          <ReplyModal page={page} perPage={perPage} color={forum.colorScheme} setReplyModal={setReplyModal} forumUrl={forum.url} threadID={threadID} threadSlug={url} />
         </>
       )}
     </div>
