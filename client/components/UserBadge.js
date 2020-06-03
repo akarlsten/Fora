@@ -5,7 +5,7 @@ const UserBadge = ({ name, displayName, avatar, isAdmin, color }) => {
     <Link href='/u/[username]' as={`/u/${name}`}>
       <a title={`${displayName} - @${name}`} className={`flex items-center text-gray-800 hover:text-${color || 'pink'}-400`}>
         {avatar ? (
-          <img className={'w-8 h-8 border border-gray-400 rounded-full mr-2'} src={avatar.publicUrlTransformed} alt="" />
+          <img loading="lazy" className={'w-8 h-8 border border-gray-400 rounded-full mr-2'} src={avatar.publicUrlTransformed} alt="" />
         ) : (
           <svg className="w-8 h-8 rounded-full mr-2 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />

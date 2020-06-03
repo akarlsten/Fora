@@ -117,6 +117,7 @@ const Thread = ({ query }) => {
           <title>
           Fora | {thread.forum.name} | {thread.title}
           </title>
+          <meta name="description" content={`${thread.title} in the forum: ${thread.forum.name}`}/>
         </Head>
         <ThreadContainer perPage={perPage} page={page} pages={pages} count={count} {...thread} />
       </>

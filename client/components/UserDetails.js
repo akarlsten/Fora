@@ -30,7 +30,18 @@ const UserDetails = ({ user }) => {
 
   return (
     <div className="flex flex-col max-w-full">
-      <div className="flex items-center justify-between flex-wrap">
+      {canEditUser && (
+        <div className="flex justify-end">
+          <Link href="/u/[username]/edit" as={`/u/${user?.name}/edit`}>
+            <a className={'p-2 rounded border border-pink-400 bg-pink-400 ml-4 flex items-center'}>
+              <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                  Edit Details
+            </a>
+          </Link>
+        </div>
+      )}
+
+      <div className="flex items-center justify-start flex-wrap">
         <div className="flex items-center mb-4">
           {user?.avatar ? (
             <img className={'my-2 bg-white rounded-full w-24 md:w-32 lg:w-40'} src={user.avatar.publicUrlTransformed} alt="" />
@@ -46,14 +57,6 @@ const UserDetails = ({ user }) => {
             <h2 className="font-light text-xl">@{user?.name}</h2>
           </div>
         </div>
-        {canEditUser && (
-          <Link href="/u/[username]/edit" as={`/u/${user?.name}/edit`}>
-            <a className={'p-2 rounded border border-pink-400 bg-pink-400 ml-4 flex items-center'}>
-              <svg className="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" fillRule="evenodd"></path></svg>
-                  Edit Details
-            </a>
-          </Link>
-        )}
       </div>
       {user?.isGlobalBanned && (
         <div className="my-8 font-bold text-red-500 text-2xl uppercase">

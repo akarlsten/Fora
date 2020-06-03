@@ -4,7 +4,7 @@ const Landing = () => {
   return (
     <>
       <div className="flex min-h-screen flex-col justify-between -mt-12">
-        <div className="flex items-center justify-center flex-wrap mt-0 xs:mt-12">
+        <div className="flex items-center justify-center flex-wrap mt-12 lg:mt-24 xl:mt-40">
           <div className="w-full lg:w-2/6">
             <h2 className="text-4xl sm:text-5xl font-display">Create your community and discuss the things you care about.</h2>
             <p className="text-xl sm:text-2xl mt-8">

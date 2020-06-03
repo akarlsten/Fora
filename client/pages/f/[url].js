@@ -139,6 +139,7 @@ const Forum = () => {
           <title>
             Fora | {forum.name}
           </title>
+          <meta name="description" content={`${forum.name} - ${forum.description}`} />
         </Head>
         <ForumContainer page={page} pages={pages} count={count} {...forum} />
       </>

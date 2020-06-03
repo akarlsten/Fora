@@ -16,7 +16,7 @@ const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorS
             <div className={`flex items-center ${!viewingSelf && 'pb-1'}`}>
               {!isBanned && (
                 icon ? (
-                  <img className = "w-10 h-10 rounded-full mr-2" src = { icon.publicUrlTransformed } alt = "" />
+                  <img loading="lazy" className = "w-10 h-10 rounded-full mr-2" src = { icon.publicUrlTransformed } alt = "" />
                 ) : (
                   <svg className = "w-10 h-10 rounded-full mr-2 fill-current" width = "159" height = "159" viewBox = "0 0 159 159" fill = "none" xmlns = "http://www.w3.org/2000/svg">
                     <circle className = {`text-${color}-400`} cx="79.5" cy="79.5" r="79.5" />
