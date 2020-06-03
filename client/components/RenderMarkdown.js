@@ -43,7 +43,7 @@ const RenderMarkdown = ({ content, color }) => {
     }
 
     return (
-      <a href={props.href} target="_blank" rel="nofollow noopener noreferrer" className={`underline text-${color || 'pink'}-500 hover:text-${color || 'pink'}-700 `}>{props.children}</a>
+      <a href={props.href} target="_blank" rel="nofollow noopener noreferrer" className={`underline text-${color || 'pink'}-600 hover:text-${color || 'pink'}-700 `}>{props.children}</a>
     )
   }
 

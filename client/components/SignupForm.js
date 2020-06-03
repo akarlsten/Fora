@@ -59,7 +59,7 @@ const SignupForm = () => {
     onError: () => addToast('Couldn\'t register user, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
-  const onSubmit = ({ name, email, password, image }) => {
+  const onSubmit = ({ nickname: name, username: email, password, image }) => {
     if (Object.keys(formErrors).length === 0) {
       if (image && image[0]) {
         createUser({
@@ -81,7 +81,7 @@ const SignupForm = () => {
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Username</label>
             <input onChange={(e) => {
               if (e.target.value.length >= 1) {
-                triggerValidation('name')
+                triggerValidation('nickname')
               }
             }} ref={register({
               minLength: { value: 1, message: '⚠ Username must have at least 1 character.' },
@@ -97,8 +97,8 @@ const SignupForm = () => {
                 trimmed: value => value.trim().length >= 1 || '⚠ Username must have at least 1 character.'
               }
             })}
-            className="form-input block sm:w-full" name="name" type="text" />
-            {formErrors.name && (<span className="text-sm text-red-600">{formErrors.name.message}</span>)}
+            className="form-input block sm:w-full" name="nickname" type="text" />
+            {formErrors.nickname && (<span className="text-sm text-red-600">{formErrors.nickname.message}</span>)}
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Email</label>
             <div>
               <input ref={register({
@@ -114,8 +114,8 @@ const SignupForm = () => {
                   }
                 }
               })}
-              className="form-input block sm:w-full" name="email" type="text" />
-              {formErrors.email && (<span className="text-sm text-red-600">{formErrors.email.message}</span>)}
+              className="form-input block sm:w-full" id="username" name="username" type="text" />
+              {formErrors.username && (<span className="text-sm text-red-600">{formErrors.username.message}</span>)}
             </div>
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Password</label>
             <div>

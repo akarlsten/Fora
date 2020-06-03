@@ -78,7 +78,7 @@ export default {
   apps: [
     new GraphQLApp({
       authStrategy,
-      apiPath: '/api',
+      apiPath: '/',
       graphiqlPath: '/gql',
       apollo: {
         validationRules: [validation.depthLimit(30)],
