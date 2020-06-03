@@ -111,8 +111,8 @@ const Forum = () => {
 
   const { data, loading, error, refetch } = useQuery(FORUM_QUERY, {
     variables: { url, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'cache-and-network', // maybe cache-and-network
-    pollInterval: 10000 // poll the server for updates every 5 secs
+    fetchPolicy: 'cache-and-network' // maybe cache-and-network
+    // pollInterval: 25000 // poll the server for updates every 10 secs
   })
 
   if (loading && !data) {

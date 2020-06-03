@@ -88,8 +88,8 @@ const Thread = ({ query }) => {
 
   const { data, loading, error, refetch } = useQuery(THREAD_QUERY, {
     variables: { slug: tid, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'cache-and-network', // maybe change to cache-and-network
-    pollInterval: 5000
+    fetchPolicy: 'network-only' // maybe change to cache-and-network
+    // pollInterval: 25000
   })
 
   if (loading && !data) {

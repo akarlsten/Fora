@@ -52,7 +52,7 @@ const ReplyModal = ({ color, threadSlug, threadID, setReplyModal, forumUrl, page
           { pathname: `/f/${forumUrl}/${threadSlug}`, query: { p: page + 1 } })
       }
     },
-    refetchQueries: [{ query: THREAD_QUERY, variables: { threadSlug } }, { query: FORUM_QUERY, variables: { forumUrl } }],
+    refetchQueries: [{ query: THREAD_QUERY, variables: { slug: threadSlug, first: perPage, skip: page * perPage - perPage } }, { query: FORUM_QUERY, variables: { forumUrl } }],
     onError: () => addToast('Couldn\'t create post, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true }),
     update (cache) {
       const { _postsMeta: { count } } = cache.readFragment({ id: `Thread:${threadID}`, fragment: POSTS_FRAGMENT })
