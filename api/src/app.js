@@ -23,7 +23,7 @@ const dbUrl = process.env.NODE_ENV === 'production' ? process.env.MONGODB_ATLAS 
 
 const keystone = new Keystone({
   name: PROJECT_NAME,
-  adapter: new Adapter({ mongoUri: dbUrl }),
+  adapter: new Adapter({ mongoUri: dbUrl, dbName: PROJECT_NAME }),
   sessionStore: new MongoStore({ url: dbUrl }),
   cookieSecret: process.env.COOKIE_SECRET,
   onConnect: initialiseData,
