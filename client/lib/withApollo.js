@@ -5,6 +5,8 @@ import { createUploadLink } from 'apollo-upload-client'
 import withApollo from 'next-with-apollo'
 import { devEndpoint, testEndpoint, prodEndpoint } from 'config'
 
+const endpoint = process.env.ENDPOINT === 'test' ? testEndpoint : process.env.NODE_ENV === 'production' ? prodEndpoint : devEndpoint
+console.log(endpoint)
 export function createClient ({ headers, initialState } = {}) {
   return new ApolloClient({
     link: ApolloLink.from([
@@ -25,7 +27,7 @@ export function createClient ({ headers, initialState } = {}) {
       }),
       // this uses apollo-link-http under the hood, so all the options here come from that package
       createUploadLink({
-        uri: process.env.NODE_ENV === 'development' ? devEndpoint : process.env.NODE_ENV === 'test' ? testEndpoint : prodEndpoint,
+        uri: endpoint,
         fetchOptions: {
           credentials: 'include'
         },

@@ -6,7 +6,8 @@
     "dev": "next dev -p 8080",
     "build": "next build",
     "start": "next start -p 8080",
-    "test-server": "next NODE_ENV=test start -p 8080",
+    "build:test-server": "ENDPOINT=test next build",
+    "test-server": "ENDPOINT=test next start -p 8080",
     "cypress:open": "cypress open"
   },
   "dependencies": {
