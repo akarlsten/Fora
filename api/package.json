@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development keystone dev --entry src/index.js",
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
-    "testing:build": "cross-env NODE_ENV=test keystone build --entry src/index.js",
-    "testing:start": "cross-env NODE_ENV=test keystone start --port 4000 --entry src/index.js",
+    "test-server": "cross-env NODE_ENV=development keystone dev --port 4000 --entry src/index.js",
     "start": "cross-env NODE_ENV=production keystone start --entry src/index.js",
     "test": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --verbose",
     "test-watch": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --watch"
