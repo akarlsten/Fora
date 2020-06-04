@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useQuery } from '@apollo/client'
@@ -86,11 +86,18 @@ const Thread = ({ query }) => {
   const page = +p || 1
   const perPage = user?.postsPerPage || postsPerPage
 
-  const { data, loading, error, refetch } = useQuery(THREAD_QUERY, {
+  const { data, loading, error } = useQuery(THREAD_QUERY, {
     variables: { slug: tid, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'network-only' // maybe change to cache-and-network
-    // pollInterval: 25000
+    fetchPolicy: 'network-only', // maybe change to cache-and-network
+    pollInterval: 10000
   })
+
+  // useEffect(() => {
+  //   // startPolling(10000)
+  //   return () => {
+  //     stopPolling()
+  //   }
+  // }, [])
 
   if (loading && !data) {
     return <LoadingSpinner />

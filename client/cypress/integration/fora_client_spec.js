@@ -1,10 +1,12 @@
-const testUser = { email: 'tester@test.com', password: 'awoo1234' }
+const time = Math.floor(new Date().getTime() / 10000)
+const testUser = { email: `${time}@test.com`, password: 'awoo1234' }
+
 describe('Landing Page and Logging In', () => {
   Cypress.Cookies.defaults({
     whitelist: 'keystone.sid'
   })
   before(() => {
-    cy.request('POST', 'http://localhost:3000', { operationName: 'CREATE_USER', variables: { data: { name: 'Tester', displayName: 'tester', email: testUser.email, password: testUser.password } }, query: 'mutation CREATE_USER($data: UserCreateInput!) {\n  createUser(data: $data) {\n    id\n    __typename\n  }\n}\n' })
+    cy.request('POST', 'http://localhost:3000', { operationName: 'CREATE_USER', variables: { data: { name: 'Tester', displayName: time, email: testUser.email, password: testUser.password } }, query: 'mutation CREATE_USER($data: UserCreateInput!) {\n  createUser(data: $data) {\n    id\n    __typename\n  }\n}\n' })
   })
 
   // beforeEach(() => {

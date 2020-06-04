@@ -15,7 +15,7 @@ import Error from 'components/Error'
 import BackToForum from 'components/BackToForum'
 import MarkdownHelp from 'components/MarkdownHelp'
 
-import { FORUM_QUERY } from 'pages/f/[url]'
+import { DETAILED_FORUM_QUERY } from 'pages/f/[url]'
 
 const CREATE_THREAD = gql`
 mutation CREATE_THREAD($forumID: ID!, $title: String!, $post: String!) {
@@ -38,7 +38,7 @@ const ThreadForm = () => {
   const { register, handleSubmit, errors: formErrors } = useForm()
 
   const { url } = router.query
-  const { data, loading, error } = useQuery(FORUM_QUERY, {
+  const { data, loading, error } = useQuery(DETAILED_FORUM_QUERY, {
     variables: { url }
   })
 
@@ -55,7 +55,7 @@ const ThreadForm = () => {
       addToast('Thread created!', { appearance: 'success' })
       router.push('/f/[url]/[tid]', `/f/${url}/${threadUrl}`)
     },
-    refetchQueries: [{ query: FORUM_QUERY, variables: { url } }],
+    refetchQueries: [{ query: DETAILED_FORUM_QUERY, variables: { url } }],
     onError: () => addToast('Couldn\'t create thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 

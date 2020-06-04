@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
@@ -12,8 +12,8 @@ import LoadingSpinner from 'components/LoadingSpinner'
 
 import { threadsPerPage } from 'config'
 
-export const FORUM_QUERY = gql`
-query FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage}) {
+export const DETAILED_FORUM_QUERY = gql`
+query DETAILED_FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage}) {
   allForums(where: {
     url: $url
   }) {
@@ -109,11 +109,18 @@ const Forum = () => {
   const page = +p || 1
   const perPage = user?.postsPerPage || threadsPerPage
 
-  const { data, loading, error, refetch } = useQuery(FORUM_QUERY, {
+  const { data, loading, error } = useQuery(DETAILED_FORUM_QUERY, {
     variables: { url, first: perPage, skip: page * perPage - perPage },
-    fetchPolicy: 'cache-and-network' // maybe cache-and-network
-    // pollInterval: 25000 // poll the server for updates every 10 secs
+    fetchPolicy: 'cache-and-network', // maybe cache-and-network
+    pollInterval: 10000 // poll the server for updates every 10 secs
   })
+
+  // useEffect(() => {
+  //   // startPolling(10000)
+  //   return () => {
+  //     stopPolling()
+  //   }
+  // }, [])
 
   if (loading && !data) {
     return <LoadingSpinner />

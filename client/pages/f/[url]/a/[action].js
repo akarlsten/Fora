@@ -1,10 +1,14 @@
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
+import dynamic from 'next/dynamic'
 
 import PleaseSignIn from 'components/PleaseSignIn'
 import NotFound from 'components/404'
-import EditForum from 'components/EditForum'
-import ThreadForm from 'components/ThreadForm'
+// import EditForum from 'components/EditForum'
+// import ThreadForm from 'components/ThreadForm'
+
+const EditForum = dynamic(() => import('components/EditForum'))
+const ThreadForm = dynamic(() => import('components/ThreadForm'))
 
 const Action = () => {
   const router = useRouter()
