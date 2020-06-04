@@ -7,9 +7,9 @@ export default async keystone => {
   const users = await keystone.lists.User.adapter.findAll()
   if (!users.length) {
     // Drop the connected database to ensure no existing collections remain
-    Object.values(keystone.adapters).forEach(async adapter => {
-      await adapter.dropDatabase()
-    })
+    // Object.values(keystone.adapters).forEach(async adapter => {
+    //   await adapter.dropDatabase()
+    // })
     console.log('! Creating initial data...')
     // // Count existing users
     // const {
@@ -30,7 +30,7 @@ export default async keystone => {
 
     const { errors } = await keystone.executeQuery(
       `mutation initialUser($password: String, $email: String) {
-            createUser(data: {name: "Admin", email: $email, isAdmin: true, password: $password}) {
+            createUser(data: {name: "admin", displayName: "The Admin", email: $email, isAdmin: true, password: $password}) {
               id
             }
           }`,
