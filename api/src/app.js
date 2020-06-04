@@ -76,9 +76,16 @@ console.log('Investigate this later!!')
 export default {
   keystone,
   apps: [
+    new AdminUIApp({
+      enableDefaultRoute: false,
+      apiPath: '/',
+      adminPath: '/admin',
+      authStrategy,
+      isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
+    }),
     new GraphQLApp({
       authStrategy,
-      apiPath: '/api',
+      apiPath: '/',
       graphiqlPath: '/gql',
       apollo: {
         validationRules: [validation.depthLimit(30)],
@@ -86,13 +93,6 @@ export default {
           privateVariables: ['password']
         }
       }
-    }),
-    new AdminUIApp({
-      enableDefaultRoute: false,
-      apiPath: '/api',
-      adminPath: '/admin',
-      authStrategy,
-      isAccessAllowed: ({ authentication: { item: user, listKey: list } }) => !!user && !!user.isAdmin
     })
   ], // uncomment this in production when behind nginx
   configureExpress: app => {
