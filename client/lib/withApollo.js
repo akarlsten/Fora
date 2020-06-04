@@ -3,7 +3,7 @@ import { onError } from '@apollo/link-error'
 import { getDataFromTree } from '@apollo/react-ssr'
 import { createUploadLink } from 'apollo-upload-client'
 import withApollo from 'next-with-apollo'
-import { endpoint, prodEndpoint } from 'config'
+import { devEndpoint, testEndpoint, prodEndpoint } from 'config'
 
 export function createClient ({ headers, initialState } = {}) {
   return new ApolloClient({
@@ -25,7 +25,7 @@ export function createClient ({ headers, initialState } = {}) {
       }),
       // this uses apollo-link-http under the hood, so all the options here come from that package
       createUploadLink({
-        uri: process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' ? endpoint : prodEndpoint,
+        uri: process.env.NODE_ENV === 'development' ? devEndpoint : process.env.NODE_ENV === 'test' ? testEndpoint : prodEndpoint,
         fetchOptions: {
           credentials: 'include'
         },
