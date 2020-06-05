@@ -1,11 +1,13 @@
 import { useQuery, gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 
 import UserDetails from 'components/UserDetails'
 import LoadingSpinner from 'components/LoadingSpinner'
-import Error from 'components/Error'
-import NotFound from 'components/404'
+
+const NotFound = dynamic(() => import('components/404'))
+const Error = dynamic(() => import('components/Error'))
 
 const USER_QUERY = gql`
 query USER_QUERY($username: String!) {

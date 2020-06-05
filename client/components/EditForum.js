@@ -76,6 +76,7 @@ mutation UPDATE_COLOR_DESC($forumID: ID!, $data: ForumUpdateInput!) {
     id
     description
     colorScheme
+    isBanned
   }
 }
 `
@@ -119,6 +120,12 @@ const EditForum = () => {
     }
   }
 
+  const handleBan = (forumIsBanned) => {
+    updateDescrColor({
+      variables: { forumID: data.allForums[0].id, data: { isBanned: !forumIsBanned } }
+    })
+  }
+
   if (loading) {
     return <LoadingSpinner />
   } else if (data?.allForums[0]) {
@@ -154,7 +161,19 @@ const EditForum = () => {
                 {forum?.colorScheme === 'black' && !mutationLoading ? (
                   <input className={'bg-gray-600 mr-4 text-white text-lg font-medium hover:bg-gray-700 p-2 rounded'} type="submit" value="Save Changes" />
                 ) : !mutationLoading ? (
-                  <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 font-medium text-white text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
+                  <>
+                    <input className = {`bg-${forum.colorScheme || 'pink'}-400 mr-4 font-medium text-white text-lg hover:bg-${forum.colorScheme || 'pink'}-700 p-2 rounded`} type="submit" value="Save Changes" />
+                    {loggedIn?.isAdmin && (
+                    forum?.isBanned ? (
+                      <button onClick={() => handleBan(forum?.isBanned)} className={'bg-green-400 mr-4 font-medium text-white text-lg hover:bg-green-700 p-2 rounded'}>
+                      Unban Forum
+                      </button>
+                    ) : (
+                      <button onClick={() => handleBan(forum?.isBanned)} className={ 'bg-red-400 mr-4 font-medium text-white text-lg hover:bg-red-700 p-2 rounded' } value = "Ban Forum">
+                      Ban Forum
+                      </button>
+                    ))}
+                  </>
                 ) : (
                   <>
                     <input className={'border border-gray-500 mr-4 text-gray-500 font-medium text-lg p-2 rounded'} type="submit" value="Saving.." />
