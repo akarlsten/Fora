@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
@@ -19,6 +19,7 @@ const FORUM_NAME_QUERY = gql`
 query FORUM_NAME_QUERY($name: String!) {
   allForums(where: {name_i: $name}) {
     id
+    name
   }
 }
 `
@@ -35,8 +36,6 @@ mutation CREATE_FORUM($data: ForumCreateInput!) {
 const CreateForum = () => {
   const router = useRouter()
   const { addToast } = useToasts()
-
-  const [nameInput, setNameInput] = useState('')
 
   const [forumNameCheck, { data: nameData }] = useLazyQuery(FORUM_NAME_QUERY)
   const { register, handleSubmit, errors: formErrors, watch, triggerValidation, getValues } = useForm()
@@ -64,6 +63,14 @@ const CreateForum = () => {
     }
   }
 
+  const watchName = watch('name')
+
+  useEffect(() => {
+    if (watchName?.length >= 1) {
+      triggerValidation('name')
+    }
+  }, [nameData])
+
   // TODO: add slug preview when typing name
 
   return (
@@ -75,8 +82,9 @@ const CreateForum = () => {
             <div className="w-full px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description">Name</label>
               <input onChange={(e) => {
-                setNameInput(e.target.value.replace(/\W/g, ''))
-                if (e.target.value.length >= 1) {
+                // setNameInput(e.target.value.replace(/\W/g, ''))
+                e.target.value = e.target.value.replace(/\W/g, '')
+                if (e.target.value.replace(/\W/g, '').length >= 1) {
                   triggerValidation('name')
                 }
               }} ref={register({
@@ -86,13 +94,14 @@ const CreateForum = () => {
                 validate: {
                   notTaken: async value => {
                     forumNameCheck({ variables: { name: value } })
+                    console.log(nameData?.allForums?.length)
                     if (nameData?.allForums?.length > 0) {
                       return '⚠ A forum with this name already exists.'
                     }
                   },
                   trimmed: value => value.trim().length >= 1 || '⚠ Forum name must have at least 1 character.'
                 }
-              })} value={nameInput} className="form-input block w-full" name="name" type="text" />
+              })} className="form-input block w-full" name="name" type="text" />
               {formErrors.name && (<span className="text-sm text-red-600">{formErrors.name.message}</span>)}
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-4 mb-2" htmlFor="description">Description</label>
               <textarea rows="4" ref={register({ minLength: 1, maxLength: 140 })} className="resize-none form-textarea block w-full" name="description" type="text" />

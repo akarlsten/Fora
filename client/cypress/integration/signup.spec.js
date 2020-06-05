@@ -52,13 +52,13 @@ describe('Signup', () => {
     cy.get(':nth-child(8) > .text-sm').should('contain', 'passwords do not match')
   })
 
-  it('shouldnt allow us to use weak passwords', () => {
+  it('shouldnt allow us to use weak/common passwords', () => {
     cy.visit('/signup')
     cy.get('input[name=nickname]').type(time)
     cy.get('input[name=username]').type(`${time}@test.com`)
     cy.get('input[name=password]').type('password')
     cy.get('input[name=confirm]').type('password{enter}')
-    cy.get(':nth-child(8) > .text-sm').should('contain', 'passwords do not match')
+    cy.get('.react-toast-notifications__toast__content').should('contain', 'password you have chosen is too common')
   })
 
   it('should let us sign up', () => {

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useUser } from 'hooks/useUser'
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
 import gql from 'graphql-tag'
@@ -133,6 +133,21 @@ const EditUser = ({ user }) => {
   if (!user || !loggedIn) {
     router.push('/u/[username]', `/u/${user?.name}`)
   }
+
+  const watchUsername = watch('nickname')
+  const watchEmail = watch('username')
+
+  useEffect(() => {
+    if (watchUsername?.length >= 1) {
+      triggerValidation('nickname')
+    }
+  }, [nameData])
+
+  useEffect(() => {
+    if (watchEmail?.length >= 1) {
+      triggerValidation('useername')
+    }
+  }, [emailData])
 
   return (
     <>

@@ -18,7 +18,7 @@ query EMAIL_QUERY($email: String!) {
 `
 const USERNAME_QUERY = gql`
 query USERNAME_QUERY($name: String!) {
-  allUsers(where: {name: $name }) {
+  allUsers(where: {name_i: $name }) {
     id
   }
 }
@@ -77,6 +77,22 @@ const SignupForm = () => {
       }
     }
   }
+
+  const watchUsername = watch('nickname')
+  const watchEmail = watch('username')
+
+  useEffect(() => {
+    if (watchUsername?.length >= 1) {
+      triggerValidation('nickname')
+    }
+  }, [nameData])
+
+  useEffect(() => {
+    if (watchEmail?.length >= 1) {
+      triggerValidation('useername')
+    }
+  }, [emailData])
+
   return (
     <div className="container mx-auto flex flex-col items-center">
       <h1 className="text-3xl mb-4 text-gray-700">Sign up to start posting!</h1>
