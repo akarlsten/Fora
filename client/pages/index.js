@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import { useEffect } from 'react'
-import Link from 'next/link'
 
 import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
@@ -12,7 +11,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import Error from 'components/Error'
 import CreateForumButton from 'components/CreateForumButton'
 
-import { createClient } from 'lib/withApollo'
+// import { createClient } from 'lib/withApollo'
 
 export const FORUM_QUERY = gql`
 query FORUM_QUERY {

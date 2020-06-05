@@ -1,6 +1,5 @@
 import React from 'react'
 import { formatDistanceToNow, parseISO } from 'date-fns'
-import RenderMarkdown from 'components/RenderMarkdown'
 import UserBadge from 'components/UserBadge'
 
 const ForumSidebar = ({ name, icon, color, description, owner, createdAt, moderators }) => {

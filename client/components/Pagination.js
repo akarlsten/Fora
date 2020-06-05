@@ -1,6 +1,4 @@
 import React from 'react'
-import gql from 'graphql-tag'
-import { Query, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 

@@ -6,7 +6,7 @@ import withApollo from 'next-with-apollo'
 import { devEndpoint, testEndpoint, prodEndpoint } from 'config'
 
 const endpoint = process.env.ENDPOINT === 'test' ? testEndpoint : process.env.NODE_ENV === 'production' ? prodEndpoint : devEndpoint
-console.log(endpoint)
+
 export function createClient ({ headers, initialState } = {}) {
   return new ApolloClient({
     link: ApolloLink.from([

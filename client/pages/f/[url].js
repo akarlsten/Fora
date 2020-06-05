@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import gql from 'graphql-tag'
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 
 import { useUser } from 'hooks/useUser'
 import ForumContainer from 'components/ForumContainer'
-import NotFound from 'components/404'
-import Error from 'components/Error'
+
 import LoadingSpinner from 'components/LoadingSpinner'
 
 import { threadsPerPage } from 'config'
+
+const NotFound = dynamic(() => import('components/404'))
+const Error = dynamic(() => import('components/Error'))
 
 export const DETAILED_FORUM_QUERY = gql`
 query DETAILED_FORUM_QUERY($url: String, $skip: Int = 0, $first: Int = ${threadsPerPage}) {

@@ -1,18 +1,13 @@
 import Link from 'next/link'
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 
 import { useTheme } from 'context/ColorContext'
 import { useUser } from 'hooks/useUser'
-import PleaseSignIn from './PleaseSignIn'
-import Signin from 'components/Signin'
 import ForumList from 'components/ForumList'
 import ForumItem from 'components/ForumItem'
-import LoadingSpinner from 'components/LoadingSpinner'
 import PreviousPosts from 'components/PreviousPosts'
 
 const UserDetails = ({ user }) => {
-  const router = useRouter()
   const { setTheme } = useTheme()
   const me = useUser()
 
@@ -40,7 +35,6 @@ const UserDetails = ({ user }) => {
           </Link>
         </div>
       )}
-
       <div className="flex items-center justify-start flex-wrap">
         <div className="flex items-center mb-4">
           {user?.avatar ? (

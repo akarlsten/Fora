@@ -1,11 +1,10 @@
 import { useQuery, gql } from '@apollo/client'
+import dynamic from 'next/dynamic'
 
-import { useUser } from 'hooks/useUser'
-import PleaseSignIn from 'components/PleaseSignIn'
 import LoadingSpinner from 'components/LoadingSpinner'
-import Error from 'components/Error'
-import Signin from 'components/Signin'
 import EditUser from 'components/EditUser'
+
+const Error = dynamic(() => import('components/Error'))
 
 export const DETAILED_USER_QUERY = gql`
   query {

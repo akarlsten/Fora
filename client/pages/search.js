@@ -126,8 +126,6 @@ const Search = () => {
     const threads = data.allThreads.filter(thread => thread.forum)
     const users = data.allUsers
 
-    console.log(data)
-
     return (
       <>
         <Head>

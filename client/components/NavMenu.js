@@ -1,7 +1,10 @@
-import UserBadge from 'components/UserBadge'
-import SignoutButton from 'components/SignoutButton'
+import dynamic from 'next/dynamic'
+
 import SigninButton from 'components/SigninButton'
 import SignupButton from 'components/SignupButton'
+
+const SignoutButton = dynamic(() => import('components/SignoutButton'))
+const UserBadge = dynamic(() => import('components/UserBadge'))
 
 const NavMenu = ({ loggedIn, setSidebar }) => {
   return (

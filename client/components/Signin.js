@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from 'react'
-import { useMutation, Mutation } from '@apollo/client'
+import React, { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import gql from 'graphql-tag'
 import Link from 'next/link'

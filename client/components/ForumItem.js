@@ -1,12 +1,10 @@
 import { format } from 'd3-format'
 import Link from 'next/link'
-import { useUser } from 'hooks/useUser'
 
 import SubscribeButton from 'components/SubscribeButton'
 
 const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorScheme, url, isBanned, viewingSelf }) => {
   const color = colorScheme || 'pink'
-  const loggedIn = useUser()
 
   return (
     <Link href="/f/[url]" as={`/f/${url}`}>

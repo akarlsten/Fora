@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import NProgress from 'nprogress'
 import Link from 'next/link'
 import Router from 'next/router'
+import dynamic from 'next/dynamic'
+
 import { useUser } from 'hooks/useUser'
 import SigninButton from 'components/SigninButton'
 import SignupButton from 'components/SignupButton'
-import SignoutButton from 'components/SignoutButton'
-import UserBadge from 'components/UserBadge'
 import NavSearch from 'components/NavSearch'
 import NavMenu from 'components/NavMenu'
+
+const SignoutButton = dynamic(() => import('components/SignoutButton'))
+const UserBadge = dynamic(() => import('components/UserBadge'))
 
 Router.onRouteChangeStart = () => {
   NProgress.start()

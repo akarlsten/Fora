@@ -1,21 +1,17 @@
-import { useForm, ErrorMessage } from 'react-hook-form'
-import { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useLazyQuery, useQuery, useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
 import gql from 'graphql-tag'
-import Link from 'next/link'
 import Loader from 'react-loader-spinner'
 
 import { useTheme } from 'context/ColorContext'
 import colorConverter from 'lib/colorConverter'
 
-import BackToForum from 'components/BackToForum'
 import ColorSelector from 'components/ColorSelector'
 import ImageSelector from 'components/ImageSelector'
 import PleaseSignIn from 'components/PleaseSignIn'
-import LoadingSpinner from 'components/LoadingSpinner'
-import Error from 'components/Error'
 
 import { FORUM_QUERY, SUBSCRIBED_QUERY } from 'pages/index'
 
@@ -38,9 +34,7 @@ mutation CREATE_FORUM($data: ForumCreateInput!) {
 
 const CreateForum = () => {
   const router = useRouter()
-  const { setTheme } = useTheme()
   const { addToast } = useToasts()
-  const { url } = router.query
 
   const [nameInput, setNameInput] = useState('')
 

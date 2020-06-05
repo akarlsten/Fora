@@ -1,7 +1,6 @@
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import Link from 'next/link'
 
-import ThreadItem from 'components/ThreadItem'
 import RenderMarkdown from 'components/RenderMarkdown'
 
 const PostWithThread = ({ post, thread, forum, perPage }) => {

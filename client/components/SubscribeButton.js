@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
 import gql from 'graphql-tag'
 import { useToasts } from 'react-toast-notifications'
 

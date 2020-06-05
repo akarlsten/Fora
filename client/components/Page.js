@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Meta from 'components/Meta'
 import Header from 'components/Header'

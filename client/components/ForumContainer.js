@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 
 import ThreadList from 'components/ThreadList'

@@ -1,6 +1,6 @@
-import Select, { components } from 'react-select'
-import Async, { makeAsyncSelect } from 'react-select/async'
-import { useState, useEffect } from 'react'
+import { components } from 'react-select'
+import Async from 'react-select/async'
+import { useState } from 'react'
 import { useLazyQuery, useMutation, gql } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
 

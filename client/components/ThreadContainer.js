@@ -1,18 +1,19 @@
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useMutation, gql } from '@apollo/client'
 import { useToasts } from 'react-toast-notifications'
 import { useForm } from 'react-hook-form'
+import dynamic from 'next/dynamic'
 
 import { useUser } from 'hooks/useUser'
 import { useTheme } from 'context/ColorContext'
 import PostList from 'components/PostList'
-import ReplyModal from 'components/ReplyModal'
 import Pagination from 'components/Pagination'
 import BackToForum from 'components/BackToForum'
 
 import { THREAD_QUERY } from 'pages/f/[url]/[tid]'
 import { useRouter } from 'next/router'
+
+const ReplyModal = dynamic(() => import('components/ReplyModal'))
 
 const UPDATE_THREAD = gql`
 mutation UPDATE_THREAD($id: ID!, $data: ThreadUpdateInput!) {
@@ -172,7 +173,7 @@ const ThreadContainer = (props) => {
           </div>
         )}
         {replyModalOpen && (
-          <div className="flex justify-end my-4">
+          <div className="flex justify-end">
             <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-200 ml-4 flex text-${forum.colorScheme || 'pink'}-300 items-center`}>
               <svg className="h-6 w-6 fill-current mr-1" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0)">
@@ -223,7 +224,7 @@ const ThreadContainer = (props) => {
       )}
       {replyModalOpen && (
         <>
-          <div className="flex justify-end my-4">
+          <div className="flex justify-end">
             <button onClick={() => setReplyModal(prev => !prev)} className={`p-2 rounded border border-${forum.colorScheme || 'pink'}-200 ml-4 flex text-${forum.colorScheme || 'pink'}-300 items-center`}>
               <svg className="h-6 w-6 fill-current mr-1" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0)">

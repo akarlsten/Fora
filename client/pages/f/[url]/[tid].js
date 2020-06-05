@@ -4,13 +4,14 @@ import Head from 'next/head'
 import { useQuery } from '@apollo/client'
 import { useUser } from '../../../hooks/useUser'
 import gql from 'graphql-tag'
-
-import NotFound from 'components/404'
-import Error from 'components/Error'
+import dynamic from 'next/dynamic'
 import LoadingSpinner from 'components/LoadingSpinner'
 import ThreadContainer from 'components/ThreadContainer'
 
 import { postsPerPage } from 'config'
+
+const NotFound = dynamic(() => import('components/404'))
+const Error = dynamic(() => import('components/Error'))
 
 export const THREAD_QUERY = gql`
 query THREAD_QUERY($slug: String, $skip: Int = 0, $first: Int = ${postsPerPage}) {
