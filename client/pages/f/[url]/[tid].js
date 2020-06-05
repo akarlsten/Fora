@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useQuery } from '@apollo/client'
@@ -90,7 +90,7 @@ const Thread = ({ query }) => {
   const { data, loading, error } = useQuery(THREAD_QUERY, {
     variables: { slug: tid, first: perPage, skip: page * perPage - perPage },
     fetchPolicy: 'network-only', // maybe change to cache-and-network
-    pollInterval: 10000
+    pollInterval: process.title === 'browser' && 10000
   })
 
   // useEffect(() => {

@@ -115,7 +115,7 @@ const Forum = () => {
   const { data, loading, error } = useQuery(DETAILED_FORUM_QUERY, {
     variables: { url, first: perPage, skip: page * perPage - perPage },
     fetchPolicy: 'cache-and-network', // maybe cache-and-network
-    pollInterval: 10000 // poll the server for updates every 10 secs
+    pollInterval: process.title === 'browser' && 10000 // poll the server for updates every 10 secs
   })
 
   // useEffect(() => {

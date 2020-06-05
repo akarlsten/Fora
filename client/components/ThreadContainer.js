@@ -22,6 +22,7 @@ mutation UPDATE_THREAD($id: ID!, $data: ThreadUpdateInput!) {
     title
     url
     state
+    isStickied
   }
 }
 `
@@ -38,7 +39,8 @@ const ThreadContainer = (props) => {
     pages,
     perPage,
     state,
-    isDeleted
+    isDeleted,
+    isStickied
   } = props
 
   const router = useRouter()
@@ -84,10 +86,23 @@ const ThreadContainer = (props) => {
     onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
-  const handleClick = () => {
+  const [updateSticky, { loading: stickyLoading }] = useMutation(UPDATE_THREAD, {
+    refetchQueries: [{ query: THREAD_QUERY, variables: { slug: url, first: perPage, skip: page * perPage - perPage } }],
+    onCompleted: ({ updateThread: { isStickied: stickyState } }) => {
+      stickyState ? addToast('Thread stickied!', { appearance: 'success' })
+        : addToast('Thread unstickied!', { appearance: 'success' })
+    },
+    onError: () => addToast('Couldn\'t update thread, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+  })
+
+  const handleOpenClose = () => {
     const operation = state === 'opened' ? 'closed' : 'opened'
 
     updateThreadState({ variables: { id: threadID, data: { state: operation } } })
+  }
+
+  const handleSticky = () => {
+    updateSticky({ variables: { id: threadID, data: { isStickied: !isStickied } } })
   }
 
   const onSubmit = ({ title }) => {
@@ -142,15 +157,26 @@ const ThreadContainer = (props) => {
               <div className="ml-4">
                 <a onClick={() => setEditingTitle(true)} className={`cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-${forum.colorScheme}-400 hover:bg-${forum.colorScheme}-600`}>Edit</a>
               </div>
-              {state === 'opened' ? (
-                <div className="ml-4">
-                  <a onClick={handleClick} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>Close Thread</a>
-                </div>
-              ) : (
-                <div className="ml-4">
-                  <a onClick={handleClick} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Reopen Thread</a>
-                </div>
-              )}
+              <div className="flex flex-col space-y-2 items-center ml-4">
+                {isStickied ? (
+                  <div>
+                    <a onClick={handleSticky} disabled={stickyLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-orange-400 hover:bg-orange-600'}>Unstick Thread</a>
+                  </div>
+                ) : (
+                  <div>
+                    <a onClick={handleSticky} disabled={stickyLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Sticky Thread</a>
+                  </div>
+                )}
+                {state === 'opened' ? (
+                  <div>
+                    <a onClick={handleOpenClose} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-red-400 hover:bg-red-600'}>Close Thread</a>
+                  </div>
+                ) : (
+                  <div>
+                    <a onClick={handleOpenClose} disabled={stateLoading} className={'cursor-pointer px-2 -mr-2 font-bold py-1 rounded bg-green-400 hover:bg-green-600'}>Reopen Thread</a>
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>
