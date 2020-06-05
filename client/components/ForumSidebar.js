@@ -5,7 +5,7 @@ import UserBadge from 'components/UserBadge'
 const ForumSidebar = ({ name, icon, color, description, owner, createdAt, moderators }) => {
   return (
     <div className={`px-4 w-72 lg:w-full flex flex-col bg-white rounded p-4 lg:ml-4 border border-${color || 'pink'}-200`}>
-      <div className="flex items-center">
+      <div className="flex items-center flex-wrap">
         {icon ? (
           <img className="w-8 h-8 rounded-full mr-2" src={icon.publicUrlTransformed} alt="" />
         ) : (
@@ -30,8 +30,8 @@ const ForumSidebar = ({ name, icon, color, description, owner, createdAt, modera
           </>
         )}
       </div>
-      <div className="flex items-center text-xs flex-wrap">
-        <p className="font-semibold mr-2 lg:mr-0 lg:mb-2">Created by:</p>
+      <div className="flex items-center lg:items-start lg:flex-col text-xs flex-wrap">
+        <p className="lg:self-start font-semibold mr-2 lg:mb-2">Created by</p>
         <div className="flex flex-col items-center">
           <UserBadge color={color} name={owner?.name} displayName={owner?.displayName} avatar={owner?.avatar} isAdmin={owner?.isAdmin} />
           {createdAt && (
@@ -45,7 +45,7 @@ const ForumSidebar = ({ name, icon, color, description, owner, createdAt, modera
 
       {moderators?.length > 0 && (
         <div className="flex flex-col self-start mt-4 space-y-2">
-          <p className="font-bold">Moderators</p>
+          <p className="font-semibold text-xs">Moderators</p>
           {moderators.map(mod => (
             <UserBadge color={color} key={mod.id} name={mod?.name} displayName={mod?.displayName} avatar={mod?.avatar} isAdmin={mod?.isAdmin} />
           ))}

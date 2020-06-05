@@ -98,7 +98,7 @@ const SubscribeButton = ({ forumID, color, small }) => {
 
   const subscriptions = data?.authenticatedUser?.subscriptions
 
-  return subscriptions.some(sub => sub.id === forumID) ? (
+  return subscriptions?.some(sub => sub.id === forumID) ? (
     <button onClick={async e => {
       e.preventDefault()
       await setUnsubscribed()
@@ -110,7 +110,7 @@ const SubscribeButton = ({ forumID, color, small }) => {
     <button onClick={async e => {
       e.preventDefault()
       await setSubscribed()
-    }} className={`p-2 rounded border border-${color || 'pink'}-400 bg-${color || 'pink'}-400 ml-4 flex items-center`}>
+    }} className={`${small ? 'p-1 text-sm' : 'p-2 ml-4'} rounded border border-${color || 'pink'}-400 bg-${color || 'pink'}-400 flex items-center`}>
       <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" fillRule="evenodd"></path></svg>
     Subscribe</button>
   )

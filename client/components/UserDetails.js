@@ -7,7 +7,7 @@ import ForumList from 'components/ForumList'
 import ForumItem from 'components/ForumItem'
 import PreviousPosts from 'components/PreviousPosts'
 
-const UserDetails = ({ user }) => {
+const UserDetails = ({ user, moderatorOf }) => {
   const { setTheme } = useTheme()
   const me = useUser()
 
@@ -22,6 +22,8 @@ const UserDetails = ({ user }) => {
   //   router.push('/signin')
   //   return <LoadingSpinner />
   // }
+
+  const subsFiltered = moderatorOf.length >= 1 ? user?.subscriptions.filter(sub => !moderatorOf.some(mod => mod.id === sub.id)) : user?.subscriptions
 
   return (
     <div className="flex flex-col max-w-full">
@@ -60,12 +62,22 @@ const UserDetails = ({ user }) => {
       <div>
         <p>{user?.id === me?.id ? 'You have' : 'User has'}: <span className="font-bold">{user?._postsMeta.count} posts</span></p>
       </div>
-      {viewingSelf && user?.subscriptions?.length >= 1 && (
+      {moderatorOf?.length >= 1 && (
+        <div className="flex flex-col mt-10">
+          <h1 className="text-2xl mb-4">Moderator of</h1>
+          <ForumList>
+            {moderatorOf.map(sub => (
+              <ForumItem key={sub.id} url={sub.url} small={true} viewingSelf={viewingSelf} {...sub} />
+            ))}
+          </ForumList>
+        </div>
+      )}
+      {canEditUser && subsFiltered.length >= 1 && (
         <div className="flex flex-col mt-10">
           <h1 className="text-2xl mb-4">Your subscriptions</h1>
           <ForumList>
-            {user?.subscriptions.map(sub => (
-              <ForumItem key={sub.id} url={sub.url} viewingSelf={viewingSelf} {...sub} />
+            {subsFiltered.map(sub => (
+              <ForumItem key={sub.id} url={sub.url} small={true} viewingSelf={viewingSelf} {...sub} />
             ))}
           </ForumList>
         </div>

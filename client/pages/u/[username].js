@@ -43,6 +43,32 @@ query USER_QUERY($username: String!) {
       count
     }
   }
+  allForums(where: {
+    OR: [
+      {moderators_some: {name: $username}},
+      {owner: {name: $username}}
+    ]}) {
+      id
+      name
+      url
+      colorScheme
+      owner {
+        id
+        name
+      }
+      moderators {
+        id
+        name
+      }
+      icon {
+        publicUrlTransformed(transformation: {
+          width:"200",
+            height:"200",
+            crop:"fill",
+            gravity:"center"
+          })
+      }
+  }
 }
 `
 
@@ -56,6 +82,7 @@ const UserDetailsPage = () => {
     return <LoadingSpinner />
   } else if (data) {
     const user = data.allUsers[0]
+    const forums = data.allForums
     return (
       <>
         <Head>
@@ -63,7 +90,7 @@ const UserDetailsPage = () => {
           Fora | @{user.name}
           </title>
         </Head>
-        <UserDetails user={user} />
+        <UserDetails user={user} moderatorOf={forums} />
       </>
     )
   } else if (error) {

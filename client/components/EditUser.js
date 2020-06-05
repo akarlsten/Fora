@@ -121,9 +121,13 @@ const EditUser = ({ user }) => {
   }
 
   const handleBan = (banned) => {
-    updateUser({
-      variables: { id: user.id, data: { isGlobalBanned: !banned } }
-    })
+    if (loggedIn?.id !== user.id) {
+      updateUser({
+        variables: { id: user.id, data: { isGlobalBanned: !banned } }
+      })
+    } else {
+      addToast('You cant globally ban yourself!', { appearance: 'error', autoDismiss: true })
+    }
   }
 
   if (!user || !loggedIn) {
