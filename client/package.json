@@ -8,7 +8,7 @@
     "start": "next start -p 8080",
     "build:test-server": "ENDPOINT=test next build",
     "test-server": "ENDPOINT=test next start -p 8080",
-    "cypress:open": "cypress open"
+    "test": "cypress open"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.44",

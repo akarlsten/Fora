@@ -55,7 +55,13 @@ const SignupForm = () => {
       addToast('Successfully registered!', { appearance: 'success' })
       router.push('/signin')
     },
-    onError: () => addToast('Couldn\'t register user, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+    onError: (error) => {
+      if (`${error}`.includes('password:rejectCommon')) {
+        addToast('The password you have chosen is too common, try something more unique! Read more: https://xato.net/10-000-top-passwords-6d6380716fe0', { appearance: 'error', autoDismiss: false })
+      } else {
+        addToast('Couldn\'t register user, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+      }
+    }
   })
 
   const onSubmit = ({ nickname: name, username: email, password, image }) => {
@@ -100,7 +106,11 @@ const SignupForm = () => {
             {formErrors.nickname && (<span className="text-sm text-red-600">{formErrors.nickname.message}</span>)}
             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Email</label>
             <div>
-              <input ref={register({
+              <input onChange={(e) => {
+                if (e.target.value.length >= 1) {
+                  triggerValidation('username')
+                }
+              }} ref={register({
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                   message: '⚠ Invalid email address.'

@@ -211,7 +211,7 @@ const EditUser = ({ user }) => {
               <div className="flex items-center mt-8">
                 <input className={`${mutationLoading ? 'bg-pink-100' : 'bg-pink-400'} border border-pink-400 ${mutationLoading ? 'text-pink-200' : 'text-white'} font-medium text-lg ${mutationLoading ? '' : 'hover:bg-pink-700 hover:border-pink-700'} p-2 rounded mr-4`}
                   type="submit" value="Update Info" disabled={!!mutationLoading} />
-                {loggedIn?.isAdmin && (
+                {loggedIn?.isAdmin && loggedIn?.id !== user.id && (
                 user?.isGlobalBanned ? (
                   <button onClick={() => handleBan(user?.isGlobalBanned)} className={'bg-green-400 mr-4 font-medium text-white text-lg hover:bg-green-700 p-2 rounded'}>
                     Unban User
