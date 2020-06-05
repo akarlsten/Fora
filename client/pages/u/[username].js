@@ -9,7 +9,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 const NotFound = dynamic(() => import('components/404'))
 const Error = dynamic(() => import('components/Error'))
 
-const USER_QUERY = gql`
+export const USER_QUERY = gql`
 query USER_QUERY($username: String!) {
   allUsers(where: { name: $username}) {
     id

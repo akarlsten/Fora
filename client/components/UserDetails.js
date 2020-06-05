@@ -60,9 +60,9 @@ const UserDetails = ({ user }) => {
       <div>
         <p>{user?.id === me?.id ? 'You have' : 'User has'}: <span className="font-bold">{user?._postsMeta.count} posts</span></p>
       </div>
-      {canEditUser && user?.subscriptions?.length >= 1 && (
+      {viewingSelf && user?.subscriptions?.length >= 1 && (
         <div className="flex flex-col mt-10">
-          <h1 className="text-2xl mb-4">Subscriptions</h1>
+          <h1 className="text-2xl mb-4">Your subscriptions</h1>
           <ForumList>
             {user?.subscriptions.map(sub => (
               <ForumItem key={sub.id} url={sub.url} viewingSelf={viewingSelf} {...sub} />

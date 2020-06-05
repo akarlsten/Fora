@@ -1,55 +1,30 @@
 import { useQuery, gql } from '@apollo/client'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { useUser } from 'hooks/useUser'
 
+import { USER_QUERY } from 'pages/u/[username]'
 import LoadingSpinner from 'components/LoadingSpinner'
 import EditUser from 'components/EditUser'
 
 const Error = dynamic(() => import('components/Error'))
 
-export const DETAILED_USER_QUERY = gql`
-  query {
-    authenticatedUser {
-      id
-      name
-      email
-      displayName
-      isAdmin
-      isGlobalBanned
-      avatar {
-        publicUrlTransformed(transformation: {
-        width:"300",
-        height:"300",
-        crop:"fill",
-        gravity:"center"
-      })
-      }
-      subscriptions {
-        id
-        name
-        url
-        colorScheme
-        icon {
-          publicUrlTransformed(transformation: {
-            width:"200",
-            height:"200",
-            crop:"fill",
-            gravity:"center"
-          })
-        }
-      }
-      _postsMeta {
-        count
-      }
-    }
-  }
-`
+const Edit = () => {
+  const router = useRouter()
+  const loggedIn = useUser()
 
-const EditSelf = () => {
-  const { data, loading, error } = useQuery(DETAILED_USER_QUERY)
+  const { username } = router.query
+  const { data, loading, error } = useQuery(USER_QUERY, { variables: { username } })
   if (loading) {
     return <LoadingSpinner />
   } else if (data) {
-    const user = data.authenticatedUser
+    const user = data.allUsers[0]
+
+    if (!loggedIn || (loggedIn.id !== user.id && !loggedIn.isAdmin)) {
+      router.push('/u/[username]', `/u/${user.name}`)
+      return <LoadingSpinner />
+    }
+
     return (
       <EditUser user={user} />
     )
@@ -58,4 +33,4 @@ const EditSelf = () => {
   }
 }
 
-export default EditSelf
+export default Edit
