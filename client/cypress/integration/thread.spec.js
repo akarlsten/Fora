@@ -70,14 +70,15 @@ describe('Thread Operations', () => {
   it('should allow us to close a thread', () => {
     cy.visit(`/f/test/thread-${time}-2`)
 
-    cy.get('.flex-wrap > .flex > :nth-child(2) > .cursor-pointer').click()
+    cy.contains('Close Thread').click()
+    cy.get('.ml-8').should('contain', 'This thread is closed and cannot be posted in.')
     cy.get('.react-toast-notifications__toast__content').should('contain', 'Thread closed!')
   })
 
   it('should allow us to open a thread', () => {
     cy.visit(`/f/test/thread-${time}-2`)
 
-    cy.get('.flex-wrap > .flex > :nth-child(2) > .cursor-pointer').click()
+    cy.contains('Reopen Thread').click()
     cy.get('.react-toast-notifications__toast__content').should('contain', 'Thread opened!')
   })
 

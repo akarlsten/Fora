@@ -41,7 +41,7 @@ const Option = props => {
         {props.data.avatar ? (
           <img className={'w-8 h-8 rounded-full mr-2 bg-white border border-white'} src={props.data.avatar} alt="" />
         ) : (
-          <svg className="w-8 h-8 rounded-full mr-2 fill-current" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-8 h-8 rounded-full mr-2 fill-current border border-white" width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle className={`text-${color}-400`} cx="79.5" cy="79.5" r="79.5" />
             <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
             <circle cx="96" cy="59" r="43" fill="white" />
@@ -57,14 +57,14 @@ const Option = props => {
 }
 
 const mapUserToLabel = (item) => {
-  return { value: item.id, label: item.name, displayName: item.displayName, avatar: item.avatar.publicUrlTransformed }
+  return { value: item.id, label: item.name, displayName: item.displayName, avatar: item?.avatar?.publicUrlTransformed }
 }
 
 // end styling crap
 
 const USERNAME_QUERY = gql`
 query USERNAME_QUERY($name: String!) {
-  allUsers(first: 5, where: {    OR: [
+  allUsers(first: 5, where: { OR: [
       {name_contains_i: $name},
       {displayName_contains_i: $name}
     ]}) {

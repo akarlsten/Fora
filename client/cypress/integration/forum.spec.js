@@ -9,10 +9,6 @@ describe('Forum Operations', () => {
     cy.request('POST', 'https://fora-test-api.adamkarlsten.com', { operationName: 'SIGNIN_MUTATION', variables: { email: 'admin@admin.com', password: 'Awoo1234' }, query: 'mutation SIGNIN_MUTATION($email: String!, $password: String!) {\n  authenticateUserWithPassword(email: $email, password: $password) {\n    item {\n      id\n      name\n      __typename\n    }\n    __typename\n  }\n}\n' })
   })
 
-  // beforeEach(() => {
-
-  // })
-
   it('should show create forum button when logged in', () => {
     cy.visit('/')
     cy.get('.font-display').should('contain', 'Create Forum')
