@@ -122,7 +122,7 @@ const ThreadContainer = (props) => {
   return (
     <div className="flex flex-col max-w-full">
       <BackToForum url={forum.url} iconUrl={forum?.icon?.publicUrlTransformed} color={forum.colorScheme} name={forum.name} />
-      <div className="flex items-center justify-between w-full mb-4">
+      <div className="flex items-center justify-between w-full mb-4 flex-wrap">
         <div className="flex items-center flex-wrap">
           {editingTitle ? (
             <>

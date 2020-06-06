@@ -92,7 +92,7 @@ const PostItem = ({ id, postNumber, threadID, owner, content, color, canEditAll,
             owner.avatar ? (
               <img loading="lazy" className={`sm:my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 border border-${color || 'pink'}-200`} src={owner.avatar.publicUrlTransformed} alt="" />
             ) : (
-              <svg className={`sm:my-2 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className={`sm:my-2 w-12 md:w-32 lg:w-48 h-12 md:h-32 lg:h-48 rounded-full border border-${color || 'pink'}-200 fill-current`} width="159" height="159" viewBox="0 0 159 159" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle className={`text-${color || 'pink'}-400`} cx="79.5" cy="79.5" r="79.5" />
                 <ellipse cx="88" cy="69.5" rx="61" ry="61.5" fill="#EFFFFB" fillOpacity="0.51" />
                 <circle cx="96" cy="59" r="43" fill="white" />

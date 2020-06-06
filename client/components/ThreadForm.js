@@ -21,6 +21,7 @@ mutation CREATE_THREAD($forumID: ID!, $title: String!, $post: String!) {
     title: $title,
     posts: { create: [{content: $post}]},
     forum: { connect: { id: $forumID } }
+    isStickied: false
     }) {
       id
       title
@@ -78,11 +79,11 @@ const ThreadForm = () => {
               <div className="w-full px-3">
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title">Title</label>
                 <input ref={register({ minLength: 4, maxLength: 75, required: true, validate: value => value.trim().length >= 4 })} className="form-input block w-full" name="title" type="text" />
-                {formErrors.title && (<span className="text-sm text-red-600">Title must be between 4 and 75 characters.</span>)}
+                {formErrors.title && (<span className="text-sm text-red-600">⚠ Title must be between 4 and 75 characters.</span>)}
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Post</label>
                 <div>
                   <textarea rows="4" ref={register({ minLength: 1, maxLength: 20000, required: true })} className="resize-none form-textarea block w-full" name="post" type="text" />
-                  {formErrors.post && (<span className="text-sm text-red-600">Content must be between 1 and 20000 characters.</span>)}
+                  {formErrors.post && (<span className="text-sm text-red-600">⚠ Content must be between 1 and 20000 characters.</span>)}
                   <div className="flex items-center mt-2">
                     <span className="text-xs text-center text-gray-600 mr-2">Markdown is enabled!</span>
                     <MarkdownHelp color={forum.colorScheme} />

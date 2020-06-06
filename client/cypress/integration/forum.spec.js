@@ -1,5 +1,4 @@
 const time = Math.floor(new Date().getTime() / 10000)
-const testUser = { email: `${time}@test.com`, password: 'awoo1234' }
 
 Cypress.Cookies.defaults({
   whitelist: 'keystone.sid'
