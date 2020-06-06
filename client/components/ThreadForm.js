@@ -21,7 +21,6 @@ mutation CREATE_THREAD($forumID: ID!, $title: String!, $post: String!) {
     title: $title,
     posts: { create: [{content: $post}]},
     forum: { connect: { id: $forumID } }
-    isStickied: false
     }) {
       id
       title

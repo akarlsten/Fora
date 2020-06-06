@@ -73,8 +73,13 @@ export default {
     forum: { type: Relationship, ref: 'Forum.threads', isRequired: true, access: { update: userIsAdmin } },
     isStickied: {
       type: Checkbox,
+      defaultValue: () => false,
       hooks: {
-        validateInput: userIsForumAdminModeratorOrOwner
+        validateInput: async ({ operation, resolvedData, existingItem, context, actions }) => {
+          if (resolvedData.isStickied === true || operation !== 'create') {
+            await userIsForumAdminModeratorOrOwner({ existingItem, context, actions })
+          }
+        }
       }
     },
     isDeleted: {
