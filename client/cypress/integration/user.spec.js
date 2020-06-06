@@ -24,4 +24,17 @@ describe('User Operations', () => {
     cy.get(':nth-child(1) > .mt-2 > :nth-child(3)').click()
     cy.get('.react-toast-notifications__toast__content').should('contain', 'Successfully changed banned users!')
   })
+
+  it('should display user details', () => {
+    cy.visit('/u/usertester')
+    cy.get(':nth-child(4) > .text-2xl').should('contain', 'subscriptions')
+    cy.get('.h-full').should('contain', 'test')
+    cy.get('.my-2 > .font-medium').should('contain', 'forumban thread')
+    cy.get('[data-testid=pagination] > p').should('contain', 'Page 1 of 1')
+  })
+
+  it('should allow us to edit details', () => {
+    cy.visit('/u/usertester')
+    cy.get('.justify-end > .p-2').click()
+  })
 })

@@ -8,6 +8,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import EditUser from 'components/EditUser'
 
 const Error = dynamic(() => import('components/Error'))
+const NotFound = dynamic(() => import('components/404'))
 
 const Edit = () => {
   const router = useRouter()
@@ -17,19 +18,21 @@ const Edit = () => {
   const { data, loading, error } = useQuery(USER_QUERY, { variables: { username } })
   if (loading) {
     return <LoadingSpinner />
-  } else if (data) {
+  } else if (data?.allUsers[0]) {
     const user = data.allUsers[0]
 
     if (!loggedIn || (loggedIn.id !== user.id && !loggedIn.isAdmin)) {
-      router.push('/u/[username]', `/u/${user.name}`)
+      router.push('/u/[username]', `/u/${user?.name}`)
       return <LoadingSpinner />
     }
 
     return (
       <EditUser user={user} />
     )
-  } else {
+  } else if (error) {
     return <Error />
+  } else {
+    return <NotFound />
   }
 }
 

@@ -80,7 +80,7 @@ const UserDetailsPage = () => {
   const { data, loading, error } = useQuery(USER_QUERY, { variables: { username } })
   if (loading) {
     return <LoadingSpinner />
-  } else if (data) {
+  } else if (data?.allUsers[0]) {
     const user = data.allUsers[0]
     const forums = data.allForums
     return (

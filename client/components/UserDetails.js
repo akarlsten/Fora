@@ -74,7 +74,7 @@ const UserDetails = ({ user, moderatorOf }) => {
       )}
       {canEditUser && subsFiltered.length >= 1 && (
         <div className="flex flex-col mt-10">
-          <h1 className="text-2xl mb-4">Your subscriptions</h1>
+          <h1 className="text-2xl mb-4">{viewingSelf ? 'Your' : 'User'} subscriptions</h1>
           <ForumList>
             {subsFiltered.map(sub => (
               <ForumItem key={sub.id} url={sub.url} small={true} viewingSelf={viewingSelf} {...sub} />
