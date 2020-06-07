@@ -22,6 +22,7 @@ const NavSearch = () => {
         }}
       >
         <input value={inputs.searchQuery}
+          aria-label="Search"
           onChange={handleChange}
           type="text"
           name="searchQuery"
