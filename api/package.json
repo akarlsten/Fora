@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production keystone build --entry src/index.js",
     "test-server": "cross-env NODE_ENV=development keystone dev --port 4000 --entry src/index.js",
     "start": "cross-env NODE_ENV=production keystone start --entry src/index.js",
-    "test": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --verbose",
+    "test": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --verbose --coverage",
     "test-watch": "cross-env DISABLE_LOGGING=true NODE_ENV=test jest --watch"
   },
   "repository": "git@gitlab.lnu.se:1dv430/student/ak222ye/project.git",
