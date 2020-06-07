@@ -57,7 +57,7 @@ const ForumItem = ({ id, icon, name, description, threadCount, userCount, colorS
           ) : (
             viewingSelf && (
               <div className = "px-2">
-                <SubscribeButton small = { viewingSelf } forumID = { id } color = { color } />
+                <SubscribeButton small={ viewingSelf } forumID={ id } color={ color } />
               </div>
             )
           )}

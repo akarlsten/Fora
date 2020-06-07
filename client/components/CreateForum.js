@@ -92,7 +92,6 @@ const CreateForum = () => {
                 validate: {
                   notTaken: async value => {
                     forumNameCheck({ variables: { name: value } })
-                    console.log(nameData?.allForums?.length)
                     if (nameData?.allForums?.length > 0) {
                       return '⚠ A forum with this name already exists.'
                     }

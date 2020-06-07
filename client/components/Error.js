@@ -9,7 +9,7 @@ const Error = ({ unexpected }) => {
           <p className="text-lgfont-light text-gray-600">Please report what you were trying to do when this happened: support@fora.fun</p>
         </>
       ) : (
-        <p className = "text-xl font-light text-gray-600">We & apos;re having some trouble with our servers, try again in a minute!</p>
+        <p className="text-xl font-light text-gray-600">We &apos;re having some trouble with our servers, try again in a minute!</p>
       )}
     </div>
   )

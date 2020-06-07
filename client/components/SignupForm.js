@@ -89,7 +89,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (watchEmail?.length >= 1) {
-      triggerValidation('useername')
+      triggerValidation('username')
     }
   }, [emailData])
 

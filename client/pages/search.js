@@ -15,7 +15,7 @@ import { useTheme } from 'context/ColorContext'
 import UserSearchResult from 'components/UserSearchResult'
 
 const SEARCH_QUERY = gql`
-query SEARCH_QUERY($query: String, $isAdmin: Boolean!) {
+query SEARCH_QUERY($query: String) {
   allForums(where: {
     OR: [
       {name_contains_i: $query},
@@ -51,7 +51,7 @@ query SEARCH_QUERY($query: String, $isAdmin: Boolean!) {
       {url_contains_i: $query}
     ],
     AND: [
-      {forum: { isBanned: $isAdmin }}
+      {forum: { isBanned: false }}
     ]
   }, first: 20) {
     id
@@ -74,7 +74,17 @@ query SEARCH_QUERY($query: String, $isAdmin: Boolean!) {
     }
     lastPost
     lastPoster {
+      id
+      displayName
       name
+      avatar {
+      publicUrlTransformed(transformation: {
+      width:"300",
+      height:"300",
+      crop:"fill",
+      gravity:"center"
+    })
+    }
     }
     _postsMeta {
       count
@@ -123,7 +133,7 @@ const Search = () => {
     return <LoadingSpinner />
   } else if (data) {
     const forums = data.allForums
-    const threads = data.allThreads.filter(thread => thread.forum)
+    const threads = data.allThreads.filter(thread => !!thread.forum)
     const users = data.allUsers
 
     return (

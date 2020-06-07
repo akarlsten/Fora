@@ -20,6 +20,15 @@ query EMAIL_QUERY($email: String!) {
   }
 }
 `
+const USER_EMAIL_QUERY = gql`
+query USER_EMAIL_QUERY($userID: ID!) {
+  User(where: { id: $userID }) {
+    id
+    email
+  }
+}
+`
+
 const USERNAME_QUERY = gql`
 query USERNAME_QUERY($name: String!) {
   allUsers(where: {name: $name }) {
@@ -42,16 +51,32 @@ const EditUser = ({ user }) => {
   const { addToast } = useToasts()
 
   // NOTE: 2 forms on this page, one for passwords and one for the rest of the info
-  const { register, handleSubmit, errors: formErrors, watch, getValues, triggerValidation } = useForm()
-  const { register: register2, handleSubmit: handleSubmit2, errors: passwordErrors, watch: watch2 } = useForm()
+  // TODO: the second form should be refactored to own component, this is a nightmare!
+  const {
+    register,
+    handleSubmit,
+    errors: formErrors,
+    watch,
+    getValues,
+    triggerValidation
+  } = useForm()
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    errors: passwordErrors,
+    watch: watch2,
+    triggerValidation: triggerValidation2,
+    getValues: getValues2,
+    setValue: setValue2
+  } = useForm()
   const password = useRef({})
   password.current = watch2('password', '')
 
   const [nameCheck, { data: nameData }] = useLazyQuery(USERNAME_QUERY)
   const [emailCheck, { data: emailData }] = useLazyQuery(EMAIL_QUERY)
+  const [userEmailCheck, { data: userData }] = useLazyQuery(USER_EMAIL_QUERY, { fetchPolicy: 'network-only' })
 
   const [updateUser, { loading: mutationLoading }] = useMutation(UPDATE_USER, {
-  /* TODO: add USER_QUERY for other users here later */
     refetchQueries: [{ query: USER_QUERY, variables: { username: user?.name } }],
     onCompleted: () => {
       addToast('Updated user!', { appearance: 'success' })
@@ -86,10 +111,12 @@ const EditUser = ({ user }) => {
   }
 
   const [updatePassword, { loading: pwMutationLoading }] = useMutation(UPDATE_USER, {
+    refetchQueries: [{ query: USER_EMAIL_QUERY, variables: { userID: user?.id } }],
     onCompleted: () => {
-      addToast('Password changed!', { appearance: 'success' })
+      setValue2('old', '')
+      addToast('Updated details!', { appearance: 'success' })
     },
-    onError: () => addToast('Couldn\'t change password, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
+    onError: () => addToast('Couldn\'t change details, cannot connect to backend. Try again in a while!', { appearance: 'error', autoDismiss: true })
   })
 
   const [signin, { data: signinData, error: signinError }] = useMutation(SIGNIN_MUTATION, {
@@ -98,8 +125,13 @@ const EditUser = ({ user }) => {
 
   const onPasswordSubmit = async ({ password, email, old }) => {
     if (Object.keys(passwordErrors).length === 0) {
-      await signin({ variables: { email: user.email, password: old } })
+      await signin({ variables: { email: userData?.User?.email, password: old } })
+    }
+  }
 
+  useEffect(() => {
+    const { password, email } = getValues2()
+    if (Object.keys(passwordErrors).length === 0) {
       if (signinData?.authenticateUserWithPassword?.item) {
         if (password) {
           if (email) {
@@ -118,7 +150,7 @@ const EditUser = ({ user }) => {
         }
       }
     }
-  }
+  }, [signinData])
 
   const handleBan = (banned) => {
     if (loggedIn?.id !== user.id) {
@@ -135,7 +167,7 @@ const EditUser = ({ user }) => {
   }
 
   const watchUsername = watch('name')
-  const watchEmail = watch('email')
+  const watchEmail = watch2('email')
 
   useEffect(() => {
     if (watchUsername?.length >= 1) {
@@ -145,9 +177,15 @@ const EditUser = ({ user }) => {
 
   useEffect(() => {
     if (watchEmail?.length >= 1) {
-      triggerValidation('email')
+      triggerValidation2('email')
     }
   }, [emailData])
+
+  useEffect(() => {
+    if (loggedIn?.id === (user && user.id)) {
+      userEmailCheck({ variables: { userID: user.id } })
+    }
+  }, [loggedIn])
 
   return (
     <>
@@ -246,7 +284,7 @@ const EditUser = ({ user }) => {
         </form>
         {loggedIn?.id === (user && user.id) && (
           <>
-            <h1 className="text-2xl mt-20 text-gray-700">Change Password</h1>
+            <h1 className="text-2xl mt-20 text-gray-700">Change Email/Password</h1>
             <form className="w-full max-w-lg" onSubmit={handleSubmit2(onPasswordSubmit)}>
               <fieldset disabled={mutationLoading || pwMutationLoading} aria-busy={mutationLoading || pwMutationLoading}>
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Email</label>
@@ -258,7 +296,7 @@ const EditUser = ({ user }) => {
                     },
                     required: '⚠ You must enter an e-mail.',
                     validate: async value => {
-                      if (user.email !== value) {
+                      if (userData?.User?.email !== value) {
                         await emailCheck({ variables: { email: value } })
                         if (emailData?.allUsers?.length > 0) {
                           return '⚠ Email already in use!'
@@ -266,7 +304,7 @@ const EditUser = ({ user }) => {
                       }
                     }
                   })}
-                  className="form-input block sm:w-full" defaultValue={user?.email} name="email" type="text" />
+                  className="form-input block sm:w-full" defaultValue={userData?.User?.email} name="email" type="text" />
                   {passwordErrors.email && (<span className="text-sm text-red-600">{passwordErrors.email.message}</span>)}
                 </div>
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="post">Password</label>

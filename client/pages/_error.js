@@ -1,6 +1,6 @@
-import Error from 'components/Error'
-const ErrorPage = () => (
-  <Error unexpected={true} />
+import ErrorComponent from 'components/Error'
+const Error = () => (
+  <ErrorComponent unexpected={true} />
 )
 
 export async function getStaticProps (context) {
@@ -9,4 +9,4 @@ export async function getStaticProps (context) {
   }
 }
 
-export default ErrorPage
+export default Error
