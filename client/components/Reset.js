@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
 import gql from 'graphql-tag'
+import { useToasts } from 'react-toast-notifications'
 
 import useSimpleForm from 'hooks/useSimpleForm'
 import { CURRENT_USER_QUERY } from 'hooks/useUser'
@@ -21,6 +22,8 @@ const RESET_MUTATION = gql`
 `
 
 function Reset ({ resetToken }) {
+  const { addToast } = useToasts()
+
   const { inputs, handleChange, resetForm } = useSimpleForm({
     password: '',
     confirmPassword: ''
@@ -33,7 +36,11 @@ function Reset ({ resetToken }) {
         password: inputs.password,
         confirmPassword: inputs.confirmPassword
       },
-      refetchQueries: [{ query: CURRENT_USER_QUERY }]
+      refetchQueries: [{ query: CURRENT_USER_QUERY }],
+      onCompleted: () => {
+        addToast('Successfully changed password!', { appearance: 'success' })
+      },
+      onError: () => addToast('Couldn\'t update password, make sure both both fields are correct and that the reset email hasn\'t expired', { appearance: 'error', autoDismiss: true })
     }
   )
   return (
@@ -44,15 +51,12 @@ function Reset ({ resetToken }) {
         onSubmit={async e => {
           e.preventDefault()
           const res = await resetPassword()
-          console.log(res)
           resetForm()
         // this.setState({ password: '', confirmPassword: '' });
         }}
       >
         <fieldset className="flex flex-col" disabled={loading} aria-busy={loading}>
           <h2 className="text-center text-3xl pb-4">Reset Your Password</h2>
-          {data && data.resetPassword && data.resetPassword.message}
-          {error && <p>{error}</p>}
           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-4" htmlFor="password">
           Password
             <div className="flex flex-col relative mt-1">

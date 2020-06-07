@@ -98,7 +98,7 @@ function Signin () {
           <p>Don&apos;t have an account? <Link href='/signup'><a className="underline font-semibold">Register here.</a></Link></p>
         </div>
         <div className="text-center pb-12">
-          <p>Forgot your password? <a onClick={() => { setResetReq(prev => !prev) }} className="underline font-semibold">Click here.</a></p>
+          <p>Forgot your password? <a onClick={() => { setResetReq(prev => !prev) }} className="underline font-semibold cursor-pointer">Click here.</a></p>
         </div>
       </div>
       {

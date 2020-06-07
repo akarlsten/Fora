@@ -1,13 +1,9 @@
 // https://github.com/wesbos/advanced-react-rerecord/blob/master/backend/mutations/resetPassword.js
 export async function resetPassword (parent, args, ctx, info, { query }) {
-  console.log(args)
-  // 1. check if the passwords match
-  console.info('1. Checking is passwords match')
   if (args.password !== args.confirmPassword) {
-    throw new Error("Yo Passwords don't match!")
+    throw new Error("Passwords don't match!")
   }
-  // 2. check if its a legit reset token
-  console.info('1. Checking if legit token')
+
   const userResponse = await query(`query {
     allUsers(where: {
       resetToken: "${args.resetToken}",
@@ -20,15 +16,13 @@ export async function resetPassword (parent, args, ctx, info, { query }) {
   if (!user) {
     throw new Error('This token is invalid.')
   }
-  // 3. Check if its expired
-  console.info('check if expired')
+
   const now = Date.now()
   const expiry = new Date(user.resetTokenExpiry).getTime()
   if (now - expiry > 3600000) {
     throw new Error('This token is expired')
   }
-  // 4. Save the new password to the user and remove old resetToken fields
-  console.log('4. Saving new password')
+
   const updatedUserResponse = await query(`
     mutation {
       updateUser(
@@ -43,12 +37,12 @@ export async function resetPassword (parent, args, ctx, info, { query }) {
         name
       }
     }
-  `)
+  `, { skipAccessControl: true })
   const { errors, data } = updatedUserResponse
   if (errors) {
     throw new Error(errors)
   }
-  console.info('Sending success response')
+
   return {
     message: 'Your password has been reset'
   }

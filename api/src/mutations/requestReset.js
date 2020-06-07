@@ -32,7 +32,7 @@ export async function requestReset (parent, args, ctx, info, { query }) {
       resetToken
       resetTokenExpiry
     }
-  }`)
+  }`, { skipAccessControl: true })
 
   // 3. Email them that reset token
   const mailRes = await sgMail.send({
