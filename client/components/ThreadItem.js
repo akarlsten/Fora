@@ -37,7 +37,7 @@ const ThreadItem = ({ id, forumUrl, url, title, count, color, perPage, lastPoste
   }
 
   return (
-    <div className={`flex justify-between items-center text-xs xs:text-sm sm:text-base ${state === 'closed' && 'opacity-50'}`}>
+    <div className={`flex justify-between items-center text-xs xs:text-sm sm:text-base ${state === 'closed' && !isStickied && 'opacity-50'}`}>
       <Link href="/f/[url]/[tid]" as={`/f/${forumUrl}/${url}`}>
         <a className={`px-4 py-2 flex font-semibold items-center flex-grow truncate ${isStickied && 'text-green-500'}`}>
           {isStickied && (

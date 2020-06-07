@@ -122,7 +122,7 @@ const RenderMarkdown = ({ content, color }) => {
     const element = props.children[0]
     const type = props.children[0]?.type?.name
 
-    return type === 'Image' || type === 'Link' ? { ...element } : <p {...props} />
+    return type === 'Image' || type === 'Link' ? { ...element } : <p className="first:mb-2 last:mt-2 first:my-0 last:my-0 my-2" {...props} />
   }
 
   const disallowedTypes = [

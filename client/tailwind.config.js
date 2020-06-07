@@ -92,7 +92,8 @@ module.exports = {
   },
   variants: {
     backgroundColor: ['responsive', 'hover', 'focus', 'odd', 'even'],
-    aspectRatio: ['responsive']
+    aspectRatio: ['responsive'],
+    margin: ['responsive', 'first', 'last']
   },
   plugins: [
     require('@tailwindcss/custom-forms'),

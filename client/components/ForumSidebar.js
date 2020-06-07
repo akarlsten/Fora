@@ -32,7 +32,7 @@ const ForumSidebar = ({ name, icon, color, description, owner, createdAt, modera
       </div>
       <div className="flex items-center lg:items-start lg:flex-col text-xs flex-wrap">
         <p className="lg:self-start font-semibold mr-2 lg:mb-2">Created by</p>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-start">
           <UserBadge color={color} name={owner?.name} displayName={owner?.displayName} avatar={owner?.avatar} isAdmin={owner?.isAdmin} />
           {createdAt && (
             <div className="flex items-center justify-center mt-1 text-xs">
